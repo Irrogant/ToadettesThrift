@@ -1,0 +1,10 @@
+<h1> Welcome, traveler. </h1>
+<p> By proceeding to the webshop you accept the terms and conditions. </p>
+
+<p> Number of items: {{itemAmount}} </p>
+
+
+<form action="{% url 'landing' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Kyllä</button>
+</form>
