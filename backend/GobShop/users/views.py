@@ -1,20 +1,30 @@
-from django.shortcuts import render
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from users.models import User
 
-# Create your views here.
+    
+# TODO: if already logged in, 
+class UsernameLoginView(APIView):
+    """
+    Custom login view that enforces username + password login.
+    """
 
-def login(request):
+    def get(self, request, *args, **kwargs):
+        return Response({"detail": "Log in with username and password."})
+    
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        print(username, password)
 
-    return render(request, 'users/login.html')
+        if not username or not password:
+            return Response({"error": "Username and password required."}, status=400)
 
-
-def LoginView(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request,user)
-            return redirect('accounts:login')
-    else:
-        form = AuthenticationForm()
-    return render(request,'accounts/login.html', {'form':form})
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return Response({"success": True})
+        else:
+            return Response({"error": "Invalid credentials."}, status=400)
+        
