@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.db.models import Sum
 from users.models import User
 from shop.models import Item
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 def landing(request):
@@ -25,3 +27,45 @@ def landing(request):
     # Fetching the total amount of objects by adding together amount fields
     itemAmount = Item.objects.aggregate(Sum("amount"))['amount__sum']
     return render(request, "landing.html", {'itemAmount':itemAmount})
+
+
+# curl -X GET "http://localhost:7000/myitems/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}"
+class ItemsView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        user_items = Item.objects.all().filter(owner=request.user)
+
+        return Response({"items": [
+            {
+                "id": item.id,
+                "title": item.title,
+                "amount": item.amount,
+                "description": item.description,
+                "price": str(item.price),
+                "date_added": item.date_added,
+                "status": item.status,
+            } for item in user_items
+        ]})
+    
+
+# TODO: test
+class CreateItemView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        title = request.data.get("title")
+        amount = request.data.get("amount")
+        description = request.data.get("description", "")
+        price = request.data.get("price")
+
+        if not title or not amount or not price:
+            return Response({"error": "Title, amount, and price are required."}, status=400)
+
+        item = Item(
+            title=title,
+            amount=amount,
+            description=description,
+            price=price,
+            owner=request.user
+        )
+        item.save()
+        return Response({"success": True, "item_id": item.id})

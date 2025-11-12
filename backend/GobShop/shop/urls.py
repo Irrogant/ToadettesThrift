@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import landing, ItemsView
 
 urlpatterns = [
-    path("", views.landing, name="landing"),
+    path("", landing, name="landing"),
+    path("myitems/", ItemsView.as_view(), name="myitems"),
 ]
