@@ -48,7 +48,8 @@ class ItemsView(APIView):
         ]})
     
 
-# TODO: test
+# TODO: loging only
+# curl -X POST "http://localhost:7000/createitem/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"Sample Item","amount":10,"description":"This is a sample description.","price":25.99}'
 class CreateItemView(APIView):
 
     def post(self, request, *args, **kwargs):
