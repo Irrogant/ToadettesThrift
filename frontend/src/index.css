@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'PixelFont';
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,6 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+    font-family: "PixelFont";
+    src: url('assets/fonts/04B_03__.TTF') format('truetype');
+}
+ 
 a {
   font-weight: 500;
   color: #646cff;

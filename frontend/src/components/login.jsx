@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from '@mui/material/Button';
 
 const getCookie = (name) => {
   let cookieValue = null;
@@ -60,7 +61,7 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
-      <button type="submit">Login</button>
+      <Button type="submit" variant="contained">Log In</Button>;
     </form>
   );
 }
