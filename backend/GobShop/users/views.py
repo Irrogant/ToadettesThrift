@@ -5,6 +5,7 @@ from users.models import User
 
     
 # TODO: if already logged in, 
+# TODO: clean input values
 # curl -X POST http://localhost:7000/login/ -H "Content-Type: application/json" -H "X-CSRFToken: {cook}" -b "csrftoken={cook}" -d '{"username":"admin","password":"admin"}'
 class UsernameLoginView(APIView):
     """

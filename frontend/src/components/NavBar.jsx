@@ -23,6 +23,7 @@ function NavBar() {
          <Box sx={{ marginLeft: "auto" }}>
           <Button color="inherit" component={Link} to="/">Home</Button>
           <Button color="inherit" component={Link} to="/login">Log In</Button>
+          <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
         </Box>
       </Toolbar>
     </AppBar>

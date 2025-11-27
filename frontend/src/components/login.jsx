@@ -1,20 +1,7 @@
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
+import getCookie from "./cookie";
 
-const getCookie = (name) => {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + "=")) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-};
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -24,8 +11,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    const csrftoken = getCookie("csrftoken");
 
     const response = await fetch("http://localhost:7000/login/", {
       method: "POST",
@@ -61,7 +46,7 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
-      <Button type="submit" variant="contained">Log In</Button>;
+      <Button type="submit" variant="contained">Log In</Button>
     </form>
   );
 }
