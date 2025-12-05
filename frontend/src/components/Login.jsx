@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import getCookie from "./cookie";
+import { useAuth } from "./AuthContext";
+import { BACKEND_URL } from "./variables.js";
 
 
 function Login() {
@@ -8,11 +10,13 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const { setIsLoggedIn } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    const response = await fetch("http://localhost:7000/login/", {
+    const response = await fetch((`${BACKEND_URL}/login/`), {
       method: "POST",
       credentials: "include",
       headers: {
@@ -24,6 +28,7 @@ function Login() {
 
     const data = await response.json();
     if (response.ok) {
+      setIsLoggedIn(true);
       alert("Login successful!");
     } else {
       setError(data.error || "Login failed");

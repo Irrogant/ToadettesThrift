@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import getCookie from "./cookie";
+import { BACKEND_URL } from "./variables.js";
 
 function Signup() {
     const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ function Signup() {
         e.preventDefault();
         setError("");
 
-        const response = await fetch("http://localhost:7000/signup/", {
+        const response = await fetch(`${BACKEND_URL}/signup/`, {
             method: "POST",
             credentials: "include",
             headers: {

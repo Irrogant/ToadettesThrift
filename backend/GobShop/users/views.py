@@ -81,3 +81,13 @@ class EditAccountView(APIView):
         user.save()
 
         return Response({"success": True})
+    
+
+class CurrentUserView(APIView):
+    """
+    View to get current authenticated user info.
+    """
+    def get(self, request, *args, **kwargs):
+        if request.user and request.user.is_authenticated:
+            return Response({"authenticated": True, "username": request.user.username, "email": request.user.email})
+        return Response({"authenticated": False, "username": None})
