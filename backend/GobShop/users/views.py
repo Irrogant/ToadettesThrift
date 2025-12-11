@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.models import User
@@ -18,7 +18,6 @@ class UsernameLoginView(APIView):
     def post(self, request, *args, **kwargs):
         username = request.data.get("username")
         password = request.data.get("password")
-        print(username, password)
 
         if not username or not password:
             return Response({"error": "Username and password required."}, status=400)
@@ -30,6 +29,26 @@ class UsernameLoginView(APIView):
         else:
             return Response({"error": "Invalid credentials."}, status=400)
         
+class LogOutView(APIView):
+    """
+    View to log out.
+    """
+
+    def get(self, request, *args, **kwargs):
+        return Response({"detail": "Log out current logged in user."})
+
+    def post (self, request, *args, **kwargs):
+        print(request)
+        request_user = request.user
+        if not request_user.is_authenticated:
+            return Response({"Could not locate a current logged in user."}, status=400)
+        
+        try:
+            logout(request)
+            return Response({"success": True})
+        except:
+            return Response({"error": "Failed to log out."}, status=400)
+
 
 # curl -X POST http://localhost:7000/signup: application/json" -H "X-CSRFToken: {cook}" -b "csrftoken={cook}" -d '{"username":"admin","email": "bla@example.com", "password":"admin"}'
 class CreateAccountView(APIView):

@@ -3,12 +3,14 @@ import Button from '@mui/material/Button';
 import getCookie from "./cookie";
 import { useAuth } from "./AuthContext";
 import { BACKEND_URL } from "./variables.js";
+import { useNavigate } from 'react-router-dom'
 
-
+{/* Prevent already logged in to go here */}
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate()
 
   const { setIsLoggedIn } = useAuth();
 
@@ -29,7 +31,7 @@ function Login() {
     const data = await response.json();
     if (response.ok) {
       setIsLoggedIn(true);
-      alert("Login successful!");
+      navigate("/")
     } else {
       setError(data.error || "Login failed");
     }
