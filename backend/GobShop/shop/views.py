@@ -46,7 +46,22 @@ class ItemsView(APIView):
                 "status": item.status,
             } for item in user_items
         ]})
-    
+
+class AllItemsView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        all_items = Item.objects.all()
+        return Response({"items": [
+            {
+                "id": item.id,
+                "title": item.title,
+                "amount": item.amount,
+                "description": item.description,
+                "price": str(item.price),
+                "date_added": item.date_added,
+                "status": item.status,
+            } for item in all_items
+        ]})
 
 # TODO: loging only
 # curl -X POST "http://localhost:7000/createitem/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"Sample Item","amount":10,"description":"This is a sample description.","price":25.99}'
