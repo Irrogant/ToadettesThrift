@@ -4,6 +4,9 @@ import getCookie from "./cookie";
 import { useAuth } from "./AuthContext";
 import { BACKEND_URL } from "./variables.js";
 import { useNavigate } from 'react-router-dom'
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import { TextField } from "@mui/material";
 
 {/* Prevent already logged in to go here */}
 function Login() {
@@ -38,23 +41,31 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <Button type="submit" variant="contained">Log In</Button>
-    </form>
+    <Container maxWidth="sm">
+       <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <h2 style={{ textAlign: "center" }}>come forth, come forth</h2>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        <TextField
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          label="Username"
+        />
+        
+        <TextField
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          label="Password"
+        />
+        
+        <Button type="submit" variant="contained">
+          Log In
+        </Button>
+        </Box>
+    </Container>
   );
 }
 

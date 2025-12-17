@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { BACKEND_URL } from "./variables.js";
 import MultiActionAreaCard from "./Items.jsx";
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 
 function Home() {
@@ -19,26 +20,26 @@ function Home() {
       }, []); 
     
       return (
-        <Grid container spacing={2}>
-          {items.map((item) => (
-            <Grid item xs={3} key={item.id}>
-            <MultiActionAreaCard
-                title={item.title}
-                description={item.description}
-                imageName="brussel" 
-                price={item.price}
-            />
+        <Box  sx={{
+        height: 1/4,
+        width: 2/4,
+        mx: "auto",
+      }}>
+            <Grid container spacing={2} justifyContent="center"> {items.map((item) => (
+                <Grid key={item.id} xs={4}>
+                <MultiActionAreaCard
+                    title={item.title}
+                    description={item.description}
+                    imageName="brussel"
+                    price={item.price}
+                    dateAdded={item.date_added}
+                />
+                </Grid>
+            ))}
             </Grid>
-          ))}
-        </Grid>
+        </Box>
       );
     }
 
 
 export default Home;
-
-/*
-1. ta in alla items
-2. lägg in i 4 card grid
-3. när man skrollar ner kommer flera items
-*/

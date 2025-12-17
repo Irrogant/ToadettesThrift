@@ -13,12 +13,12 @@ function NavBar() {
   const { isLoggedIn } = useAuth();
 
   return (
-    <AppBar position="fixed">
+    <AppBar>
       <Toolbar>
 
          <Box component="img" src={Logo} alt="Logo" sx={{ height: 40 }} />
 
-         <Box sx={{ flexGrow: 1, mx: 2 }}>
+         <Box sx={{ flexGrow: 2, mx: 2 }}>
          <SearchBar options={options} />
          </Box>
           {/* If logged in, login and signup is removed, a logout is added*/}

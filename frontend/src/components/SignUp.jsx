@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import getCookie from "./cookie";
 import { BACKEND_URL } from "./variables.js";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import { TextField } from "@mui/material";
 
 function Signup() {
     const [username, setUsername] = useState("");
@@ -32,30 +35,39 @@ function Signup() {
     };
 
    return (
-    <form onSubmit={handleSubmit}>
-      <h2>Sign tf up</h2>
+  <Container maxWidth="sm">
+    <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <h2 style={{ textAlign: "center" }}>thy shall giveth us thy soul</h2>
+
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
+
+      <TextField
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
+        label="Username"
       />
-       <input
+
+      <TextField
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
+        label="Email"
       />
-      <input
+
+      <TextField
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
+        label="Password"
       />
-      <Button type="submit" variant="contained">Sign Up</Button>
-    </form>
-  );
+
+      <Button type="submit" variant="contained">
+        Sign Up
+      </Button>
+    </Box>
+  </Container>
+);
 }
 
 export default Signup;
