@@ -5,6 +5,8 @@ import Account from "./components/Account";
 import LogOut from "./components/LogOut"
 import Home from "./components/Home";
 import Layout from "./components/Layout";
+import Search from "./components/Search";
+import ItemDetail from "./components/ItemDetail";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
         <Route path="/logout" element={<LogOut/> } />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/account" element={<Account/>} />
+        <Route path="/search" element={<Search/>} />
+        <Route path="/item/:id" element={<ItemDetail/>} />
       </Route>
     </Routes>
   </BrowserRouter>

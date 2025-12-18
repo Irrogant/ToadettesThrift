@@ -9,7 +9,6 @@ import SearchBar from './SearchBar';
 import { useAuth } from "./AuthContext";
 
 function NavBar() {
-  const options = ["Test", "Testhh", "TUSTHHH"];
   const { isLoggedIn } = useAuth();
 
   return (
@@ -19,7 +18,7 @@ function NavBar() {
          <Box component="img" src={Logo} alt="Logo" sx={{ height: 40 }} />
 
          <Box sx={{ flexGrow: 2, mx: 2 }}>
-         <SearchBar options={options} />
+         <SearchBar />
          </Box>
           {/* If logged in, login and signup is removed, a logout is added*/}
          <Box sx={{ marginLeft: "auto" }}>
