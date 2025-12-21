@@ -46,6 +46,72 @@ class ItemsView(APIView):
                 "status": item.status,
             } for item in user_items
         ]})
+    
+class ItemDetail(APIView):
+
+    def get(self, request, *args, **kwargs):
+        print("YHAAAAAAAHAHAYAAH")
+        editable = False
+        user = request.user
+        query = request.GET.get("id")
+        item = Item.objects.get(id=query)
+
+        editable = user == item.owner
+        
+        print(item)
+        
+        return Response({"item": {
+            "id": item.id,
+            "title": item.title,
+            "amount": item.amount,
+            "description": item.description,
+            "price": str(item.price),
+            "date_added": item.date_added,
+            "status": item.status,
+            "owner": item.owner.username
+        }})
+
+    def post(self, request, *args, **kwargs):
+        id = request.data.get("id")
+        item = Item.objects.filter(id=id)
+
+        # TODO: dehär rn alltid true
+        if not item:
+            return Response({"error": "Item not found."}, status=400)
+
+        if request.user != item.owner:
+            return Response({"error": "Only the owner an item can edit it."}, status=400)
+
+        # TODO: dehär rn alltid true
+        if item:
+            item.title = request.data.get("title")
+            item.amount = request.data.get("amount")
+            item.description = request.data.get("description"),
+            item.price = request.data.get("price"),
+            
+        item.save()
+        return Response({"success": True, "item_id": item.id})
+        
+
+
+
+class SearchItemsView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("q", "")
+        search_items = Item.objects.all().filter(title__icontains=query)[:5]
+        return Response({"items": [
+            {
+                "id": item.id,
+                "title": item.title,
+                "amount": item.amount,
+                "description": item.description,
+                "price": str(item.price),
+                "date_added": item.date_added,
+                "status": item.status,
+            } for item in search_items
+        ]})
+    
 
 class AllItemsView(APIView):
 

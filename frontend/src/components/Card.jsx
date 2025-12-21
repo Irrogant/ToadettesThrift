@@ -17,8 +17,8 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
   const itemTitle = (title.length > 12) ? (title.substring(0,12).trim()) : title;
 
   return (
-    <Card sx={{ maxWidth: cardMaxWidth, maxHeight: 300 }} component={Link} to={`/item/${id}`}>
-      <CardActionArea>
+    <Card sx={{ '&:hover': {color: 'green'}, maxWidth: cardMaxWidth, maxHeight: 300 }} component={Link} to={`/item/?id=${id}`}>
+      <CardActionArea sx={{backgroundColor: 'white'}}>
         <CardMedia
           component="img"
           height="140"
@@ -38,7 +38,7 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
         </CardContent>
       </CardActionArea>
 
-      <CardActions sx={{justifyContent: "space-between", alignItems: "center", borderTop: '1px solid grey', }}>
+      <CardActions sx={{ backgroundColor: 'white', justifyContent: "space-between", alignItems: "center", borderTop: '1px solid grey', }}>
         <Button size="small" color="primary">
           <Typography gutterBottom variant="h6"> Buy </Typography>
         </Button>

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BACKEND_URL } from "./variables.js";
 import { Container } from "@mui/material";
 import Items from "./Items.jsx"
@@ -10,7 +9,6 @@ function Search() {
     const [items, setItems] = useState([]);
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
-    console.log("Search query:", query);
 
     const searchItems = async (query) => {
         if (!query) return; /* no query, no search */
