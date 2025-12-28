@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { BACKEND_URL } from "./variables.js";
 import { Container, Grid, Stack, Button, Box, TextField } from '@mui/material';
 import { useAuth } from "./AuthContext";
+import getCookie from "./cookie"
 
 
 /*TODO: edit product */
@@ -16,6 +17,10 @@ function ItemDetail() {
     const { username, email } = useAuth();
     const [view, setView] = useState("info");
     const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [amount, setAmount] = useState("");
+    const [price, setPrice] = useState("");
+    const [status, setStatus] = useState("");
 
     const url = `${BACKEND_URL}/itemdetail/?id=${encodeURIComponent(query)}`
 
@@ -30,7 +35,7 @@ function ItemDetail() {
             "Content-Type": "application/json",
             "X-CSRFToken": getCookie("csrftoken"),
         },
-        body: JSON.stringify({ title }),
+        body: JSON.stringify({ title, description, amount, price, status }),
         });
 
         const data = await response.json();
@@ -39,7 +44,7 @@ function ItemDetail() {
         } else {
         setError(data.error || "Edit failed");
         }
-  };    
+    };    
 
     useEffect(() => {
 
@@ -62,20 +67,30 @@ function ItemDetail() {
     fetchItem();
     }, [query]);
 
+    useEffect(() => {
+        if (item) {
+            setTitle(item.title);
+            setDescription(item.description);
+            setAmount(item.amount);
+            setPrice(item.price);
+            setStatus(item.status);
+        }
+    }, [item]);
+
     const isOwner = (username === owner) /* if the user viewing is the one who owns the item */
 
     return (
         <Container maxWidth:sm>
         { view === "info" && 
             <Container maxWidth:sm>
-                <h2>{item?.title}</h2>
+                <h2>{title}</h2>
                 <Grid container spacing={2}>
                     <Grid size={4}>
                         <Stack spacing={2}>
-                        <div>{item?.description}</div>
-                        <div>{item?.amount}</div>
-                        <div>{item?.price}</div>
-                        <div>{item?.status}</div>
+                        <div>{description}</div>
+                        <div>{amount}</div>
+                        <div>{price}</div>
+                        <div>{status}</div>
                         </Stack>
                     </Grid>
                     <Grid size={8}>
@@ -100,11 +115,31 @@ function ItemDetail() {
                             />
                     <Grid container spacing={2}>
                         <Grid size={4}>
-                            <Stack spacing={2}>
-                            <div>{item?.description}</div>
-                            <div>{item?.amount}</div>
-                            <div>{item?.price}</div>
-                            <div>{item?.status}</div>
+                         <Stack spacing={2}>
+                            <TextField
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                label="Description"
+                            />
+                            <TextField
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                                label="Amount"
+                            />
+                            <TextField
+                                type="number"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                label="Price"
+                            />
+                            <TextField
+                                type="text"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                label="Status"
+                            />
                             </Stack>
                         </Grid>
                         <Grid size={8}>
@@ -119,36 +154,6 @@ function ItemDetail() {
         </Container>
     );
 }
-
-/*
-
-<Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <h2 style={{ textAlign: "center" }}>come forth, come forth</h2>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        <TextField
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          label="Username"
-        />
-        
-        <TextField
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          label="Password"
-        />
-        
-        <Button type="submit" variant="contained">
-          Log In
-        </Button>
-        </Box>
-
-
-
-*/
 
 
 export default ItemDetail;

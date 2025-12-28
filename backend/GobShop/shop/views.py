@@ -51,13 +51,9 @@ class ItemDetail(APIView):
 
     def get(self, request, *args, **kwargs):
         print("YHAAAAAAAHAHAYAAH")
-        editable = False
-        user = request.user
         query = request.GET.get("id")
         item = Item.objects.get(id=query)
 
-        editable = user == item.owner
-        
         print(item)
         
         return Response({"item": {
@@ -71,9 +67,11 @@ class ItemDetail(APIView):
             "owner": item.owner.username
         }})
 
+    # curl -X POST "http://localhost:7000/itemdetail/?id={item_id}" -H "Content-Type: application/json" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"freshaf"}' 
+    # TODO: only allow edit if item is on sale (not already sold)
     def post(self, request, *args, **kwargs):
-        id = request.data.get("id")
-        item = Item.objects.filter(id=id)
+        query = request.GET.get("id")
+        item = Item.objects.get(id=query)
 
         # TODO: dehär rn alltid true
         if not item:
@@ -83,16 +81,20 @@ class ItemDetail(APIView):
             return Response({"error": "Only the owner an item can edit it."}, status=400)
 
         # TODO: dehär rn alltid true
-        if item:
-            item.title = request.data.get("title")
-            item.amount = request.data.get("amount")
-            item.description = request.data.get("description"),
-            item.price = request.data.get("price"),
-            
+        # if item:
+        #     item.title = request.data.get("title")
+        #     item.amount = request.data.get("amount")
+        #     item.description = request.data.get("description")
+        #     item.price = request.data.get("price")
+        #     item.status = request.data.get("status")
+
+        for field in ["title", "amount", "description", "price", "status"]:
+            if field in request.data:
+                setattr(item, field, request.data[field])
+
         item.save()
         return Response({"success": True, "item_id": item.id})
         
-
 
 
 class SearchItemsView(APIView):
