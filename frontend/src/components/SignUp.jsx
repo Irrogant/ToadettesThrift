@@ -5,38 +5,49 @@ import { BACKEND_URL } from "./variables.js";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
+import useSubmit from "./useSubmit"
+import { useNavigate } from 'react-router-dom'
 
 function Signup() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); 
+    const navigate = useNavigate()
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
+    const submit = useSubmit({
+      END_URL: "signup/", 
+      JSON_DATA: {username, email, password},
+      onSuccess: () => {
+        navigate("/login");
+      },
+      onError: (data) => setError(data.error || "Signup failed")
+    });
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError("");
 
-        const response = await fetch(`${BACKEND_URL}/signup/`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken"),
-            },
-            body: JSON.stringify({ username, email, password }),
-        });
+    //     const response = await fetch(`${BACKEND_URL}/signup/`, {
+    //         method: "POST",
+    //         credentials: "include",
+    //         headers: {
+    //         "Content-Type": "application/json",
+    //         "X-CSRFToken": getCookie("csrftoken"),
+    //         },
+    //         body: JSON.stringify({ username, email, password }),
+    //     });
 
-        const data = await response.json();
-        if (response.ok) {
-            alert("Signup successful!");
-        } else {
-            setError(data.error || "Signup failed");
-        }
-    };
+    //     const data = await response.json();
+    //     if (response.ok) {
+    //         alert("Signup successful!");
+    //     } else {
+    //         setError(data.error || "Signup failed");
+    //     }
+    // };
 
    return (
   <Container maxWidth="sm">
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+    <Box component="form" onSubmit={submit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <h2 style={{ textAlign: "center" }}>thy shall giveth us thy soul</h2>
 
       {error && <p style={{ color: "red" }}>{error}</p>}

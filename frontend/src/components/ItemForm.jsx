@@ -4,7 +4,7 @@ import { BACKEND_URL } from "./variables.js";
 import { Container, Grid, Stack, Button, Box, TextField } from '@mui/material';
 import { useAuth } from "./AuthContext";
 import getCookie from "./cookie"
-import useSubmit from "./useSubmit.js"
+
 
 /*TODO: edit product */
 
@@ -22,39 +22,29 @@ function ItemDetail() {
     const [price, setPrice] = useState("");
     const [status, setStatus] = useState("");
 
-    const url = `${BACKEND_URL}/itemdetail/?id=${encodeURIComponent(query)}`
+    const url = `${BACKEND_URL}/createitem}`
 
-    const submit = useSubmit({
-      END_URL: `itemdetail/?id=${encodeURIComponent(query)}`, 
-      JSON_DATA: {title, description, amount, price, status},
-      onSuccess: () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        const response = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ title, description, amount, price, status }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
         setView("info");
-      },
-      onError: (data) => setError(data.error || "Edit failed")
-    });
-
-    
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setError("");
-
-    //     const response = await fetch(url, {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "X-CSRFToken": getCookie("csrftoken"),
-    //     },
-    //     body: JSON.stringify({ title, description, amount, price, status }),
-    //     });
-
-    //     const data = await response.json();
-    //     if (response.ok) {
-    //     setView("info");
-    //     } else {
-    //     setError(data.error || "Edit failed");
-    //     }
-    // };    
+        } else {
+        setError(data.error || "Item creation failed lmao");
+        }
+    };    
 
     useEffect(() => {
 
@@ -89,34 +79,12 @@ function ItemDetail() {
 
     const isOwner = (username === owner) /* if the user viewing is the one who owns the item */
 
+    /*TODO: when submitted, go to itemdetail*/
     return (
         <Container maxWidth:sm>
-        { view === "info" && 
-            <Container maxWidth:sm>
-                <h2>{title}</h2>
-                <Grid container spacing={2}>
-                    <Grid size={4}>
-                        <Stack spacing={2}>
-                        <div>{description}</div>
-                        <div>{amount}</div>
-                        <div>{price}</div>
-                        <div>{status}</div>
-                        </Stack>
-                    </Grid>
-                    <Grid size={8}>
-                        <div sx={{ height: '100%', boxSizing: 'border-box' }}>PICTURE</div>
-                    </Grid>
-                    </Grid>
-            { !isOwner &&
-            <Button> BUY </Button> }
-            { isOwner &&
-            <Button onClick={() => setView("edit")}> EDIT </Button> }
-            </Container>
-        }
-
         { view === "edit" &&
             <Container maxWidth:sm>
-                <Box component="form" onSubmit={submit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                        <TextField
                             type="text"
                             value={title}
