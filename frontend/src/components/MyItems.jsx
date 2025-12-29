@@ -11,41 +11,42 @@ import Items from "./Items.jsx"
 
 
 
-/* TODO: create not working */
-
 function myItems() { 
     const items = useItems();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [amount, setAmount] = useState("");
-    const [price, setPrice] = useState("");
+    const [amount, setAmount] = useState("1");
+    const [price, setPrice] = useState("0");
     const [status, setStatus] = useState("");
     const [view, setView] = useState("info");
+    const [error, setError] = useState("");
 
     function clear() {
         setTitle("");
         setDescription("");
-        setAmount("");
-        setPrice("");
+        setAmount("1");
+        setPrice("0");
         setStatus("");
     }
 
     const submit = useSubmit({
-      END_URL: "createitem", 
+      END_URL: "createitem/", 
       JSON_DATA: {title, description, amount, price, status},
       onSuccess: () => {
         setView("info")
       },
       onError: (data) => setError(data.error || "Item creation failed")
     });
-
-
+    /* TODO: stoppa frontend creation när de fö lite fields*/
+    /* sort by category */
+    /* bara edit när SA???  ah inte när sålda */
     return (
         <Container>
+    
             { view === "info" && 
                 <Container> 
                     <Box sx={{ mt: 2 }}>
-                        <Button onClick={() => setView("create")}>Create Item</Button>
+                        <Button onClick={() => { setView("create"); clear()}} >Create Item</Button>
                         <Typography variant="h6">Your Items</Typography>
                         {items.length === 0 ? (
                             <Typography>No items LMAOOOOOOO</Typography>
@@ -67,7 +68,8 @@ function myItems() {
             }
             
             { view === "create" &&
-                 <Container>
+                <Container>
+                {error && <p style={{ color: "red" }}>{error}</p>}
                 <Box component="form" onSubmit={submit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                        <TextField
                             type="text"
@@ -109,7 +111,7 @@ function myItems() {
                         </Grid>
                         </Grid>
                     <Button type="submit"> CREATE </Button>
-                    <Button onClick={() => { setView("info"); clear()}}> CANCEL </Button>
+                    <Button onClick={() => setView("info")}> CANCEL </Button>
                 </Box>
             </Container>
             }
