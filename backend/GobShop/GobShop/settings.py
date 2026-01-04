@@ -155,3 +155,5 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ]
 }
+
+FRONTEND_URL = "http://localhost:5173/"

@@ -8,15 +8,18 @@ import Layout from "./components/Layout";
 import Search from "./components/Search";
 import ItemDetail from "./components/ItemDetail";
 import MyItems from "./components/MyItems";
+import Landing from "./components/Landing";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import getCookie from "./components/cookie";
 
 function App() {
+  const alreadyLanded = getCookie("already_landed");
   return (
 
   <BrowserRouter>
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={alreadyLanded ? <Home /> : <Landing />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/logout" element={<LogOut/> } />
         <Route path="/signup" element={<Signup/>} />
