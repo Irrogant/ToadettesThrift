@@ -4,7 +4,10 @@ from carts.models import Cart, CartItem
 from shop.models import Item
 from rest_framework.response import Response
 
+# TODO: clean input values
 # TODO: make sure only cart owner can see and modify own cart
+# curl -X POST "http://localhost:7000/cart/" -H "Content-Type: application/json" -H "Cookie: sessionid=mhnff9ml9eqfrn3f0ggjebuqnbk2hub6; csrftoken=RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -H "X-CSRFToken: RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -d '{"cart_item_id":1,"action":"remove"}'
+
 class CartView(APIView):
     #TODO: serializer?
     def get(self, request, *args, **kwargs):

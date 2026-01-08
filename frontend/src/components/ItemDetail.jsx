@@ -5,6 +5,7 @@ import { Container, Grid, Stack, Button, Box, TextField } from '@mui/material';
 import { useAuth } from "./AuthContext";
 import getCookie from "./cookie"
 import useSubmit from "./useSubmit.js"
+import { useCart } from "./useCart.jsx"
 
 /*TODO: edit product */
 
@@ -16,11 +17,13 @@ function ItemDetail() {
     const [owner, setOwner] = useState("");
     const { username, email } = useAuth();
     const [view, setView] = useState("info");
+    const [id, setId] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
     const [price, setPrice] = useState("");
     const [status, setStatus] = useState("");
+    const { addToCart } = useCart();
 
     const url = `${BACKEND_URL}/itemdetail/?id=${encodeURIComponent(query)}`
 
@@ -79,6 +82,7 @@ function ItemDetail() {
 
     useEffect(() => {
         if (item) {
+            setId(item.id)
             setTitle(item.title);
             setDescription(item.description);
             setAmount(item.amount);
@@ -108,7 +112,7 @@ function ItemDetail() {
                     </Grid>
                     </Grid>
             { !isOwner &&
-            <Button> BUY </Button> }
+            <Button onClick={() => addToCart(id)}>  BUY </Button> }
             { isOwner &&
             <Button onClick={() => setView("edit")}> EDIT </Button> }
             </Container>
