@@ -2,23 +2,31 @@ import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import { Typography, Button } from '@mui/material';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
-import { Box } from '@mui/material';
 import { Link } from "react-router-dom";
+import { useCart } from "./useCart.jsx";
+import { useAuth } from "./AuthContext";
 
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
-
-export default function MultiActionAreaCard({ id, title, description, imageName, price, dateAdded }) {
-  const cardMaxWidth = 200
+export default function MultiActionAreaCard({ id, title, description, imageName, price, dateAdded, owner }) {
+  const cardMaxWidth = 300
+  const cardMaxHeight = 300
   const itemDescription = (description.length > 20) ? (description.substring(0,20).trim() + '...') : description;
   const itemTitle = (title.length > 12) ? (title.substring(0,12).trim()) : title;
+  const { addToCart, removeFromCart, inCart } = useCart();
+  const { username, email } = useAuth() 
+  
+  console.log("JIEHDAOILNAWOI ")
+  console.log(username)
+  console.log(owner)
 
   return (
-    <Card sx={{ '&:hover': {color: 'green'}, maxWidth: cardMaxWidth, maxHeight: 300 }} component={Link} to={`/item/?id=${id}`}>
-      <CardActionArea sx={{backgroundColor: 'white'}}>
+    <Card sx={{ '&:hover': {color: 'green'}, maxWidth: cardMaxWidth, cardMaxHeight }}>
+      <CardActionArea sx={{backgroundColor: 'white'}} component={Link} to={`/item/?id=${id}`}>
         <CardMedia
           component="img"
           height="140"
@@ -39,9 +47,22 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
       </CardActionArea>
 
       <CardActions sx={{ backgroundColor: 'white', justifyContent: "space-between", alignItems: "center", borderTop: '1px solid grey', }}>
-        <Button size="small" color="primary">
-          <Typography gutterBottom variant="h6"> Buy </Typography>
-        </Button>
+        {(owner === username) ?
+        null :
+        (
+          (inCart(id)) ?
+          (<Button onClick={() => removeFromCart(id)} size="small" color="primary">
+            <RemoveShoppingCartIcon/>
+          </Button>
+          ):
+          (
+          <Button onClick={() => addToCart(id)} size="small" color="primary">
+            <AddShoppingCartIcon/>
+          </Button>
+          )
+          
+        )
+        }
         <Typography sx={{ pr: 1.5 }} variant="body2"> {dateAdded} </Typography>
       </CardActions>
     </Card>

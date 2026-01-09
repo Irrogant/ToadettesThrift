@@ -7,10 +7,11 @@ import Box from '@mui/material/Box';
 import Logo from '../assets/logo.png';
 import SearchBar from './SearchBar';
 import { useAuth } from "./AuthContext";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function NavBar() {
   const { isLoggedIn } = useAuth();
-
+  /* TODO: navbar täcker saker under rn */
   return (
     <AppBar>
       <Toolbar>
@@ -32,6 +33,9 @@ function NavBar() {
             <>
               <Button color="inherit" component={Link} to="/myitems">My Items</Button>
               <Button color="inherit" component={Link} to="/account">Account</Button>
+              <Button component={Link} to="/cart" color="inherit">
+                <ShoppingCartIcon />
+              </Button>
               <Button color="inherit" component={Link} to="/logout">Log Out</Button>
             </>
           )}

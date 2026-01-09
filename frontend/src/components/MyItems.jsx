@@ -12,7 +12,6 @@ import Items from "./Items.jsx"
 
 
 function myItems() { 
-    const items = useItems();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("1");
@@ -29,6 +28,10 @@ function myItems() {
         setStatus("");
     }
 
+    const items = useItems({
+        END_URL: "myitems/"
+    });
+    
     const submit = useSubmit({
       END_URL: "createitem/", 
       JSON_DATA: {title, description, amount, price, status},

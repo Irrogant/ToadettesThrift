@@ -66,6 +66,7 @@ class ItemsView(APIView):
                 "price": str(item.price),
                 "date_added": item.date_added,
                 "status": item.status,
+                "owner": item.owner.username,
             } for item in user_items
         ]})
     
@@ -150,6 +151,7 @@ class AllItemsView(APIView):
                 "price": str(item.price),
                 "date_added": item.date_added,
                 "status": item.status,
+                "owner": item.owner.username
             } for item in all_items
         ]})
 

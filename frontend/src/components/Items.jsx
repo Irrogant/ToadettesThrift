@@ -16,6 +16,7 @@ function Items({ items }) {
                     imageName="brussel"
                     price={item.price}
                     dateAdded={item.date_added}
+                    owner={item.owner}
                 />
                 </Grid>
             ))}

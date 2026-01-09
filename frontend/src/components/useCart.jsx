@@ -1,36 +1,42 @@
 
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect, useMemo } from 'react'; 
 import { BACKEND_URL } from "./variables.js";
 import useSubmit from './useSubmit.js';
+import useItems from './useItems.js';
 
 export function useCart() {
     const [price, setPrice] = useState(0)
-    const [items, setItems] = useState([])
     const [error, setError] = useState(null);
+    const items = useItems({ END_URL: "cart/" });
+    const itemIDs = useMemo(() => items.map(item => item.id), [items]);
+    // const [selectedItemId, setSelectedItemId] = useState("")
+    // const [selectedAction, setSelectedAction] = useState("") 
 
-    async function modifyCart(item_id, action){
-        const submit = useSubmit({
-                END_URL: `cart/`, 
-                JSON_DATA: {item_id, action},
-                onSuccess: () => {
-                },
-                onError: (data) => setError(data.error || `Failed to ${action} item`)
-        });
-        
-        await submit()
+    const submit = useSubmit({
+        END_URL: "cart/",
+        onSuccess: (data) => {
+            console.log("Cart updated", data);
+        },
+        onError: (data) => setError(data?.error || "Failed to modify cart"),
+    });
+
+    async function modifyCart(item_id, action) {
+        await submit({ item_id, action });
     }
 
     async function addToCart(item_id) {
         await modifyCart(item_id, "add")
-        setItems(prev => [...prev, item_id]);
     }
 
     async function removeFromCart(item_id) {
         await modifyCart(item_id, "remove")
-        setItems(prev => prev.filter(item => item !== item_id));
     }
 
-    return { addToCart, removeFromCart }
+    function inCart(item_id) {
+        return itemIDs.includes(item_id)
+    }
+
+    return { addToCart, removeFromCart, inCart, items }
 }
 
 

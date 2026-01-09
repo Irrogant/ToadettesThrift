@@ -11,6 +11,7 @@ import MyItems from "./components/MyItems";
 import Landing from "./components/Landing";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import getCookie from "./components/cookie";
+import Cart from "./components/Cart";
 
 function App() {
   const alreadyLanded = getCookie("already_landed");
@@ -27,6 +28,7 @@ function App() {
         <Route path="/myitems" element={<MyItems/>} />
         <Route path="/search" element={<Search/>} />
         <Route path="/item" element={<ItemDetail/>} />
+        <Route path="/cart" element={<Cart/>} />
       </Route>
     </Routes>
   </BrowserRouter>

@@ -15,7 +15,7 @@ class CartView(APIView):
         cart, created = Cart.objects.get_or_create(owner=request.user)
         cart_items = CartItem.objects.filter(cart=cart)
         print(cart_items)
-        return Response({"cart_items": [
+        return Response({"items": [
             {
                 "id": cart_item.item.id,
                 "title": cart_item.item.title,
@@ -23,12 +23,16 @@ class CartView(APIView):
                 "price": str(cart_item.item.price),
                 "date_added": cart_item.item.date_added,
                 "status": cart_item.item.status,
+                "owner": cart_item.item.owner.username,
             } for cart_item in cart_items
         ]})
 
     # TODO: add price
     def post(self, request, *args, **kwargs):
         # add
+        print(f"request:!:!:!:! {request}")
+        print(f"request:!:!:!:! {request.data}")
+
         if request.data.get("action") == "add":
             item_id = request.data.get("item_id")
             item = Item.objects.get(id=item_id)
@@ -44,8 +48,9 @@ class CartView(APIView):
 
         # remove
         if request.data.get("action") == "remove":
-            cart_item_id = request.data.get("cart_item_id")
-            cart_item = CartItem.objects.get(id=cart_item_id)
+            item_id = request.data.get("item_id")
+            cart = Cart.objects.get(owner=request.user)
+            cart_item = CartItem.objects.get(cart=cart, item_id=item_id)
             cart_item.delete()
             return Response({"success": True, "cart_item_id": cart_item.id})
 
