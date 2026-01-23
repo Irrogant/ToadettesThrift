@@ -54,7 +54,7 @@ function Login() {
 
   return (
     <Container maxWidth="sm">
-       <Box component="form" onSubmit={submit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+       <Box component="form" onSubmit={(e) => submit({ username, password }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <h2 style={{ textAlign: "center" }}>come forth, come forth</h2>
 
         {error && <p style={{ color: "red" }}>{error}</p>}

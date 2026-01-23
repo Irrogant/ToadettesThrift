@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.models import User
 
-    
-# TODO: if already logged in, 
+
+# TODO: if already logged in,
 # TODO: clean input values
 # curl -X POST http://localhost:7000/login/ -H "Content-Type: application/json" -H "X-CSRFToken: {cook}" -b "csrftoken={cook}" -d '{"username":"admin","password":"admin"}'
 class UsernameLoginView(APIView):
@@ -14,7 +14,7 @@ class UsernameLoginView(APIView):
 
     def get(self, request, *args, **kwargs):
         return Response({"detail": "Log in with username and password."})
-    
+
     def post(self, request, *args, **kwargs):
         username = request.data.get("username")
         password = request.data.get("password")
@@ -28,7 +28,8 @@ class UsernameLoginView(APIView):
             return Response({"success": True})
         else:
             return Response({"error": "Invalid credentials."}, status=400)
-        
+
+
 class LogOutView(APIView):
     """
     View to log out.
@@ -37,12 +38,12 @@ class LogOutView(APIView):
     def get(self, request, *args, **kwargs):
         return Response({"detail": "Log out current logged in user."})
 
-    def post (self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         print(request)
         request_user = request.user
         if not request_user.is_authenticated:
             return Response({"Could not locate a current logged in user."}, status=400)
-        
+
         try:
             logout(request)
             return Response({"success": True})
@@ -69,11 +70,12 @@ class CreateAccountView(APIView):
 
         if User.objects.filter(username=username).exists():
             return Response({"error": "Username already taken."}, status=400)
-        
+
         if User.objects.filter(email=email).exists():
             return Response({"error": "An account with this email already exists."}, status=400)
 
-        user = User.objects.create_user(username=username, email=email, password=password)
+        user = User.objects.create_user(
+            username=username, email=email, password=password)
         user.save()
         return Response({"success": True})
 
@@ -100,13 +102,18 @@ class EditAccountView(APIView):
         user.save()
 
         return Response({"success": True})
-    
+
 
 class CurrentUserView(APIView):
     """
     View to get current authenticated user info.
     """
+    print("CURRENT USER VIEWUUUU")
+
     def get(self, request, *args, **kwargs):
+        print("looking for user nyhaaaah")
+        print(request)
+        print(request.data)
         if request.user and request.user.is_authenticated:
             return Response({"authenticated": True, "username": request.user.username, "email": request.user.email})
         return Response({"authenticated": False, "username": None})

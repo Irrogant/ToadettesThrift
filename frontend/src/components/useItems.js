@@ -1,23 +1,30 @@
 import { BACKEND_URL } from "./variables.js";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
-function useItems({END_URL}) {
+function useItems({ END_URL }) {
   const [items, setItems] = useState([]);
 
+  const refetch = useCallback(() => {
+    fetch(`${BACKEND_URL}/${END_URL}`, { credentials: "include" })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch items");
+        return res.json();
+      })
+      .then((data) => setItems(data.items ?? []))
+      .catch(console.error);
+  }, [END_URL]);
+
   useEffect(() => {
-    fetch((`${BACKEND_URL}/${END_URL}`), {
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => setItems(data.items))
-      .catch((error) => console.error('Error fetching items:', error));
-  }, []); 
-  console.log("items found!!!")
-  console.log(items)
-  return items;
+    refetch();
+    console.log("REFEEETCHHHHINGGGGGGGGGGGGGGGGGG", items)
+  }, [refetch]);
+
+  useEffect(() => {
+    console.log("REFETCH Itemsu", items)
+  }, [items]);
+
+
+  return { items, refetch };
 }
-
-
-
 
 export default useItems;

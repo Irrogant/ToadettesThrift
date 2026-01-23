@@ -9,76 +9,75 @@ import useSubmit from "./useSubmit"
 import { useNavigate } from 'react-router-dom'
 
 function Signup() {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(""); 
-    const navigate = useNavigate()
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate()
 
-    const submit = useSubmit({
-      END_URL: "signup/", 
-      JSON_DATA: {username, email, password},
-      onSuccess: () => {
-        navigate("/login");
-      },
-      onError: (data) => setError(data.error || "Signup failed")
-    });
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setError("");
+  const submit = useSubmit({
+    END_URL: "signup/",
+    onSuccess: () => {
+      navigate("/login");
+    },
+    onError: (data) => setError(data.error || "Signup failed")
+  });
+  // const handleSubmit = async (e) => {
+  //     e.preventDefault();
+  //     setError("");
 
-    //     const response = await fetch(`${BACKEND_URL}/signup/`, {
-    //         method: "POST",
-    //         credentials: "include",
-    //         headers: {
-    //         "Content-Type": "application/json",
-    //         "X-CSRFToken": getCookie("csrftoken"),
-    //         },
-    //         body: JSON.stringify({ username, email, password }),
-    //     });
+  //     const response = await fetch(`${BACKEND_URL}/signup/`, {
+  //         method: "POST",
+  //         credentials: "include",
+  //         headers: {
+  //         "Content-Type": "application/json",
+  //         "X-CSRFToken": getCookie("csrftoken"),
+  //         },
+  //         body: JSON.stringify({ username, email, password }),
+  //     });
 
-    //     const data = await response.json();
-    //     if (response.ok) {
-    //         alert("Signup successful!");
-    //     } else {
-    //         setError(data.error || "Signup failed");
-    //     }
-    // };
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //         alert("Signup successful!");
+  //     } else {
+  //         setError(data.error || "Signup failed");
+  //     }
+  // };
 
-   return (
-  <Container maxWidth="sm">
-    <Box component="form" onSubmit={submit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <h2 style={{ textAlign: "center" }}>thy shall giveth us thy soul</h2>
+  return (
+    <Container maxWidth="sm">
+      <Box component="form" onSubmit={(e) => submit({ username, email, password }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <h2 style={{ textAlign: "center" }}>thy shall giveth us thy soul</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <TextField
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        label="Username"
-      />
+        <TextField
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          label="Username"
+        />
 
-      <TextField
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        label="Email"
-      />
+        <TextField
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          label="Email"
+        />
 
-      <TextField
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        label="Password"
-      />
+        <TextField
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          label="Password"
+        />
 
-      <Button type="submit" variant="contained">
-        Sign Up
-      </Button>
-    </Box>
-  </Container>
-);
+        <Button type="submit" variant="contained">
+          Sign Up
+        </Button>
+      </Box>
+    </Container>
+  );
 }
 
 export default Signup;

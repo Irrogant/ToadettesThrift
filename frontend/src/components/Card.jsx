@@ -1,4 +1,4 @@
-import { useState } from 'react'; 
+import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -15,18 +15,18 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 export default function MultiActionAreaCard({ id, title, description, imageName, price, dateAdded, owner }) {
   const cardMaxWidth = 300
   const cardMaxHeight = 300
-  const itemDescription = (description.length > 20) ? (description.substring(0,20).trim() + '...') : description;
-  const itemTitle = (title.length > 12) ? (title.substring(0,12).trim()) : title;
+  const itemDescription = description ? ((description.length > 20) ? (description.substring(0, 20).trim() + '...') : description) : "";
+  const itemTitle = (title.length > 12) ? (title.substring(0, 12).trim()) : title;
   const { addToCart, removeFromCart, inCart } = useCart();
-  const { username, email } = useAuth() 
-  
-  console.log("JIEHDAOILNAWOI ")
-  console.log(username)
-  console.log(owner)
+  const { username, email } = useAuth()
+
+  // console.log("JIEHDAOILNAWOI ")
+  // console.log(username)
+  // console.log(owner)
 
   return (
-    <Card sx={{ '&:hover': {color: 'green'}, maxWidth: cardMaxWidth, cardMaxHeight }}>
-      <CardActionArea sx={{backgroundColor: 'white'}} component={Link} to={`/item/?id=${id}`}>
+    <Card sx={{ '&:hover': { color: 'green' }, maxWidth: cardMaxWidth, cardMaxHeight }}>
+      <CardActionArea sx={{ backgroundColor: 'white' }} component={Link} to={`/item/?id=${id}`}>
         <CardMedia
           component="img"
           height="140"
@@ -40,7 +40,7 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
           <Typography gutterBottom variant="h5" component="div">
             {price}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', maxHeight: 4}}>
+          <Typography variant="body2" sx={{ color: 'text.secondary', maxHeight: 4 }}>
             {itemDescription}
           </Typography>
         </CardContent>
@@ -48,20 +48,20 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
 
       <CardActions sx={{ backgroundColor: 'white', justifyContent: "space-between", alignItems: "center", borderTop: '1px solid grey', }}>
         {(owner === username) ?
-        null :
-        (
-          (inCart(id)) ?
-          (<Button onClick={() => removeFromCart(id)} size="small" color="primary">
-            <RemoveShoppingCartIcon/>
-          </Button>
-          ):
+          null :
           (
-          <Button onClick={() => addToCart(id)} size="small" color="primary">
-            <AddShoppingCartIcon/>
-          </Button>
+            (inCart(id)) ?
+              (<Button onClick={() => removeFromCart(id)} size="small" color="primary">
+                <RemoveShoppingCartIcon />
+              </Button>
+              ) :
+              (
+                <Button onClick={() => addToCart(id)} size="small" color="primary">
+                  <AddShoppingCartIcon />
+                </Button>
+              )
+
           )
-          
-        )
         }
         <Typography sx={{ pr: 1.5 }} variant="body2"> {dateAdded} </Typography>
       </CardActions>

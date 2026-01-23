@@ -12,9 +12,11 @@ import Landing from "./components/Landing";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import getCookie from "./components/cookie";
 import Cart from "./components/Cart";
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
   const alreadyLanded = getCookie("already_landed");
+
   return (
 
   <BrowserRouter>
@@ -24,11 +26,20 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/logout" element={<LogOut/> } />
         <Route path="/signup" element={<Signup/>} />
-        <Route path="/account" element={<Account/>} />
-        <Route path="/myitems" element={<MyItems/>} />
         <Route path="/search" element={<Search/>} />
         <Route path="/item" element={<ItemDetail/>} />
-        <Route path="/cart" element={<Cart/>} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/cart" element={<Cart />} />
+        </Route>
+        <Route path="/account" element={<Account />} />
+        <Route path="/myitems" element={<MyItems />} />
+
+        {/* <Route element={<ProtectedRoute />}>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/myitems" element={<MyItems />} />
+        </Route> */}
+
       </Route>
     </Routes>
   </BrowserRouter>

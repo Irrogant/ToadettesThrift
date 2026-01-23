@@ -6,7 +6,8 @@ function useSubmit({ END_URL, onSuccess, onError }) {
 
     const handleSubmit = async (JSON_DATA, e) => {
         if (e?.preventDefault) e.preventDefault();
-
+        console.log("TRYNA SUBMIT NJYEHAEAUIENAEJAK")
+        console.log(JSON_DATA)
         try {
             const response = await fetch(url, {
                 method: "POST",

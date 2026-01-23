@@ -12,7 +12,7 @@ from django.conf import settings
 class LandingView(View):
 
     def get(self, request, *args, **kwargs):
-        itemAmount = Item.objects.aggregate(Sum("amount"))['amount__sum']
+        itemAmount = Item.objects.all().count()
         return render(request, "landing.html", {'itemAmount':itemAmount})
     
     def post(self, request, *args, **kwargs):
@@ -37,7 +37,7 @@ class LandingView(View):
                 user.save()
                 # Giving items to half of the users
                 if i % 2 == 0: 
-                    item = Item(title="Item %s" % i, amount=10, price=20.00, owner=user)
+                    item = Item(title="Item %s" % i, price=20.00, owner=user)
                     item.save()
             message = "you successfully populated the DB congratulations wow insane we are truly impressed!!1"
 
@@ -47,7 +47,7 @@ class LandingView(View):
             message = "why tf would you do that"
             # Fetching the total amount of objects by adding together amount fields
         
-        itemAmount = Item.objects.aggregate(Sum("amount"))['amount__sum']
+        itemAmount = Item.objects.all().count()
         return render(request, "landing.html", {'itemAmount':itemAmount, 'message':message})
 
 
@@ -61,11 +61,9 @@ class ItemsView(APIView):
             {
                 "id": item.id,
                 "title": item.title,
-                "amount": item.amount,
                 "description": item.description,
                 "price": str(item.price),
                 "date_added": item.date_added,
-                "status": item.status,
                 "owner": item.owner.username,
             } for item in user_items
         ]})
@@ -82,11 +80,9 @@ class ItemDetail(APIView):
         return Response({"item": {
             "id": item.id,
             "title": item.title,
-            "amount": item.amount,
             "description": item.description,
             "price": str(item.price),
             "date_added": item.date_added,
-            "status": item.status,
             "owner": item.owner.username
         }})
 
@@ -106,12 +102,10 @@ class ItemDetail(APIView):
         # TODO: dehär rn alltid true
         # if item:
         #     item.title = request.data.get("title")
-        #     item.amount = request.data.get("amount")
         #     item.description = request.data.get("description")
         #     item.price = request.data.get("price")
-        #     item.status = request.data.get("status")
 
-        for field in ["title", "amount", "description", "price", "status"]:
+        for field in ["title", "description", "price", "status"]:
             if field in request.data:
                 setattr(item, field, request.data[field])
 
@@ -129,11 +123,9 @@ class SearchItemsView(APIView):
             {
                 "id": item.id,
                 "title": item.title,
-                "amount": item.amount,
                 "description": item.description,
                 "price": str(item.price),
                 "date_added": item.date_added,
-                "status": item.status,
             } for item in search_items
         ]})
     
@@ -146,32 +138,28 @@ class AllItemsView(APIView):
             {
                 "id": item.id,
                 "title": item.title,
-                "amount": item.amount,
                 "description": item.description,
                 "price": str(item.price),
                 "date_added": item.date_added,
-                "status": item.status,
                 "owner": item.owner.username
             } for item in all_items
         ]})
 
 # TODO: loging only
-# curl -X POST "http://localhost:7000/createitem/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"Sample Item","amount":10,"description":"This is a sample description.","price":25.99}'
+# curl -X POST "http://localhost:7000/createitem/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"Sample Item","description":"This is a sample description.","price":25.99}'
 class CreateItemView(APIView):
 
     def post(self, request, *args, **kwargs):
         print(request.data)
         title = request.data.get("title")
-        amount = request.data.get("amount")
         description = request.data.get("description", "")
         price = request.data.get("price")
 
-        if not title or not amount or not price:
-            return Response({"error": "Title, amount, and price are required."}, status=400)
+        if not title or not price:
+            return Response({"error": "Title and price are required."}, status=400)
 
         item = Item(
             title=title,
-            amount=amount,
             description=description,
             price=price,
             owner=request.user
