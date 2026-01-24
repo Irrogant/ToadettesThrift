@@ -7,10 +7,11 @@ import { useCart } from "./useCart.jsx";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthContext.jsx";
+import { useCartContext } from "./CartContext.jsx";
 
 function Cart() {
     const { isLoggedIn } = useAuth();
-    const { items } = useCart();
+    const { items } = useCartContext();
 
 
     console.log("ITEMSSS IN CARTTTT RNNNNN",)

@@ -6,7 +6,7 @@ import { Typography, Button } from '@mui/material';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
 import { Link } from "react-router-dom";
-import { useCart } from "./useCart.jsx";
+import { useCartContext } from "./CartContext"
 import { useAuth } from "./AuthContext";
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -17,7 +17,7 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
   const cardMaxHeight = 300
   const itemDescription = description ? ((description.length > 20) ? (description.substring(0, 20).trim() + '...') : description) : "";
   const itemTitle = (title.length > 12) ? (title.substring(0, 12).trim()) : title;
-  const { addToCart, removeFromCart, inCart } = useCart();
+  const { addToCart, removeFromCart, inCart } = useCartContext();
   const { username, email } = useAuth()
 
   // console.log("JIEHDAOILNAWOI ")
