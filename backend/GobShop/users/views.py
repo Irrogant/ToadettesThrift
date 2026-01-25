@@ -41,6 +41,7 @@ class LogOutView(APIView):
     def post(self, request, *args, **kwargs):
         print(request)
         request_user = request.user
+        print(request_user)
         if not request_user.is_authenticated:
             return Response({"Could not locate a current logged in user."}, status=400)
 
@@ -92,14 +93,20 @@ class EditAccountView(APIView):
 
     def post(self, request, *args, **kwargs):
 
-        newPassword = request.data.get("password")
+        old_password = request.data.get("oldPassword")
+        new_password = request.data.get("newPassword")
 
-        if not newPassword:
+        if not new_password or not old_password:
             return Response({"error": "Bro you came here to edit your password didn't you"}, status=400)
 
         user = request.user
-        user.set_password(newPassword)
+
+        if not user.check_password(old_password):
+            return Response({"error": "Current password is wrong"}, status=400)
+
+        user.set_password(new_password)
         user.save()
+        login(request, user)  # set_password logs out the current user
 
         return Response({"success": True})
 
