@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from carts.models import Cart, CartItem
 from shop.models import Item, SoldItem
+from users.models import User
 from rest_framework.response import Response
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
@@ -10,9 +11,10 @@ from rest_framework.permissions import IsAuthenticated
 # TODO: make sure only cart owner can see and modify own cart
 # curl -X POST "http://localhost:7000/cart/" -H "Content-Type: application/json" -H "Cookie: sessionid=mhnff9ml9eqfrn3f0ggjebuqnbk2hub6; csrftoken=RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -H "X-CSRFToken: RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -d '{"cart_item_id":1,"action":"remove"}'
 
+
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
-    #TODO: serializer?
+    # TODO: serializer?
 
     def get(self, request, *args, **kwargs):
 
@@ -48,16 +50,16 @@ class CartView(APIView):
             # trying to add already existing item
             if CartItem.objects.filter(item_id=item_id, cart=cart).exists():
                 return Response({"error": "Item is already in cart."}, status=400)
-            
+
             cart_item = CartItem.objects.create(
                 cart=cart,
                 item_id=item.id,
                 title=item.title,
                 owner=item.owner,
                 price=item.price
-                )
+            )
 
-            cart_item.save() 
+            cart_item.save()
             return Response({"success": True, "cart_item_id": cart_item.id})
 
         # remove
@@ -67,6 +69,7 @@ class CartView(APIView):
             cart_item = CartItem.objects.get(cart=cart, item_id=item_id)
             cart_item.delete()
             return Response({"success": True, "cart_item_id": cart_item.id})
+
 
 class CheckOutView(APIView):
 
@@ -82,28 +85,35 @@ class CheckOutView(APIView):
             # modifications to item fields
             if cart_item.item.last_modified is not cart_item.date_added:
                 item_messages.update({cart_item: "item has changed"})
-        
-        return Response({"error": True, "cart":cart.id, "messages":item_messages})
-    
+
+        return Response({"error": True, "cart": cart.id, "messages": item_messages})
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        print("POSTNNNHHHYAHHH")
         cart = Cart.objects.get(owner=request.user)
         cart_items = cart.items.all()
+        cart_price = 0
         items = []
         # do same checks
         # if nothing wrong;
-        # lock items 
+        # lock items
         for cart_item in cart_items:
             item = Item.objects.get(id=cart_item.item_id)
-            SoldItem.objects.create(
-                title="", 
-                owner=cart_item.item.owner,
+            sold_item = SoldItem.objects.create(
+                title=item.title,
+                seller=item.owner,
                 buyer=request.user,
-                price=cart_item.price, 
-                )
+                price=item.price,
+            )
+            cart_price += item.price
             item.delete()
-            cart_item.delete() 
+            cart_item.delete()
+            items.append(sold_item)
 
-        # jämför cart items w real items 
+        print(f"purchase done yay for a total {cart_price}")
+        return Response({"success": True, "cart_item_id": cart_item.id})
+
+        # jämför cart items w real items
         # om samma, genomför köp
-        # = clear cart, ändra items ti sold, gör cart items ti purchased? 
+        # = clear cart, ändra items ti sold, gör cart items ti purchased?

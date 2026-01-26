@@ -3,17 +3,13 @@ import NavBar from "./NavBar";
 import { Outlet } from 'react-router-dom';
 import { Toolbar } from '@mui/material';
 
-function Layout() {    
-    return (  
-    <div>
-        <header>
+function Layout() {
+    return (
+        <>
             <NavBar />
-            <Toolbar />  {/** makes sure content is not hidden behind navbar **/}
-        </header>
-        <main> 
-            <Outlet />    
-        </main>
-    </div>
+            <Toolbar />
+            <Outlet />
+        </>
     );
 }
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,17 +12,16 @@ import { useAuth } from "./AuthContext";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
-export default function MultiActionAreaCard({ id, title, description, imageName, price, dateAdded, owner }) {
+export default function MultiActionAreaCard({ id, title, description, imageName, price, dateAdded, owner, seller, buyer }) {
   const cardMaxWidth = 300
   const cardMaxHeight = 300
   const itemDescription = description ? ((description.length > 20) ? (description.substring(0, 20).trim() + '...') : description) : "";
   const itemTitle = (title.length > 12) ? (title.substring(0, 12).trim()) : title;
   const { addToCart, removeFromCart, inCart } = useCartContext();
   const { username, email } = useAuth()
+  const isUserInvolved = [owner, seller, buyer].includes(username);
 
-  // console.log("JIEHDAOILNAWOI ")
-  // console.log(username)
-  // console.log(owner)
+  // TODO: only prevent SA item to be added to backend cart  
 
   return (
     <Card sx={{ '&:hover': { color: 'green' }, maxWidth: cardMaxWidth, cardMaxHeight }}>
@@ -47,7 +46,7 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
       </CardActionArea>
 
       <CardActions sx={{ backgroundColor: 'white', justifyContent: "space-between", alignItems: "center", borderTop: '1px solid grey', }}>
-        {(owner === username) ?
+        {(isUserInvolved) ?
           null :
           (
             (inCart(id)) ?

@@ -13,16 +13,26 @@ function NavBar() {
   const { isLoggedIn } = useAuth();
   /* TODO: navbar täcker saker under rn */
   return (
-    <AppBar>
+    <AppBar position="fixed">
       <Toolbar>
+        <Box component="img" src={Logo} alt="Logo" sx={{ height: 40 }} />
 
-         <Box component="img" src={Logo} alt="Logo" sx={{ height: 40 }} />
-
-         <Box sx={{ flexGrow: 2, mx: 2 }}>
-         <SearchBar />
-         </Box>
-          {/* If logged in, login and signup is removed, a logout is added*/}
-         <Box sx={{ marginLeft: "auto" }}>
+        <Box sx={{ flexGrow: 2, mx: 2 }}>
+          <SearchBar />
+        </Box>
+        {/* If logged in, login and signup is removed, a logout is added*/}
+        <Box sx={{
+          display: "flex",
+          gap: 1,
+          flexWrap: "nowrap",
+          overflow: "hidden",
+          marginLeft: "auto",
+          "& .MuiButton-root": {
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          },
+        }}>
           <Button color="inherit" component={Link} to="/">Home</Button>
           {!isLoggedIn ? (
             <>

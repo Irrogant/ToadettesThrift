@@ -16,6 +16,7 @@ function myItems() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("0");
     const [view, setView] = useState("info");
+    const [inventory, setInventory] = useState("on_sale")
     const [error, setError] = useState("");
 
     function clear() {
@@ -38,22 +39,55 @@ function myItems() {
         onError: (data) => setError(data.error || "Item creation failed")
 
     });
+
+    useEffect(() => {
+        console.log("Items updated:", items);
+        console.log("AAAAAAAAAajdaionflwka", items[0]?.on_sale_items)
+    }, [items]);
+    //console.log(items.on_sale_items)
     /* TODO: stoppa frontend creation när de fö lite fields*/
     /* sort by category */
     /* bara edit när SA???  ah inte när sålda */
+    // TODO: adda clear ti change password å sånt också
     return (
         <Container>
 
             {view === "info" &&
                 <Container>
                     <Box sx={{ mt: 2 }}>
-                        <Button onClick={() => { setView("create"); clear() }} >Create Item</Button>
-                        <Typography variant="h6">Your Items</Typography>
-                        {items.length === 0 ? (
-                            <Typography>No items LMAOOOOOOO</Typography>
-                        ) : (
-                            <Items items={items} />
-                        )}
+                        <Button onClick={() => setInventory("on_sale")}>Your Items</Button>
+                        <Button onClick={() => setInventory("sold")}>Sold Items</Button>
+                        <Button onClick={() => setInventory("purchased")}>Purchased Items</Button>
+
+                        {inventory === "on_sale" ? (
+                            <Container>
+                                <Button onClick={() => { setView("create"); clear() }}>Create Item</Button>
+                                <Typography variant="h6">Your Items</Typography>
+                                {items[0]?.on_sale_items?.length === 0 ? (
+                                    <Typography>No items LMAOOOOOOO</Typography>
+                                ) : (
+                                    <Items items={items[0]?.on_sale_items || []} />
+                                )}
+                            </Container>
+                        ) : inventory === "sold" ? (
+                            <Container>
+                                <Typography variant="h6">Sold Items</Typography>
+                                {items[0]?.sold_items?.length === 0 ? (
+                                    <Typography>No items LMAOOOOOOO</Typography>
+                                ) : (
+                                    <Items items={items[0]?.sold_items || []} />
+                                )}
+                            </Container>
+                        ) : inventory === "purchased" ? (
+                            <Container>
+                                <Typography variant="h6">Purchased Items</Typography>
+                                {items[0]?.purchased_items?.length === 0 ? (
+                                    <Typography>No items LMAOOOOOOO</Typography>
+                                ) : (
+                                    <Items items={items[0]?.purchased_items || []} />
+                                )}
+                            </Container>
+                        ) : null}
                     </Box>
                 </Container>
             }

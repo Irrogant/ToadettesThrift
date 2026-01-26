@@ -56,7 +56,7 @@ export function useCart() {
         return itemIDs.includes(item_id);
     }
 
-    return { addToCart, removeFromCart, inCart, items }
+    return { addToCart, removeFromCart, inCart, items, refetch }
 }
 
 
