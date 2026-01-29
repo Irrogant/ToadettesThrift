@@ -70,7 +70,7 @@ class ItemsView(APIView):
                         "title": item.title,
                         "description": item.description,
                         "price": str(item.price),
-                        "date_added": item.date_added,
+                        "date_created": item.date_created,
                         "owner": item.owner.username,
                     } for item in on_sale_items
                 ],
@@ -113,7 +113,7 @@ class ItemDetail(APIView):
             "title": item.title,
             "description": item.description,
             "price": str(item.price),
-            "date_added": item.date_added,
+            "date_added": item.date_created,
             "owner": item.owner.username
         }})
 
@@ -155,7 +155,7 @@ class SearchItemsView(APIView):
                 "title": item.title,
                 "description": item.description,
                 "price": str(item.price),
-                "date_added": item.date_added,
+                "date_created": item.date_created,
             } for item in search_items
         ]})
 
@@ -170,7 +170,7 @@ class AllItemsView(APIView):
                 "title": item.title,
                 "description": item.description,
                 "price": str(item.price),
-                "date_added": item.date_added,
+                "date_created": item.date_created,
                 "owner": item.owner.username
             } for item in all_items
         ]})

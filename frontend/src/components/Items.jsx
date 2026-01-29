@@ -15,7 +15,8 @@ function Items({ items }) {
                         description={item.description}
                         imageName="brussel"
                         price={item.price}
-                        dateAdded={item.date_added}
+                        dateCreated={item.date_created}
+                        soldAt={item.sold_at}
                         owner={item.owner}
                         seller={item.seller}
                         buyer={item.buyer}

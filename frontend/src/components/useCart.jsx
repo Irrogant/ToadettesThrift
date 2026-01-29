@@ -2,17 +2,25 @@
 import { useState, useEffect, useMemo } from 'react';
 import useSubmit from './useSubmit.js';
 import useItems from './useItems.js';
+import useMessages from './useMessages.js';
 import { useAuth } from "./AuthContext";
 
 export function useCart() {
     const [price, setPrice] = useState(0)
     const [error, setError] = useState(null);
     const { items, refetch } = useItems({ END_URL: "cart/" });
+    const { messages, refetchMessages } = useMessages({ END_URL: "cart/" });
+
+    useEffect(() => {
+        const cartPrice = items.reduce(
+            (total, item) => total + Number(item.price),
+            0
+        );
+        setPrice(cartPrice);
+    }, [items]);
 
     const { isLoggedIn } = useAuth()
     // kan man int fetch itemid direkt från cartid?
-
-    // TODO:::::::::: items funkar int, kolla console log
 
     const itemIDs = useMemo(() => {
         if (!items) return [];
@@ -22,14 +30,9 @@ export function useCart() {
 
     const submit = useSubmit({
         END_URL: "cart/",
-        onSuccess: () => { refetch() },
+        onSuccess: () => { refetch(), refetchMessages() },
         onError: (data) => setError(data?.error || "Failed to modify cart"),
     });
-
-    useEffect(() => {
-        // console.log("ITEMIDSSSSSSSHHSHSHSHS", itemIDs)
-        // console.log("normal items", items)
-    }, [items]);
 
     async function modifyCart(item_id, action) {
         if (!isLoggedIn) {
@@ -52,11 +55,10 @@ export function useCart() {
             console.log("narrrr");
             return false;
         }
-
         return itemIDs.includes(item_id);
     }
 
-    return { addToCart, removeFromCart, inCart, items, refetch }
+    return { addToCart, removeFromCart, inCart, modifyCart, items, price, messages, refetch }
 }
 
 

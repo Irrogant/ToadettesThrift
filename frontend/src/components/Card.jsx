@@ -8,24 +8,37 @@ import CardActions from '@mui/material/CardActions';
 import { Link } from "react-router-dom";
 import { useCartContext } from "./CartContext"
 import { useAuth } from "./AuthContext";
+import coin from "../assets/icons/coin.png";
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
-export default function MultiActionAreaCard({ id, title, description, imageName, price, dateAdded, owner, seller, buyer }) {
+export default function MultiActionAreaCard({ id, title, description, imageName, price, soldAt, dateCreated, owner, seller, buyer }) {
   const cardMaxWidth = 300
   const cardMaxHeight = 300
   const itemDescription = description ? ((description.length > 20) ? (description.substring(0, 20).trim() + '...') : description) : "";
   const itemTitle = (title.length > 12) ? (title.substring(0, 12).trim()) : title;
   const { addToCart, removeFromCart, inCart } = useCartContext();
   const { username, email } = useAuth()
-  const isUserInvolved = [owner, seller, buyer].includes(username);
+  const [isUserInvolved, setIsUserInvolved] = useState(false)
+  const [isSold, setIsSold] = useState(false)
+
+  useEffect(() => {
+    setIsSold([seller, buyer].includes(username))
+  }, [])
+
+  useEffect(() => {
+    setIsUserInvolved([owner, seller, buyer].includes(username))
+  }, [])
 
   // TODO: only prevent SA item to be added to backend cart  
-
   return (
     <Card sx={{ '&:hover': { color: 'green' }, maxWidth: cardMaxWidth, cardMaxHeight }}>
-      <CardActionArea sx={{ backgroundColor: 'white' }} component={Link} to={`/item/?id=${id}`}>
+      <CardActionArea
+        sx={{ backgroundColor: 'white' }}
+        component={isSold ? 'div' : Link}
+        to={isSold ? undefined : `/item/?id=${id}`}
+      >
         <CardMedia
           component="img"
           height="140"
@@ -37,7 +50,23 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
             {itemTitle}
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            {price}
+            <Typography
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.25em",
+              }}
+            >
+              {price}
+              <img
+                src={coin}
+                alt="Coin"
+                style={{
+                  width: "1em",
+                  height: "1em",
+                }}
+              />
+            </Typography>
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', maxHeight: 4 }}>
             {itemDescription}
@@ -62,7 +91,14 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
 
           )
         }
-        <Typography sx={{ pr: 1.5 }} variant="body2"> {dateAdded} </Typography>
+        <Typography sx={{ pr: 1.5 }} variant="body2">
+          {
+
+            (dateCreated) ?
+              (dateCreated) :
+              ("Sold " + soldAt)
+          }
+        </Typography>
       </CardActions>
     </Card>
   );

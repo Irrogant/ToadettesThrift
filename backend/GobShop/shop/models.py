@@ -12,8 +12,8 @@ class Item(models.Model):
     description = models.CharField(max_length=200, default="", null=False)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     # Adds current date at creation
-    date_added = models.DateField(auto_now_add=True)
-    # last_modified = models.DateField(auto_now_add=True)
+    date_created = models.DateField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title

@@ -7,7 +7,8 @@ import useSubmit from "./useSubmit.js"
 import { useCart } from "./useCart.jsx"
 
 /*TODO: edit product */
-
+// TODO: remove BUY when already in cart
+// TODO: 
 function ItemDetail() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("id");
@@ -22,6 +23,7 @@ function ItemDetail() {
     const [price, setPrice] = useState("");
     const { addToCart } = useCart();
 
+    // ta in sa/pu/so
     const url = `${BACKEND_URL}/itemdetail/?id=${encodeURIComponent(query)}`
 
     const submit = useSubmit({
@@ -32,29 +34,6 @@ function ItemDetail() {
         },
         onError: (data) => setError(data.error || "Edit failed")
     });
-
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setError("");
-
-    //     const response = await fetch(url, {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "X-CSRFToken": getCookie("csrftoken"),
-    //     },
-    //     body: JSON.stringify({ title, description, price }),
-    //     });
-
-    //     const data = await response.json();
-    //     if (response.ok) {
-    //     setView("info");
-    //     } else {
-    //     setError(data.error || "Edit failed");
-    //     }
-    // };    
 
     useEffect(() => {
 
@@ -87,7 +66,7 @@ function ItemDetail() {
     }, [item]);
 
     const isOwner = (username === owner) /* if the user viewing is the one who owns the item */
-
+    // DELETE ITEM!!
     return (
         <Container maxWidth:sm>
             {view === "info" &&

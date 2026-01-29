@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Autocomplete, TextField, Button, Container} from "@mui/material";
+import { Autocomplete, TextField, Button, Container } from "@mui/material";
 import mag from "../assets/icons/mag.png";
 import { BACKEND_URL } from "./variables.js";
 import { Link } from "react-router-dom";
@@ -17,9 +17,9 @@ function SearchBar() {
     const url = `${BACKEND_URL}/searchitems/?q=${encodeURIComponent(query)}`;
 
     const response = await fetch(url, {
-        method: "GET",
-        credentials: "include",
-      });
+      method: "GET",
+      credentials: "include",
+    });
 
     const data = await response.json();
 
@@ -31,25 +31,25 @@ function SearchBar() {
 
   return (
     <Container sx={{ display: "flex", alignItems: "center", marginLeft: 4 }}>
-    <Autocomplete
-      sx={{ width: 600, alignContent: "center" }}
-      freeSolo
-      options={searchResults}
-      value={searchTerm}
-      onInputChange={handleSearch}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Search"
-          variant="outlined"
-          fullWidth
-        />
-      )}
-    />
-    <Button color="inherit" component={Link} to={`/search/?q=${encodeURIComponent(searchTerm)}`}>
-      <img src={mag} alt="Search" style={{ width: "40px", height: "40px" }} />
-    </Button>
-  </Container>
+      <Autocomplete
+        sx={{ width: 600, alignContent: "center" }}
+        freeSolo
+        options={searchResults}
+        value={searchTerm}
+        onInputChange={handleSearch}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search"
+            variant="outlined"
+            fullWidth
+          />
+        )}
+      />
+      <Button color="inherit" component={Link} to={`/search/?q=${encodeURIComponent(searchTerm)}`}>
+        <img src={mag} alt="Search" style={{ width: "40px", height: "40px" }} />
+      </Button>
+    </Container>
   );
 };
 
