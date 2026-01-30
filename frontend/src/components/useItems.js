@@ -1,5 +1,5 @@
 import { BACKEND_URL } from "./variables.js";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 function useItems({ END_URL }) {
   const [items, setItems] = useState([]);

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.db.models import Sum
 from users.models import User
 from shop.models import Item, SoldItem
 from rest_framework.views import APIView
@@ -7,6 +6,7 @@ from rest_framework.response import Response
 from django.views import View
 from django.shortcuts import redirect
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 
 # TODO: fixa cavegrej ti landing
 
@@ -36,11 +36,11 @@ class LandingView(View):
             # Creating six users with numbers 1-6
             for i in range(1, 7):
                 user = User.objects.create_user(
-                    "testuser%s" % i, "testuser%s@example.com" % i, "pass%s" % i)
+                    f"testuser{i}", f"testuser{i}@example.com", f"pass{i}")
                 user.save()
                 # Giving items to half of the users
                 if i % 2 == 0:
-                    item = Item(title="Item %s" % i, price=20.00, owner=user)
+                    item = Item(title=f"Item {i}", price=20.00, owner=user)
                     item.save()
             message = "you successfully populated the DB congratulations wow insane we are truly impressed!!1"
 
@@ -118,23 +118,16 @@ class ItemDetail(APIView):
         }})
 
     # curl -X POST "http://localhost:7000/itemdetail/?id={item_id}" -H "Content-Type: application/json" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"freshaf"}'
-    # TODO: only allow edit if item is on sale (not already sold)
     def post(self, request, *args, **kwargs):
         query = request.GET.get("id")
-        item = Item.objects.get(id=query)
 
-        # TODO: dehär rn alltid true
-        if not item:
-            return Response({"error": "Item not found."}, status=400)
+        try:
+            item = Item.objects.get(id=query)
+        except Item.DoesNotExist:
+            return Response({"error": "Item does not exist."}, status=400)
 
         if request.user != item.owner:
             return Response({"error": "Only the owner an item can edit it."}, status=400)
-
-        # TODO: dehär rn alltid true
-        # if item:
-        #     item.title = request.data.get("title")
-        #     item.description = request.data.get("description")
-        #     item.price = request.data.get("price")
 
         for field in ["title", "description", "price", "status"]:
             if field in request.data:
@@ -175,11 +168,11 @@ class AllItemsView(APIView):
             } for item in all_items
         ]})
 
-# TODO: loging only
 # curl -X POST "http://localhost:7000/createitem/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"Sample Item","description":"This is a sample description.","price":25.99}'
 
 
 class CreateItemView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         print(request.data)

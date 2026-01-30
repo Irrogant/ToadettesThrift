@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Autocomplete, TextField, Button, Container } from "@mui/material";
-import mag from "../assets/icons/mag.png";
-import { BACKEND_URL } from "./variables.js";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { Autocomplete, Button, Container, TextField } from '@mui/material';
+
+import { BACKEND_URL } from './variables.js';
+import mag from '../assets/icons/mag.png';
 
 function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");

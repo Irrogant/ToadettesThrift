@@ -1,7 +1,8 @@
-import { useEffect } from "react";
-import { BACKEND_URL } from "./variables";
-import getCookie from "./cookie";
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { BACKEND_URL } from './variables';
+import getCookie from './cookie';
 
 
 
@@ -12,7 +13,7 @@ function Landing() {
 
     useEffect(() => {
         if (!alreadyLanded) {
-            window.location.href = url; 
+            window.location.href = url;
         }
         else {
             navigate("/")

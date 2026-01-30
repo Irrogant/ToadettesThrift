@@ -1,18 +1,23 @@
 import { useEffect, useState } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { Typography, Button } from '@mui/material';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardActions from '@mui/material/CardActions';
-import { Link } from "react-router-dom";
-import { useCartContext } from "./CartContext"
-import { useAuth } from "./AuthContext";
-import coin from "../assets/icons/coin.png";
+import { Link } from 'react-router-dom';
+
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
+import { useAuth } from './AuthContext';
+import { useCartContext } from './CartContext';
+
+import coin from '../assets/icons/coin.png';
 export default function MultiActionAreaCard({ id, title, description, imageName, price, soldAt, dateCreated, owner, seller, buyer }) {
   const cardMaxWidth = 300
   const cardMaxHeight = 300

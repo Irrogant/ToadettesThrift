@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { BACKEND_URL } from "./variables.js";
-import { Container, Grid, Stack, Button, Box, TextField } from '@mui/material';
-import { useAuth } from "./AuthContext";
-import useSubmit from "./useSubmit.js"
-import { useCart } from "./useCart.jsx"
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { Box, Button, Container, Grid, Stack, TextField } from '@mui/material';
+
+import { BACKEND_URL } from './variables.js';
+import { useAuth } from './AuthContext';
+import { useCart } from './useCart.jsx';
+import useSubmit from './useSubmit.js';
 
 /*TODO: edit product */
 // TODO: remove BUY when already in cart
@@ -21,10 +23,17 @@ function ItemDetail() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
+    const [image, setImage] = useState(null);
     const { addToCart } = useCart();
 
-    // ta in sa/pu/so
     const url = `${BACKEND_URL}/itemdetail/?id=${encodeURIComponent(query)}`
+
+    const handleUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setImage(URL.createObjectURL(file));
+        }
+    };
 
     const submit = useSubmit({
         END_URL: `itemdetail/?id=${encodeURIComponent(query)}`,
@@ -68,9 +77,10 @@ function ItemDetail() {
     const isOwner = (username === owner) /* if the user viewing is the one who owns the item */
     // DELETE ITEM!!
     return (
-        <Container maxWidth:sm>
+        <Container>
             {view === "info" &&
-                <Container maxWidth:sm>
+                <Container>
+                    {error && <p style={{ color: "red" }}>{error}</p>}
                     <h2>{title}</h2>
                     <Grid container spacing={2}>
                         <Grid size={4}>
@@ -91,8 +101,9 @@ function ItemDetail() {
             }
 
             {view === "edit" &&
-                <Container maxWidth:sm>
-                    <Box component="form" onSubmit={(e) => submit({ title, description, price }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Container>
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    <Box component="form" onSubmit={(e) => submit({ title, description, price }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
                         <TextField
                             type="text"
                             value={title}
@@ -117,7 +128,15 @@ function ItemDetail() {
                                 </Stack>
                             </Grid>
                             <Grid size={8}>
-                                <div sx={{ height: '100%', boxSizing: 'border-box' }}>PICTURE</div>
+                                <Button variant="contained" component="label">
+                                    Upload Picture
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        hidden
+                                        onChange={handleUpload}
+                                    />
+                                </Button>
                             </Grid>
                         </Grid>
                         {isOwner &&
@@ -125,7 +144,7 @@ function ItemDetail() {
                     </Box>
                 </Container>
             }
-        </Container>
+        </Container >
     );
 }
 

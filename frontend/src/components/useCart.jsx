@@ -1,9 +1,9 @@
-
 import { useState, useEffect, useMemo } from 'react';
-import useSubmit from './useSubmit.js';
+
+import { useAuth } from './AuthContext';
 import useItems from './useItems.js';
 import useMessages from './useMessages.js';
-import { useAuth } from "./AuthContext";
+import useSubmit from './useSubmit.js';
 
 export function useCart() {
     const [price, setPrice] = useState(0)

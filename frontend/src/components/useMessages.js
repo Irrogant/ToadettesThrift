@@ -1,5 +1,5 @@
 import { BACKEND_URL } from "./variables.js";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 function useMessages({ END_URL }) {
     const [messages, setMessages] = useState([]);

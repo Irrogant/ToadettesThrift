@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { BACKEND_URL } from "./variables.js";
-import { Container } from "@mui/material";
-import Items from "./Items.jsx"
-import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-function Search() {  
+import { Container } from '@mui/material';
+
+import { BACKEND_URL } from './variables.js';
+import Items from './Items.jsx';
+
+function Search() {
 
     const [items, setItems] = useState([]);
     const [searchParams] = useSearchParams();
@@ -18,7 +20,7 @@ function Search() {
         const response = await fetch(url, {
             method: "GET",
             credentials: "include",
-            });
+        });
 
         const data = await response.json();
 
@@ -31,10 +33,10 @@ function Search() {
     }, [query]);
 
     return (
-    <Container maxWidth="false">
-        <h2 style={{ textAlign: "center" }}>reshults</h2>
-        < Items items={items} />
-    </Container>
+        <Container maxWidth="false">
+            <h2 style={{ textAlign: "center" }}>reshults</h2>
+            < Items items={items} />
+        </Container>
     );
 }
 

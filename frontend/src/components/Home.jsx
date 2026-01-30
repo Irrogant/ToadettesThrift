@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { BACKEND_URL } from "./variables.js";
 import { Container } from "@mui/material";
@@ -16,7 +16,7 @@ function Home() {
       .then((response) => response.json())
       .then((data) => setItems(data.items))
       .catch((error) => console.error('Error fetching items:', error));
-  }, []); 
+  }, []);
 
   return (
     <Container maxWidth="false">

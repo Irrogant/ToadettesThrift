@@ -1,16 +1,15 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import { Button } from '@mui/material';
-import { useCartContext } from './CartContext';
+import {
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    Button,
+} from '@mui/material';
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+
+import { useCartContext } from './CartContext';
 
 // TODO: link 
 export default function ListObject({ id, title, imageName, price, message }) {

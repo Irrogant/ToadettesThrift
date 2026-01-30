@@ -1,12 +1,9 @@
-import React, { useState } from "react";
-import Button from '@mui/material/Button';
-import getCookie from "./cookie";
-import { BACKEND_URL } from "./variables.js";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import { TextField } from "@mui/material";
-import useSubmit from "./useSubmit"
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Box, Button, Container, TextField } from '@mui/material';
+
+import useSubmit from './useSubmit';
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -22,30 +19,9 @@ function Signup() {
     },
     onError: (data) => setError(data.error || "Signup failed")
   });
-  // const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     setError("");
-
-  //     const response = await fetch(`${BACKEND_URL}/signup/`, {
-  //         method: "POST",
-  //         credentials: "include",
-  //         headers: {
-  //         "Content-Type": "application/json",
-  //         "X-CSRFToken": getCookie("csrftoken"),
-  //         },
-  //         body: JSON.stringify({ username, email, password }),
-  //     });
-
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //         alert("Signup successful!");
-  //     } else {
-  //         setError(data.error || "Signup failed");
-  //     }
-  // };
 
   return (
-    <Container maxWidth="sm">
+    <Container>
       <Box component="form" onSubmit={(e) => submit({ username, email, password }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <h2 style={{ textAlign: "center" }}>thy shall giveth us thy soul</h2>
 

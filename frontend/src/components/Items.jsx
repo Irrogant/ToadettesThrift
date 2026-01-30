@@ -1,6 +1,5 @@
-import MultiActionAreaCard from "./Card.jsx";
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { Box, Grid } from '@mui/material';
+import MultiActionAreaCard from './Card.jsx';
 
 
 function Items({ items }) {

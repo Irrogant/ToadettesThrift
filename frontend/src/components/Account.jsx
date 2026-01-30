@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
   Typography,
   TextField,
-  Grid,
-  Stack,
   Container,
 } from "@mui/material";
 import { useAuth } from "./AuthContext";
-import useItems from "./useItems";
 import useSubmit from "./useSubmit";
-import Items from "./Items.jsx";
-import { BACKEND_URL } from "./variables.js";
 
-
-// TODO: clean up imports i alla filer
 
 function Account() {
   const { username, email } = useAuth();

@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 import { useCart } from "./useCart.jsx";
 
 const CartContext = createContext(null);

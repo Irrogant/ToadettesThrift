@@ -1,8 +1,6 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from carts.models import Cart, CartItem
 from shop.models import Item, SoldItem
-from users.models import User
 from rest_framework.response import Response
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
@@ -48,7 +46,7 @@ def syncCart(cart):
 
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
-    # TODO: serializer?
+    # TODO: serializers?
 
     def get(self, request, *args, **kwargs):
         cart, _ = Cart.objects.get_or_create(owner=request.user)
@@ -62,21 +60,17 @@ class CartView(APIView):
                         "owner": cart_item.owner.username,
                         } for cart_item in cart_items
         ]})
-        # TODO: add price
-        # TODO: prevent user to add their own items to cart
 
     def post(self, request, *args, **kwargs):
-        print(f"request:!:!:!:! {request}")
-        print(f"request:!:!:!:! {request.data}")
-
         action = request.data.get("action")
         cart, _ = Cart.objects.get_or_create(owner=request.user)
 
-        # add
         if action == "add":
             try:
                 item_id = request.data.get("item_id")
                 item = Item.objects.get(id=item_id)
+
+                # prevent user to add their own items to cart
 
                 # trying to add already existing item
                 if CartItem.objects.filter(item_id=item_id, cart=cart).exists():
@@ -95,7 +89,6 @@ class CartView(APIView):
             except:
                 return Response({"error": "Failed to add to cart."}, status=400)
 
-        # remove
         if action == "remove":
             try:
                 item_id = request.data.get("item_id")
@@ -105,7 +98,6 @@ class CartView(APIView):
             except:
                 return Response({"error": "Failed to remove from cart."}, status=400)
 
-        # sync
         if action == "sync":
             try:
                 item_messages = syncCart(cart)
@@ -115,6 +107,7 @@ class CartView(APIView):
 
 
 class CheckOutView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         cart = Cart.objects.get(owner=request.user)
@@ -135,7 +128,6 @@ class CheckOutView(APIView):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        # TODO: check for item changes
         try:
             print("POSTNNNHHHYAHHH")
             cart = Cart.objects.get(owner=request.user)

@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { BACKEND_URL } from "./variables.js";
-import { Container } from "@mui/material";
-import Typography from '@mui/material/Typography';
-import Items from "./Items.jsx"
-import { useCart } from "./useCart.jsx";
-import { Button, Box } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useAuth } from "./AuthContext.jsx";
-import { useCartContext } from "./CartContext.jsx";
-import useSubmit from "./useSubmit";
-import FolderList from "./CartList.jsx";
-import coin from "../assets/icons/coin.png";
+import { useEffect, useState } from 'react';
 
-// TODO: fix maxwidth false
+import { Box, Button, Container, Typography } from '@mui/material';
+
+import { useAuth } from './AuthContext.jsx';
+import { useCartContext } from './CartContext.jsx';
+import useSubmit from './useSubmit';
+import FolderList from './CartList.jsx';
+
+import coin from '../assets/icons/coin.png';
+
 function Cart() {
     const { isLoggedIn } = useAuth();
     const { items, price, refetch } = useCartContext();
