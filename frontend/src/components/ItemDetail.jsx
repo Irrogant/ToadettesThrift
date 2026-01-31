@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Container, Grid, Stack, TextField } from '@mui/material';
+import { Box, Button, Container, Grid, Stack, TextField, Typography } from '@mui/material';
 
 import { BACKEND_URL } from './variables.js';
 import { useAuth } from './AuthContext';
 import { useCart } from './useCart.jsx';
 import useSubmit from './useSubmit.js';
+import useFormSubmit from "./useFormSubmit";
+import { useNavigate } from 'react-router-dom';
 
-/*TODO: edit product */
-// TODO: remove BUY when already in cart
-// TODO: 
 function ItemDetail() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("id");
@@ -24,15 +23,17 @@ function ItemDetail() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [image, setImage] = useState(null);
+    const [preview, setPreview] = useState(null);
     const { addToCart } = useCart();
+    const navigate = useNavigate();
 
     const url = `${BACKEND_URL}/itemdetail/?id=${encodeURIComponent(query)}`
 
     const handleUpload = (event) => {
         const file = event.target.files[0];
-        if (file) {
-            setImage(URL.createObjectURL(file));
-        }
+        if (!file) return;
+        setImage(file);
+        setPreview(URL.createObjectURL(file));
     };
 
     const submit = useSubmit({
@@ -42,6 +43,29 @@ function ItemDetail() {
             setView("info");
         },
         onError: (data) => setError(data.error || "Edit failed")
+    });
+
+    const submitWithFormData = useFormSubmit({
+        END_URL: `itemdetail/?id=${encodeURIComponent(query)}`,
+        getFormData: () => {
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("price", price);
+
+            if (image) {
+                formData.append("image", image);
+            }
+
+            return formData;
+        },
+        onSuccess: () => {
+            setView("info");
+            setError("");
+        },
+        onError: (data) => {
+            setError(data.error || "Edit failed");
+        },
     });
 
     useEffect(() => {
@@ -71,11 +95,16 @@ function ItemDetail() {
             setTitle(item.title);
             setDescription(item.description);
             setPrice(item.price);
+
+            if (item.image) {
+                setPreview(`${BACKEND_URL}${item.image}`);
+            }
         }
     }, [item]);
 
+    // TODO: buy-knapp funmar int lmao
     const isOwner = (username === owner) /* if the user viewing is the one who owns the item */
-    // DELETE ITEM!!
+    // TODO: DELETE ITEM!!
     return (
         <Container>
             {view === "info" &&
@@ -90,11 +119,39 @@ function ItemDetail() {
                             </Stack>
                         </Grid>
                         <Grid size={8}>
-                            <div sx={{ height: '100%', boxSizing: 'border-box' }}>PICTURE</div>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    borderRadius: 2,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    overflow: "hidden",
+                                    position: "relative",
+                                }}
+                            >
+                                {preview ? (
+                                    <img
+                                        src={preview}
+                                        alt="preview"
+                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    />
+                                ) : (
+                                    <Typography>No image</Typography>
+                                )}
+                            </Box>
                         </Grid>
                     </Grid>
                     {!isOwner &&
-                        <Button onClick={() => addToCart(id)}>  BUY </Button>}
+                        <Button
+                            onClick={() => {
+                                addToCart(id);
+                                navigate("/cart");
+                            }}
+                        >
+                            BUY
+                        </Button>}
                     {isOwner &&
                         <Button onClick={() => setView("edit")}> EDIT </Button>}
                 </Container>
@@ -103,7 +160,7 @@ function ItemDetail() {
             {view === "edit" &&
                 <Container>
                     {error && <p style={{ color: "red" }}>{error}</p>}
-                    <Box component="form" onSubmit={(e) => submit({ title, description, price }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+                    <Box component="form" onSubmit={submitWithFormData} sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
                         <TextField
                             type="text"
                             value={title}
@@ -127,17 +184,40 @@ function ItemDetail() {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid size={8}>
-                                <Button variant="contained" component="label">
-                                    Upload Picture
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        hidden
-                                        onChange={handleUpload}
+                            <Box
+                                onClick={() => document.getElementById("fileInput").click()}
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    border: "2px dashed",
+                                    borderColor: "primary.main",
+                                    borderRadius: 2,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                    overflow: "hidden",
+                                    position: "relative",
+                                }}
+                            >
+                                {preview ? (
+                                    <img
+                                        src={preview}
+                                        alt="preview"
+                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
                                     />
-                                </Button>
-                            </Grid>
+                                ) : (
+                                    <Typography>Click to upload</Typography>
+                                )}
+
+                                <input
+                                    id="fileInput"
+                                    type="file"
+                                    accept="image/*"
+                                    hidden
+                                    onChange={handleUpload}
+                                />
+                            </Box>
                         </Grid>
                         {isOwner &&
                             <Button type="submit"> DONE </Button>}

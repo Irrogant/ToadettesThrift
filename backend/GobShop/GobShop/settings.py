@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    ]
+]
 
 
 # Application definition
@@ -158,3 +158,6 @@ REST_FRAMEWORK = {
 }
 
 FRONTEND_URL = "http://localhost:5173/"
+
+MEDIA_ROOT = "uploads"
+MEDIA_URL = "/media/"

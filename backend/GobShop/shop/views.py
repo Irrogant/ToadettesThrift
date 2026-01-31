@@ -7,6 +7,11 @@ from django.views import View
 from django.shortcuts import redirect
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
+from django.core.management import call_command
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 
 # TODO: fixa cavegrej ti landing
 
@@ -27,8 +32,7 @@ class LandingView(View):
 
         if button == "populate":
             # Emptying database
-            User.objects.all().delete()
-            Item.objects.all().delete()
+            call_command('flush', '--no-input')
 
             # Creating admin user
             admin = User.objects.create_superuser("admin", "admin", "admin")
@@ -36,17 +40,14 @@ class LandingView(View):
             # Creating six users with numbers 1-6
             for i in range(1, 7):
                 user = User.objects.create_user(
-                    f"testuser{i}", f"testuser{i}@example.com", f"pass{i}")
+                    f"testuser{i}", f"testuser{i}@gobshop.com", f"pass{i}")
                 user.save()
-                # Giving items to half of the users
-                if i % 2 == 0:
-                    item = Item(title=f"Item {i}", price=20.00, owner=user)
-                    item.save()
+
+            call_command('loaddata', 'item_fixture.json')
             message = "you successfully populated the DB congratulations wow insane we are truly impressed!!1"
 
         if button == "empty":
-            User.objects.all().delete()
-            Item.objects.all().delete()
+            call_command('flush', '--no-input')
             message = "why tf would you do that"
             # Fetching the total amount of objects by adding together amount fields
 
@@ -72,6 +73,7 @@ class ItemsView(APIView):
                         "price": str(item.price),
                         "date_created": item.date_created,
                         "owner": item.owner.username,
+                        "image": item.image_url
                     } for item in on_sale_items
                 ],
                 "sold_items": [
@@ -82,6 +84,7 @@ class ItemsView(APIView):
                         "sold_at": sold_item.sold_at,
                         "seller": sold_item.seller.username,
                         "buyer": sold_item.buyer.username,
+                        "image": sold_item.image_url
                     } for sold_item in sold_items
                 ],
                 "purchased_items": [
@@ -92,6 +95,7 @@ class ItemsView(APIView):
                         "sold_at": purchased_item.sold_at,
                         "seller": purchased_item.seller.username,
                         "buyer": purchased_item.buyer.username,
+                        "image": purchased_item.image_url
                     } for purchased_item in purchased_items
                 ]
 
@@ -114,12 +118,20 @@ class ItemDetail(APIView):
             "description": item.description,
             "price": str(item.price),
             "date_added": item.date_created,
-            "owner": item.owner.username
+            "owner": item.owner.username,
+            "image": item.image_url
         }})
 
+    # TODO: PUT
+    # TODO: delete
     # curl -X POST "http://localhost:7000/itemdetail/?id={item_id}" -H "Content-Type: application/json" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"freshaf"}'
     def post(self, request, *args, **kwargs):
+        print("NHGHGHGHGHGHGH")
+        print(request.data)
+        print(request.FILES)
         query = request.GET.get("id")
+
+        image = request.FILES.get("image")
 
         try:
             item = Item.objects.get(id=query)
@@ -132,6 +144,9 @@ class ItemDetail(APIView):
         for field in ["title", "description", "price", "status"]:
             if field in request.data:
                 setattr(item, field, request.data[field])
+
+        if image:
+            item.image = image
 
         item.save()
         return Response({"success": True, "item_id": item.id})
@@ -149,6 +164,7 @@ class SearchItemsView(APIView):
                 "description": item.description,
                 "price": str(item.price),
                 "date_created": item.date_created,
+                "image": item.image_url
             } for item in search_items
         ]})
 
@@ -164,7 +180,8 @@ class AllItemsView(APIView):
                 "description": item.description,
                 "price": str(item.price),
                 "date_created": item.date_created,
-                "owner": item.owner.username
+                "owner": item.owner.username,
+                "image": item.image_url
             } for item in all_items
         ]})
 
@@ -179,6 +196,7 @@ class CreateItemView(APIView):
         title = request.data.get("title")
         description = request.data.get("description", "")
         price = request.data.get("price")
+        image = request.FILES.get("image")
 
         if not title or not price:
             return Response({"error": "Title and price are required."}, status=400)
@@ -189,5 +207,40 @@ class CreateItemView(APIView):
             price=price,
             owner=request.user
         )
+
+        if image:
+            # Open image with Pillow
+            img = Image.open(image)
+
+            # Crop to square (centered)
+            width, height = img.size
+            min_dim = min(width, height)
+            left = (width - min_dim) / 2
+            top = (height - min_dim) / 2
+            right = (width + min_dim) / 2
+            bottom = (height + min_dim) / 2
+            img_cropped = img.crop((left, top, right, bottom))
+
+            # Resize to 150x150
+            img_resized = img_cropped.resize((150, 150), Image.ANTIALIAS)
+
+            # Save cropped and resized image to memory
+            output = BytesIO()
+            img_format = img.format if img.format else 'PNG'
+            img_resized.save(output, format=img_format)
+            output.seek(0)
+
+            # Create a new InMemoryUploadedFile
+            image_file = InMemoryUploadedFile(
+                output,
+                'ImageField',
+                image.name,
+                image.content_type,
+                sys.getsizeof(output),
+                None
+            )
+
+            item.image = image_file
+
         item.save()
-        return Response({"success": True, "item_id": item.id})
+        return Response({"success": True, "item_id": item.id, "image_url": item.image.url if item.image else None}, status=201)

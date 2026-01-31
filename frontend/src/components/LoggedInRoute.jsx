@@ -5,7 +5,7 @@ function LoggedInRoute() {
     const { isLoggedIn, loading } = useAuth();
 
     if (loading) return null;
-    if (isLoggedIn) return <Navigate to="/account" replace />;
+    if (isLoggedIn) return <Navigate to="/" replace />;
 
     return <Outlet />;
 }

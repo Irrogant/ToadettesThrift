@@ -1,5 +1,4 @@
 from django.db import models
-from shop.models import Item
 from django.conf import settings
 
 
@@ -8,6 +7,8 @@ class Cart(models.Model):
                               on_delete=models.CASCADE)
     update_date = models.DateField(auto_now_add=True)
     locked = models.BooleanField(default=False)
+
+# TODO: locked gone?!?!?!?!?
 
 
 class CartItem(models.Model):
@@ -20,6 +21,14 @@ class CartItem(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     date_added = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
+    image = models.FileField(
+        upload_to="items", null=True, blank=True)
+
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        return None
 
     def __str__(self):
         return self.title

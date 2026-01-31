@@ -12,12 +12,21 @@ function NavBar() {
   return (
     <AppBar position="fixed">
       <Toolbar>
-        <Box component="img" src={Logo} alt="Logo" sx={{ height: 40 }} />
 
-        <Box sx={{ flexGrow: 2, mx: 2 }}>
+        <Link to="/">
+          <Box component="img" src={Logo} alt="Logo" sx={{ verticalAlign: "middle", height: 40 }} />
+        </Link>
+
+        <Box sx={{
+          flexGrow: 1,
+          flexShrink: 1,
+          mx: 2,
+          minWidth: 100,
+          maxWidth: '70vw',
+        }}>
           <SearchBar />
         </Box>
-        {/* If logged in, login and signup is removed, a logout is added*/}
+        {/* If logged in, login and signup is removed, and logout is added*/}
         <Box sx={{
           display: "flex",
           gap: 1,
@@ -30,7 +39,7 @@ function NavBar() {
             overflow: "hidden",
           },
         }}>
-          <Button color="inherit" component={Link} to="/">Home</Button>
+          <Button color="inherit" component={Link} to="/">Shop</Button>
           {!isLoggedIn ? (
             <>
               <Button color="inherit" component={Link} to="/login">Log In</Button>

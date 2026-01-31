@@ -7,7 +7,7 @@ import useSubmit from './useSubmit.js';
 import Items from './Items.jsx';
 
 import AddBoxIcon from '@mui/icons-material/AddBox';
-
+import useFormSubmit from "./useFormSubmit";
 
 function myItems() {
     const [title, setTitle] = useState("");
@@ -16,15 +16,50 @@ function myItems() {
     const [view, setView] = useState("info");
     const [inventory, setInventory] = useState("on_sale")
     const [error, setError] = useState("");
+    const [image, setImage] = useState(null);
+    const [preview, setPreview] = useState(null);
 
     function clear() {
         setTitle("");
         setDescription("");
         setPrice("0");
+        setImage(null);
+        setPreview(null);
     }
 
     const { items, refetch } = useItems({
         END_URL: "myitems/"
+    });
+
+    const handleUpload = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        setImage(file);
+        setPreview(URL.createObjectURL(file));
+    };
+
+    const submitWithFormData = useFormSubmit({
+        END_URL: `createitem/`,
+        getFormData: () => {
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("price", price);
+
+            if (image) {
+                formData.append("image", image);
+            }
+
+            return formData;
+        },
+        onSuccess: () => {
+            setView("info");
+            setError("");
+            refetch()
+        },
+        onError: (data) => {
+            setError(data.error || "Edit failed");
+        },
     });
 
     const submit = useSubmit({
@@ -94,7 +129,7 @@ function myItems() {
             {view === "create" &&
                 <Container>
                     {error && <p style={{ color: "red" }}>{error}</p>}
-                    <Box component="form" onSubmit={(e) => submit({ title, description, price }, e)} sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Box component="form" onSubmit={submitWithFormData} sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                         <TextField
                             type="text"
                             value={title}
@@ -119,7 +154,40 @@ function myItems() {
                                 </Stack>
                             </Grid>
                             <Grid size={8}>
-                                <div sx={{ height: '100%', boxSizing: 'border-box' }}>PICTURE</div>
+                                <Box
+                                    onClick={() => document.getElementById("fileInput").click()}
+                                    sx={{
+                                        width: 150,
+                                        height: 150,
+                                        border: "2px dashed",
+                                        borderColor: "primary.main",
+                                        borderRadius: 2,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        cursor: "pointer",
+                                        overflow: "hidden",
+                                        position: "relative",
+                                    }}
+                                >
+                                    {preview ? (
+                                        <img
+                                            src={preview}
+                                            alt="preview"
+                                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                        />
+                                    ) : (
+                                        <Typography>Click to upload</Typography>
+                                    )}
+
+                                    <input
+                                        id="fileInput"
+                                        type="file"
+                                        accept="image/*"
+                                        hidden
+                                        onChange={handleUpload}
+                                    />
+                                </Box>
                             </Grid>
                         </Grid>
                         <Button type="submit"> CREATE </Button>

@@ -73,7 +73,7 @@ function Cart() {
             alignItems: "center",
             minHeight: "100vh",
         }}>
-            <h2 style={{ textAlign: "center" }}>u sure about this?</h2>
+            <h2 style={{ textAlign: "center" }}>YER CART</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
 
             {items.length === 0 ? (

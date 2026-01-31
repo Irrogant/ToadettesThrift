@@ -5,19 +5,19 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(null);
+  const [email, setEmail] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchUser = () => {
     fetch(`${BACKEND_URL}/current_user/`, {
       credentials: "include",
     })
       .then((res) => res.ok ? res.json() : {})
       .then((data) => {
         setIsLoggedIn(!!data.username);
-        setUsername(data.username || "");
-        setEmail(data.email || "");
+        setUsername(data.username ?? null);
+        setEmail(data.email ?? null);
       })
       .catch(() => {
         setIsLoggedIn(false);
@@ -25,7 +25,11 @@ export function AuthProvider({ children }) {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [isLoggedIn])
 
   return (
     <AuthContext.Provider
@@ -37,6 +41,7 @@ export function AuthProvider({ children }) {
         setUsername,
         email,
         setEmail,
+        fetchUser
       }}
     >
       {children}

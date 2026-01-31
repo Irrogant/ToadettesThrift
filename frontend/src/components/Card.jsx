@@ -16,9 +16,10 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 import { useAuth } from './AuthContext';
 import { useCartContext } from './CartContext';
+import { BACKEND_URL } from "./variables.js";
 
 import coin from '../assets/icons/coin.png';
-export default function MultiActionAreaCard({ id, title, description, imageName, price, soldAt, dateCreated, owner, seller, buyer }) {
+export default function MultiActionAreaCard({ id, title, description, imageUrl, price, soldAt, dateCreated, owner, seller, buyer }) {
   const cardMaxWidth = 300
   const cardMaxHeight = 300
   const itemDescription = description ? ((description.length > 20) ? (description.substring(0, 20).trim() + '...') : description) : "";
@@ -36,6 +37,9 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
     setIsUserInvolved([owner, seller, buyer].includes(username))
   }, [])
 
+  console.log("AAAAAAAAAAAAAAAAAAAAAa", description, imageUrl)
+  console.log("URLLLL", `${BACKEND_URL}${imageUrl}`)
+
   // TODO: only prevent SA item to be added to backend cart  
   return (
     <Card sx={{ '&:hover': { color: 'green' }, maxWidth: cardMaxWidth, cardMaxHeight }}>
@@ -47,7 +51,7 @@ export default function MultiActionAreaCard({ id, title, description, imageName,
         <CardMedia
           component="img"
           height="140"
-          image={`/assets/images/cards/${imageName}.jpg`}
+          image={`${BACKEND_URL}${imageUrl}`}
           alt={title}
         />
         <CardContent>

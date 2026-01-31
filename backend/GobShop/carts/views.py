@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from carts.models import Cart, CartItem
 from shop.models import Item, SoldItem
 from rest_framework.response import Response
-from django.db import transaction
+from django.db import Error, transaction
 from rest_framework.permissions import IsAuthenticated
 
 # TODO: clean input values
@@ -58,6 +58,7 @@ class CartView(APIView):
                         "price": str(cart_item.price),
                         "date_added": cart_item.date_added,
                         "owner": cart_item.owner.username,
+                        "image": cart_item.image_url,
                         } for cart_item in cart_items
         ]})
 
@@ -76,19 +77,21 @@ class CartView(APIView):
                 if CartItem.objects.filter(item_id=item_id, cart=cart).exists():
                     return Response({"error": "Item is already in cart."}, status=400)
 
+                print(f"UMUGIGI {item.image}")
                 cart_item = CartItem.objects.create(
                     cart=cart,
                     item_id=item.id,
                     title=item.title,
                     owner=item.owner,
-                    price=item.price
+                    price=item.price,
+                    image=item.image
                 )
 
                 cart_item.save()
                 return Response({"success": True, "cart_item_id": cart_item.id})
-            except:
-                return Response({"error": "Failed to add to cart."}, status=400)
-
+            except Error as e:
+                return Response({"error": f"Failed to add to cart: {e}"}, status=400)
+        # TODO: cart item not getting deleted???
         if action == "remove":
             try:
                 item_id = request.data.get("item_id")
@@ -148,6 +151,7 @@ class CheckOutView(APIView):
                     seller=item.owner,
                     buyer=request.user,
                     price=item.price,
+                    image=item.image
                 )
                 cart_price += item.price
                 item.delete()

@@ -42,7 +42,7 @@ function Account() {
               <Typography>Email: {email}</Typography>
             </Box>
 
-            <Button onClick={() => setView("edit")}> Edit </Button>
+            <Button onClick={() => setView("edit")}> Edit Password </Button>
 
           </Box>
         </Container>

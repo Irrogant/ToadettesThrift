@@ -2,11 +2,12 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.models import User
+from rest_framework.permissions import IsAuthenticated
 
-
-# TODO: if already logged in,
 # TODO: clean input values
 # curl -X POST http://localhost:7000/login/ -H "Content-Type: application/json" -H "X-CSRFToken: {cook}" -b "csrftoken={cook}" -d '{"username":"admin","password":"admin"}'
+
+
 class UsernameLoginView(APIView):
     """
     Custom login view that enforces username + password login.
@@ -34,6 +35,7 @@ class LogOutView(APIView):
     """
     View to log out.
     """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         return Response({"detail": "Log out current logged in user."})
@@ -81,12 +83,12 @@ class CreateAccountView(APIView):
         return Response({"success": True})
 
 
-# TODO: log-in required
 # curl -X POST http://localhost:7000/account/ -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"password":"nytt"}'
 class EditAccountView(APIView):
     """
     View to edit account password.
     """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         return Response({"detail": "Edit your password."})
@@ -115,12 +117,9 @@ class CurrentUserView(APIView):
     """
     View to get current authenticated user info.
     """
-    print("CURRENT USER VIEWUUUU")
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        print("looking for user nyhaaaah")
-        print(request)
-        print(request.data)
-        if request.user and request.user.is_authenticated:
+        if request.user:
             return Response({"authenticated": True, "username": request.user.username, "email": request.user.email})
         return Response({"authenticated": False, "username": None})
