@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserCreateForm, UserEditForm
 from .models import User
 
+
 class UserAdmin(BaseUserAdmin):
     model = User
 
@@ -10,14 +11,15 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email')
     list_filter = ('superuser', 'active',)
     ordering = ('email',)
-    readonly_fields = ('date_joined','last_login') # Fields that should not be editable
+    # Fields that should not be editable
+    readonly_fields = ('date_joined', 'last_login')
 
     # Fields visible in creation form
     add_form = UserCreateForm
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 
+            'fields': ('username',
                        'email',
                        'password',
                        'balance',
@@ -33,16 +35,15 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 
-                       'email', 
-                       'balance', 
-                       'active', 
+            'fields': ('username',
+                       'email',
+                       'active',
                        'superuser',
                        'staff',
                        'date_joined',
-                       'last_login',
                        )
         }),
     )
+
 
 admin.site.register(User, UserAdmin)

@@ -32,6 +32,7 @@ export function useCart() {
         END_URL: "cart/",
         onSuccess: () => { refetch(), refetchMessages() },
         onError: (data) => setError(data?.error || "Failed to modify cart"),
+        method: "POST"
     });
 
     async function modifyCart(item_id, action) {

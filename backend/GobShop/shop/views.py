@@ -44,11 +44,11 @@ class LandingView(View):
                 user.save()
 
             call_command('loaddata', 'item_fixture.json')
-            message = "you successfully populated the DB congratulations wow insane we are truly impressed!!1"
+            message = "ya populated the DB, congratz"
 
         if button == "empty":
             call_command('flush', '--no-input')
-            message = "why tf would you do that"
+            message = "and WHY wod ya do dat?"
             # Fetching the total amount of objects by adding together amount fields
 
         itemAmount = Item.objects.all().count()
@@ -106,7 +106,6 @@ class ItemsView(APIView):
 class ItemDetail(APIView):
 
     def get(self, request, *args, **kwargs):
-        print("YHAAAAAAAHAHAYAAH")
         query = request.GET.get("id")
         item = Item.objects.get(id=query)
 
@@ -122,13 +121,9 @@ class ItemDetail(APIView):
             "image": item.image_url
         }})
 
-    # TODO: PUT
-    # TODO: delete
     # curl -X POST "http://localhost:7000/itemdetail/?id={item_id}" -H "Content-Type: application/json" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"title":"freshaf"}'
-    def post(self, request, *args, **kwargs):
-        print("NHGHGHGHGHGHGH")
-        print(request.data)
-        print(request.FILES)
+    def put(self, request, *args, **kwargs):
+
         query = request.GET.get("id")
 
         image = request.FILES.get("image")
@@ -139,7 +134,7 @@ class ItemDetail(APIView):
             return Response({"error": "Item does not exist."}, status=400)
 
         if request.user != item.owner:
-            return Response({"error": "Only the owner an item can edit it."}, status=400)
+            return Response({"error": "Only the owner of an item can edit it."}, status=400)
 
         for field in ["title", "description", "price", "status"]:
             if field in request.data:
@@ -150,6 +145,18 @@ class ItemDetail(APIView):
 
         item.save()
         return Response({"success": True, "item_id": item.id})
+
+    def delete(self, request, *args, **kwards):
+        try:
+            query = request.GET.get("id")
+            item = Item.objects.get(id=query)
+            if request.user != item.owner:
+                return Response({"error": "Only the owner of an item can delete it."}, status=400)
+            item.delete()
+            return Response({"success": True, "item_id": query}, status=200)
+
+        except:
+            return Response({"error": "Failed to delete item."}, status=400)
 
 
 class SearchItemsView(APIView):

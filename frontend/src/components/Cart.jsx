@@ -27,7 +27,8 @@ function Cart() {
             setUpdateMessage(data.updateMessage)
             console.log("FOUNDDDD", data.updateMessage)
         },
-        onError: (data) => setError(data.error || "Error at checkout OOF money gonegone")
+        onError: (data) => setError(data.error || "Error at checkout OOF money gonegone"),
+        method: "POST"
     });
 
     const syncSubmit = useSubmit({
@@ -38,7 +39,8 @@ function Cart() {
             refetch()
             setMessages(data.messages)
         },
-        onError: (data) => setError(data.error || "Error at cart sync")
+        onError: (data) => setError(data.error || "Error at cart sync"),
+        method: "POST"
     });
 
     // useEffect

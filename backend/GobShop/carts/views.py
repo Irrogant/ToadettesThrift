@@ -6,7 +6,6 @@ from django.db import Error, transaction
 from rest_framework.permissions import IsAuthenticated
 
 # TODO: clean input values
-# TODO: make sure only cart owner can see and modify own cart
 # curl -X POST "http://localhost:7000/cart/" -H "Content-Type: application/json" -H "Cookie: sessionid=mhnff9ml9eqfrn3f0ggjebuqnbk2hub6; csrftoken=RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -H "X-CSRFToken: RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -d '{"cart_item_id":1,"action":"remove"}'
 
 
@@ -72,6 +71,8 @@ class CartView(APIView):
                 item = Item.objects.get(id=item_id)
 
                 # prevent user to add their own items to cart
+                if item.owner == request.user:
+                    return Response({"error": "User cannot add own their item to their cart."}, status=400)
 
                 # trying to add already existing item
                 if CartItem.objects.filter(item_id=item_id, cart=cart).exists():

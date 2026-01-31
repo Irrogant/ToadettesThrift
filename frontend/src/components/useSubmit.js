@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "./variables.js";
 import getCookie from "./cookie.js";
 
-function useSubmit({ END_URL, onSuccess, onError }) {
+function useSubmit({ END_URL, onSuccess, onError, method }) {
     const url = `${BACKEND_URL}/${END_URL}`;
 
     const handleSubmit = async (JSON_DATA, e) => {
@@ -10,7 +10,7 @@ function useSubmit({ END_URL, onSuccess, onError }) {
         console.log(JSON_DATA)
         try {
             const response = await fetch(url, {
-                method: "POST",
+                method,
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",

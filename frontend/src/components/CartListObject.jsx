@@ -13,7 +13,7 @@ import { useCartContext } from './CartContext';
 
 import { BACKEND_URL } from "./variables.js";
 
-// TODO: link 
+// TODO: fix clickable links? 
 export default function ListObject({ id, title, imageURL, price, message }) {
     const { addToCart, removeFromCart, inCart } = useCartContext();
 
@@ -28,7 +28,7 @@ export default function ListObject({ id, title, imageURL, price, message }) {
             </ListItemAvatar>
             <ListItemText primary={title} secondary={
                 <>
-                    {price}
+                    <span style={{ color: "white" }}>{price}</span>
                     {message && (
                         <div style={{ color: "orange", fontSize: 12 }}>
                             {message}

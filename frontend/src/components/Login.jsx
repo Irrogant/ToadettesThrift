@@ -7,8 +7,6 @@ import { useAuth } from './AuthContext';
 import useSubmit from './useSubmit.js';
 
 
-{/* Prevent already logged in to go here */ }
-/* TODO: create reusable function for handleSubmit */
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +22,8 @@ function Login() {
       setIsLoggedIn(true)
       navigate("/");
     },
-    onError: (data) => setError(data.error || "Login failed")
+    onError: (data) => setError(data.error || "Login failed"),
+    method: "POST"
   });
 
   return (

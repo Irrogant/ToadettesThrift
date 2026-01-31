@@ -17,7 +17,8 @@ function Signup() {
     onSuccess: () => {
       navigate("/login");
     },
-    onError: (data) => setError(data.error || "Signup failed")
+    onError: (data) => setError(data.error || "Signup failed"),
+    method: "POST"
   });
 
   return (

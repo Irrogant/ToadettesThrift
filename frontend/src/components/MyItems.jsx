@@ -60,6 +60,7 @@ function myItems() {
         onError: (data) => {
             setError(data.error || "Edit failed");
         },
+        method: "POST"
     });
 
     const submit = useSubmit({
@@ -69,7 +70,8 @@ function myItems() {
             setView("info"),
                 refetch()
         },
-        onError: (data) => setError(data.error || "Item creation failed")
+        onError: (data) => setError(data.error || "Item creation failed"),
+        method: "POST"
 
     });
 
@@ -78,7 +80,6 @@ function myItems() {
         console.log("AAAAAAAAAajdaionflwka", items[0]?.on_sale_items)
     }, [items]);
 
-    // TODO: adda clear ti change password å sånt också
     return (
         <Container>
 

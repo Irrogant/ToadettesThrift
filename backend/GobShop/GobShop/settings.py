@@ -161,3 +161,5 @@ FRONTEND_URL = "http://localhost:5173/"
 
 MEDIA_ROOT = "uploads"
 MEDIA_URL = "/media/"
+
+STATIC_URL = '/static/'

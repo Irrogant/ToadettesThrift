@@ -19,11 +19,12 @@ import { useCartContext } from './CartContext';
 import { BACKEND_URL } from "./variables.js";
 
 import coin from '../assets/icons/coin.png';
+
 export default function MultiActionAreaCard({ id, title, description, imageUrl, price, soldAt, dateCreated, owner, seller, buyer }) {
   const cardMaxWidth = 300
   const cardMaxHeight = 300
-  const itemDescription = description ? ((description.length > 20) ? (description.substring(0, 20).trim() + '...') : description) : "";
-  const itemTitle = (title.length > 12) ? (title.substring(0, 12).trim()) : title;
+  const itemDescription = description ? ((description.length > 40) ? (description.substring(0, 40).trim()) : description) : "";
+  const itemTitle = (title.length > 20) ? (title.substring(0, 20).trim()) : title;
   const { addToCart, removeFromCart, inCart } = useCartContext();
   const { username, email } = useAuth()
   const [isUserInvolved, setIsUserInvolved] = useState(false)
@@ -37,10 +38,7 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
     setIsUserInvolved([owner, seller, buyer].includes(username))
   }, [])
 
-  console.log("AAAAAAAAAAAAAAAAAAAAAa", description, imageUrl)
-  console.log("URLLLL", `${BACKEND_URL}${imageUrl}`)
 
-  // TODO: only prevent SA item to be added to backend cart  
   return (
     <Card sx={{ '&:hover': { color: 'green' }, maxWidth: cardMaxWidth, cardMaxHeight }}>
       <CardActionArea
@@ -55,7 +53,12 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
           alt={title}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div" sx={{
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 1,
+            overflow: 'hidden',
+          }}>
             {itemTitle}
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
@@ -77,7 +80,13 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
               />
             </Typography>
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', maxHeight: 4 }}>
+          <Typography variant="body2" sx={{
+            color: 'text.secondary',
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 1,
+            overflow: 'hidden',
+          }}>
             {itemDescription}
           </Typography>
         </CardContent>

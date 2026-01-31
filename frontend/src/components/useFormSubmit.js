@@ -6,7 +6,7 @@ function useSubmitFormData({
     getFormData,
     onSuccess,
     onError,
-    method = "POST",
+    method,
 }) {
     const url = `${BACKEND_URL}/${END_URL}`;
 

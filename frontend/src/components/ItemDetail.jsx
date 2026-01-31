@@ -10,6 +10,8 @@ import useSubmit from './useSubmit.js';
 import useFormSubmit from "./useFormSubmit";
 import { useNavigate } from 'react-router-dom';
 
+import coin from '../assets/icons/coin.png';
+
 function ItemDetail() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("id");
@@ -38,11 +40,11 @@ function ItemDetail() {
 
     const submit = useSubmit({
         END_URL: `itemdetail/?id=${encodeURIComponent(query)}`,
-        JSON_DATA: { title, description, price },
         onSuccess: () => {
-            setView("info");
+            navigate("/myitems");
         },
-        onError: (data) => setError(data.error || "Edit failed")
+        onError: (data) => setError(data.error || "Deletion failed"),
+        method: "DELETE"
     });
 
     const submitWithFormData = useFormSubmit({
@@ -66,6 +68,7 @@ function ItemDetail() {
         onError: (data) => {
             setError(data.error || "Edit failed");
         },
+        method: "PUT"
     });
 
     useEffect(() => {
@@ -102,9 +105,7 @@ function ItemDetail() {
         }
     }, [item]);
 
-    // TODO: buy-knapp funmar int lmao
     const isOwner = (username === owner) /* if the user viewing is the one who owns the item */
-    // TODO: DELETE ITEM!!
     return (
         <Container>
             {view === "info" &&
@@ -114,15 +115,31 @@ function ItemDetail() {
                     <Grid container spacing={2}>
                         <Grid size={4}>
                             <Stack spacing={2}>
-                                <div>{description}</div>
-                                <div>{price}</div>
+                                <Typography>{description}</Typography>
+                                <Typography
+                                    sx={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "0.25em",
+                                    }}
+                                >
+                                    {price}
+                                    <img
+                                        src={coin}
+                                        alt="Coin"
+                                        style={{
+                                            width: "1em",
+                                            height: "1em",
+                                        }}
+                                    />
+                                </Typography>
                             </Stack>
                         </Grid>
                         <Grid size={8}>
                             <Box
                                 sx={{
-                                    width: 150,
-                                    height: 150,
+                                    width: 250,
+                                    height: 250,
                                     borderRadius: 2,
                                     display: "flex",
                                     alignItems: "center",
@@ -154,6 +171,8 @@ function ItemDetail() {
                         </Button>}
                     {isOwner &&
                         <Button onClick={() => setView("edit")}> EDIT </Button>}
+                    {isOwner &&
+                        <Button color="error" onClick={() => submit()}> DELETE </Button>}
                 </Container>
             }
 
@@ -220,7 +239,8 @@ function ItemDetail() {
                             </Box>
                         </Grid>
                         {isOwner &&
-                            <Button type="submit"> DONE </Button>}
+                            <Button type="submit"> SAVE </Button>}
+
                     </Box>
                 </Container>
             }

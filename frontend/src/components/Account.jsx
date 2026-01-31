@@ -16,16 +16,24 @@ function Account() {
   const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  // TODO: set message when updated
+
+  function clear() {
+    setOldPassword("");
+    setNewPassword("");
+  }
+
   const submit = useSubmit({
     END_URL: "account/",
     JSON_DATA: { oldPassword, newPassword },
     onSuccess: () => {
       setView("info")
+      setMessage("Password updated successfully")
+      clear()
     },
-    onError: (data) => setError(data.error || "Password modification failed")
-
+    onError: (data) => setError(data.error || "Password modification failed"),
+    method: "POST"
   });
 
   // TODO: unify så eg int använda form, utan använda såär i alla submit
@@ -41,7 +49,7 @@ function Account() {
               <Typography>Username: {username}</Typography>
               <Typography>Email: {email}</Typography>
             </Box>
-
+            {message && <Typography variant="h5">{message}</Typography>}
             <Button onClick={() => setView("edit")}> Edit Password </Button>
 
           </Box>
@@ -66,7 +74,7 @@ function Account() {
               label="New Password"
             />
             <Button onClick={() => submit({ oldPassword, newPassword })}> Save </Button>
-            <Button onClick={() => setView("info")}> Cancel </Button>
+            <Button onClick={() => { setView("info"); clear(); }}> Cancel </Button>
           </Box>
         </Container>
       }

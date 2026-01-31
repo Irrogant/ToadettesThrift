@@ -5,10 +5,10 @@ from django.conf import settings
 class Cart(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE)
-    update_date = models.DateField(auto_now_add=True)
-    locked = models.BooleanField(default=False)
+    last_modified = models.DateField(auto_now_add=True)
 
-# TODO: locked gone?!?!?!?!?
+    def __str__(self):
+        return f"{self.owner}'s cart"
 
 
 class CartItem(models.Model):
