@@ -36,11 +36,11 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
 
     # An ID field is generated automatically by Django
-    username = models.CharField(max_length=20, unique=True, blank=False, null=False)
-    email = models.EmailField(max_length=254, unique=True, blank=False, null=False)
-    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    username = models.CharField(
+        max_length=20, unique=True, blank=False, null=False)
+    email = models.EmailField(
+        max_length=254, unique=True, blank=False, null=False)
     date_joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
     superuser = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)

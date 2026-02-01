@@ -1,10 +1,43 @@
-<h1> Welcome, traveler. </h1>
-<p> By proceeding to the webshop you accept the terms and conditions. </p>
+<!DOCTYPE html>
 
-<p> Number of items: {{itemAmount}} </p>
+<html>
+
+<head>
+    <title>GobShop</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'images/favicon.png' type='image/png' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/accessStyle.css' %}">
+</head>
+
+<body>
+
+    <div class="middleField">
+
+        <h1>GOBSHOP</h1>
+        <h2> Number of items: {{itemAmount}} </h2>
+    </div>
+
+    <div class="cave">
+        {% if message %}
+        <ul class="messages">
+            <li class="{{ message.tags }}"> {{ message }} </li>
+        </ul>
+        {% endif %}
+        <img class="goblin" src="{% static '/images/goblinguard.gif' %}" alt="Goblin Guard">
+    </div>
 
 
-<form action="{% url 'landing' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Kyllä</button>
-</form>
+    <form action="{% url 'landing' %}" method="post" class="button-container">
+        {% csrf_token %}
+        <button type="submit" name="button" value="populate">Populate DB</button>
+        <button type="submit" name="button" value="empty">Empty DB</button>
+        <button type="submit" name="button" value="proceed">Proceed to GobShop</button>
+    </form>
+
+    </div>
+
+
+
+</body>
+
+</html>

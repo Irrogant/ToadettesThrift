@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    ]
+]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "shop",
+    "carts",
     "corsheaders",
 ]
 
@@ -142,6 +143,10 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:5173",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
 # Cors-related settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
@@ -151,3 +156,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ]
 }
+
+FRONTEND_URL = "http://localhost:5173/"
+
+MEDIA_ROOT = "uploads"
+MEDIA_URL = "/media/"
+
+STATIC_URL = '/static/'
