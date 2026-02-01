@@ -29,7 +29,7 @@ export default function ListObject({ id, title, imageURL, price, message }) {
                 <>
                     <span style={{ color: "white" }}>{price}</span>
                     {message && (
-                        <span style={{ color: "orange", fontSize: 12 }}>
+                        <span style={{ color: "orange", fontSize: 12, marginLeft: 8 }}>
                             {message}
                         </span>
                     )}

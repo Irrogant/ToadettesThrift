@@ -35,7 +35,7 @@ def syncCart(cart):
 
             if changes:
                 cart_item.save()
-                item_messages[cart_item.item_id] = f"Item {' and '.join(changes)} has changed"
+                item_messages[cart_item.item_id] = f"item {' and '.join(changes)} has changed"
 
     return item_messages
 
