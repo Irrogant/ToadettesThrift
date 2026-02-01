@@ -3,8 +3,11 @@ from django.conf import settings
 
 
 class Cart(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE)
+    owner = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="cart"
+    )
     last_modified = models.DateField(auto_now_add=True)
 
     def __str__(self):
