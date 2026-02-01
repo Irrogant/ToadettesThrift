@@ -17,6 +17,7 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import { useAuth } from './AuthContext';
 import { useCartContext } from './CartContext';
 import { BACKEND_URL } from "./variables.js";
+import { useNavigate } from 'react-router-dom';
 
 import coin from '../assets/icons/coin.png';
 
@@ -26,9 +27,10 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
   const itemDescription = description ? ((description.length > 40) ? (description.substring(0, 40).trim()) : description) : "";
   const itemTitle = (title.length > 20) ? (title.substring(0, 20).trim()) : title;
   const { addToCart, removeFromCart, inCart } = useCartContext();
-  const { username, email } = useAuth()
+  const { username, isLoggedIn } = useAuth()
   const [isUserInvolved, setIsUserInvolved] = useState(false)
   const [isSold, setIsSold] = useState(false)
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsSold([seller, buyer].includes(username))
@@ -93,22 +95,37 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
       </CardActionArea>
 
       <CardActions sx={{ backgroundColor: 'white', justifyContent: "space-between", alignItems: "center", borderTop: '1px solid grey', }}>
-        {(isUserInvolved) ?
-          null :
-          (
-            (inCart(id)) ?
-              (<Button onClick={() => removeFromCart(id)} size="small" color="primary">
-                <RemoveShoppingCartIcon />
-              </Button>
-              ) :
-              (
-                <Button onClick={() => addToCart(id)} size="small" color="primary">
-                  <AddShoppingCartIcon />
-                </Button>
-              )
-
+        {!isUserInvolved && (
+          inCart(id) ? (
+            <Button
+              onClick={() => {
+                if (!isLoggedIn) {
+                  navigate("/login");
+                } else {
+                  removeFromCart(id);
+                }
+              }}
+              size="small"
+              color="primary"
+            >
+              <RemoveShoppingCartIcon />
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                if (!isLoggedIn) {
+                  navigate("/login");
+                } else {
+                  addToCart(id);
+                }
+              }}
+              size="small"
+              color="primary"
+            >
+              <AddShoppingCartIcon />
+            </Button>
           )
-        }
+        )}
         <Typography sx={{ pr: 1.5 }} variant="body2">
           {
 

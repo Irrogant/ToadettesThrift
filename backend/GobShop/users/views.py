@@ -41,9 +41,7 @@ class LogOutView(APIView):
         return Response({"detail": "Log out current logged in user."})
 
     def post(self, request, *args, **kwargs):
-        print(request)
         request_user = request.user
-        print(request_user)
         if not request_user.is_authenticated:
             return Response({"Could not locate a current logged in user."}, status=400)
 

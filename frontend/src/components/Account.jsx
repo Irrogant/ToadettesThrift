@@ -36,7 +36,6 @@ function Account() {
     method: "POST"
   });
 
-  // TODO: unify så eg int använda form, utan använda såär i alla submit
   return (
     <Container>
       {view === "info" &&

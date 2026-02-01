@@ -5,9 +5,6 @@ from rest_framework.response import Response
 from django.db import Error, transaction
 from rest_framework.permissions import IsAuthenticated
 
-# TODO: clean input values
-# curl -X POST "http://localhost:7000/cart/" -H "Content-Type: application/json" -H "Cookie: sessionid=mhnff9ml9eqfrn3f0ggjebuqnbk2hub6; csrftoken=RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -H "X-CSRFToken: RdLZOL6VsOtfKCM3NhzELnW6Qd4O1kSu" -d '{"cart_item_id":1,"action":"remove"}'
-
 
 def syncCart(cart):
 
@@ -43,9 +40,9 @@ def syncCart(cart):
     return item_messages
 
 
+# curl -X POST "http://localhost:7000/cart/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}" -d '{"cart_item_id":1,"action":"remove"}'
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
-    # TODO: serializers?
 
     def get(self, request, *args, **kwargs):
         cart, _ = Cart.objects.get_or_create(owner=request.user)
@@ -78,7 +75,6 @@ class CartView(APIView):
                 if CartItem.objects.filter(item_id=item_id, cart=cart).exists():
                     return Response({"error": "Item is already in cart."}, status=400)
 
-                print(f"UMUGIGI {item.image}")
                 cart_item = CartItem.objects.create(
                     cart=cart,
                     item_id=item.id,
@@ -92,7 +88,7 @@ class CartView(APIView):
                 return Response({"success": True, "cart_item_id": cart_item.id})
             except Error as e:
                 return Response({"error": f"Failed to add to cart: {e}"}, status=400)
-        # TODO: cart item not getting deleted???
+
         if action == "remove":
             try:
                 item_id = request.data.get("item_id")
@@ -133,7 +129,6 @@ class CheckOutView(APIView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
-            print("POSTNNNHHHYAHHH")
             cart = Cart.objects.get(owner=request.user)
             cart_items = cart.items.all()
             cart_price = 0

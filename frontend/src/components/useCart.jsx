@@ -1,32 +1,31 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import { useAuth } from './AuthContext';
-import useItems from './useItems.js';
-import useMessages from './useMessages.js';
+import useCartItems from './useCartItems.js';
+import useCartMessages from './useCartMessages.js';
 import useSubmit from './useSubmit.js';
+import { useAuth } from "./AuthContext.jsx";
 
 export function useCart() {
     const [price, setPrice] = useState(0)
     const [error, setError] = useState(null);
-    const { items, refetch } = useItems({ END_URL: "cart/" });
-    const { messages, refetchMessages } = useMessages({ END_URL: "cart/" });
+    const { cartItems, refetch } = useCartItems({ END_URL: "cart/", });
+    const { messages, refetchMessages } = useCartMessages({ END_URL: "cart/" });
+    const { isLoggedIn } = useAuth()
 
     useEffect(() => {
-        const cartPrice = items.reduce(
+        const cartPrice = cartItems.reduce(
             (total, item) => total + Number(item.price),
             0
         );
         setPrice(cartPrice);
-    }, [items]);
+    }, [cartItems]);
 
-    const { isLoggedIn } = useAuth()
-    // kan man int fetch itemid direkt från cartid?
-
+    // gets corresponding real item ids
     const itemIDs = useMemo(() => {
-        if (!items) return [];
-        const awooga = items.map(item => item.id);
+        if (!cartItems) return [];
+        const awooga = cartItems.map(item => item.id);
         return awooga;
-    }, [items]);
+    }, [cartItems]);
 
     const submit = useSubmit({
         END_URL: "cart/",
@@ -37,7 +36,6 @@ export function useCart() {
 
     async function modifyCart(item_id, action) {
         if (!isLoggedIn) {
-            console.log("narrrr");
             return;
         }
         await submit({ item_id, action });
@@ -53,13 +51,12 @@ export function useCart() {
 
     function inCart(item_id) {
         if (!isLoggedIn) {
-            console.log("narrrr");
             return false;
         }
         return itemIDs.includes(item_id);
     }
 
-    return { addToCart, removeFromCart, inCart, modifyCart, items, price, messages, refetch }
+    return { addToCart, removeFromCart, inCart, modifyCart, cartItems, price, messages, refetch }
 }
 
 

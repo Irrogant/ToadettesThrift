@@ -13,8 +13,6 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
-# TODO: fixa cavegrej ti landing
-
 
 class LandingView(View):
 
@@ -109,8 +107,6 @@ class ItemDetail(APIView):
         query = request.GET.get("id")
         item = Item.objects.get(id=query)
 
-        print(item)
-
         return Response({"item": {
             "id": item.id,
             "title": item.title,
@@ -199,7 +195,6 @@ class CreateItemView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
         title = request.data.get("title")
         description = request.data.get("description", "")
         price = request.data.get("price")

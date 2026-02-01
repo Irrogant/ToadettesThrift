@@ -1,18 +1,25 @@
 import { BACKEND_URL } from "./variables.js";
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "./AuthContext.jsx";
 
-function useMessages({ END_URL }) {
-    const [messages, setMessages] = useState([]);
+// beautiful code duplication to prevent cart items from being fetched for non-logged in user
+function useCartMessages({ END_URL }) {
+    const [messages, setCartMessages] = useState([]);
+    const { isLoggedIn } = useAuth()
 
     const refetchMessages = useCallback(() => {
+        if (!isLoggedIn) {
+            setCartMessages([])
+            return;
+        }
         fetch(`${BACKEND_URL}/${END_URL}`, { credentials: "include" })
             .then((res) => {
                 if (!res.ok) throw new Error("Failed to fetch messages");
                 return res.json();
             })
-            .then((data) => setMessages(data.messages ?? []))
+            .then((data) => setCartMessages(data.messages ?? []))
             .catch(console.error);
-    }, [END_URL]);
+    }, [END_URL, isLoggedIn]);
 
     useEffect(() => {
         refetchMessages();
@@ -22,4 +29,4 @@ function useMessages({ END_URL }) {
     return { messages, refetchMessages };
 }
 
-export default useMessages;
+export default useCartMessages;

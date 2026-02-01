@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import LandingView, ItemsView, CreateItemView, AllItemsView, SearchItemsView, ItemDetail
-# TODO: consistent url name patterns
+
 urlpatterns = [
     path("landing/", LandingView.as_view(), name="landing"),
     path("allitems/", AllItemsView.as_view(), name="allitems"),

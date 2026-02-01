@@ -1,6 +1,6 @@
 // theme.js
 import { createTheme } from '@mui/material/styles';
-// TODO: center etc
+
 const gobtheme = createTheme({
   typography: {
     fontFamily: 'PixelFont, Arial, sans-serif',

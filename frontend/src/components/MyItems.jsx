@@ -63,23 +63,6 @@ function myItems() {
         method: "POST"
     });
 
-    const submit = useSubmit({
-        END_URL: "createitem/",
-        JSON_DATA: { title, description, price },
-        onSuccess: () => {
-            setView("info"),
-                refetch()
-        },
-        onError: (data) => setError(data.error || "Item creation failed"),
-        method: "POST"
-
-    });
-
-    useEffect(() => {
-        console.log("Items updated:", items);
-        console.log("AAAAAAAAAajdaionflwka", items[0]?.on_sale_items)
-    }, [items]);
-
     return (
         <Container>
 

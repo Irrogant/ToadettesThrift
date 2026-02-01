@@ -11,13 +11,10 @@ import coin from '../assets/icons/coin.png';
 
 function Cart() {
     const { isLoggedIn } = useAuth();
-    const { items, price, refetch } = useCartContext();
+    const { cartItems, price, refetch } = useCartContext();
     const [error, setError] = useState("");
     const [messages, setMessages] = useState("");
     const [updateMessage, setUpdateMessage] = useState("");
-
-    console.log("CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAART")
-    console.log("MESUGUIEIS", messages)
 
     const submit = useSubmit({
         END_URL: "checkout/",
@@ -25,7 +22,6 @@ function Cart() {
             refetch()
             setMessages(data.messages)
             setUpdateMessage(data.updateMessage)
-            console.log("FOUNDDDD", data.updateMessage)
         },
         onError: (data) => setError(data.error || "Error at checkout OOF money gonegone"),
         method: "POST"
@@ -34,8 +30,6 @@ function Cart() {
     const syncSubmit = useSubmit({
         END_URL: "cart/",
         onSuccess: (data) => {
-            //alert("SYNcED")
-            console.log("DATA FUTCHED!!!!!!!!!!!!!!!!!!", data)
             refetch()
             setMessages(data.messages)
         },
@@ -43,21 +37,14 @@ function Cart() {
         method: "POST"
     });
 
-    // useEffect
-
     useEffect(() => {
         syncSubmit({ action: "sync" })
     }, []
     )
 
     useEffect(() => {
-        console.log("MMMMMMMMmMESUGUIEIS", messages)
     }, [messages]
     )
-
-
-
-    console.log("ITEMSSS IN CARTTTT RNNNNN",)
 
     if (!isLoggedIn) {
         return (
@@ -67,7 +54,6 @@ function Cart() {
         );
     }
 
-    console.log("ITEMSUSUUSUSUSUS", items)
     return (
         <Container maxWidth="false" sx={{
             display: "flex",
@@ -78,7 +64,7 @@ function Cart() {
             <h2 style={{ textAlign: "center" }}>YER CART</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            {items.length === 0 ? (
+            {cartItems.length === 0 ? (
 
                 (updateMessage) ?
                     (<Typography>{updateMessage}</Typography>) :
@@ -86,7 +72,7 @@ function Cart() {
 
             ) : (
                 <Box component="form" onSubmit={(e) => submit(null, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <FolderList items={items} messages={messages} />
+                    <FolderList items={cartItems} messages={messages} />
                     <Typography
                         sx={{
                             display: "inline-flex",
