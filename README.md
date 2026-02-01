@@ -1,22 +1,31 @@
 # GobShop
-
 Final project for the Web Technologies 2025 course created by Iréne Åbrandt (irene.abrandt@abo.fi).
 
 The project utilizes Django for the backend and serves React.js for the frontend through Node.js.
 
 ## Implemented Requirements 
-
 All requirements (1-18) have been implemented.
 
 
 ## Run Project
+This project requires Python and Node.js to run. 
 
+It is recommended to install dependencies inside a virtual environment.
+
+Create a virtual environment through running:
+
+    python -m venv venv
+    
+and activate it:
+
+    source venvbin/activate (on macOS/Linux)
+    venv\Scripts\activate (on Windows)
+    
 
 ### Backend + Frontend
 To install dependencies for both the backend and frontend, locate the project root and run:
 
     npm run setup
-Note: creating and activating a Python virtual environment for the backend before running setup is recommended.
 
 To start both the backend and frontend simultaneously, locate the project root and run: 
 
@@ -30,22 +39,13 @@ The backend runs at
 
 and serves API views only, apart from a landing page used to populate the database.
 
-To create a virtual environment for the backend depencencies, first run:
-
-    python3 -m venv venv
-    
-and activate it by running:
-
-    source venvbin/activate (on macOS/Linux)
-    venv\Scripts\activate (on Windows)
-    
 To install the dependencies, cd backend and run:
 
     pip install -r requirements.txt
 
 To run the backend, then cd backend/GobShop and run:
 
-	python3 manage.py runserver 7000
+	python manage.py runserver 7000
 
 ___
 ### Frontend
@@ -58,7 +58,7 @@ To install the dependencies, cd frontend and run:
 
     npm install
 
-To run the frontend, go to frontend and run:
+To run the frontend, cd frontend and run:
 
     npm run dev
 
