@@ -25,7 +25,8 @@ and activate it:
 ### Backend + Frontend
 To install dependencies for both the backend and frontend, locate the project root and run:
 
-    npm run setup
+    npm install
+	npm run setup
 
 To start both the backend and frontend simultaneously, locate the project root and run: 
 
