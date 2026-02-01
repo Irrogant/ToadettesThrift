@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
-    "dev": "concurrently \"cd backend/GobShop && python3 manage.py runserver 7000\" \"cd frontend && npm run dev\""
+    "dev": "concurrently \"cd backend/GobShop && python manage.py runserver 7000\" \"cd frontend && npm run dev\""
   },
   "repository": {
     "type": "git",
