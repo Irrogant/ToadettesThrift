@@ -18,7 +18,7 @@ Create a virtual environment through running:
     
 and activate it:
 
-    source venvbin/activate (on macOS/Linux)
+    source venv/bin/activate (on macOS/Linux)
     venv\Scripts\activate (on Windows)
     
 
