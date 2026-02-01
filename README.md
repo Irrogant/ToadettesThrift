@@ -32,13 +32,21 @@ To start both the backend and frontend simultaneously, locate the project root a
 
     npm run dev
 
-____
-### Backend
 The backend runs at 
 
     http://localhost:7000/
 
-and serves API views only, apart from a landing page used to populate the database.
+The frontend runs at 
+
+    http://localhost:5173/
+
+
+____
+### Backend
+
+The Django backend serves API views only, apart from a landing page used to populate the database.
+
+If you want to run it independently:
 
 To install the dependencies, cd backend and run:
 
@@ -54,10 +62,9 @@ To run the backend, cd backend/GobShop and run:
 
 ___
 ### Frontend
-The frontend runs at 
+The React frontend serves a single-page application.
 
-    http://localhost:5173/
-and serves a single-page application.
+If you want to run it independently:
 
 To install the dependencies, cd frontend and run:
 
