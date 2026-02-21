@@ -11,8 +11,6 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 import { useCartContext } from './CartContext';
 
-import { BACKEND_URL } from "./variables.js";
-
 export default function ListObject({ id, title, imageURL, price, message }) {
     const { addToCart, removeFromCart, inCart } = useCartContext();
 
@@ -20,7 +18,7 @@ export default function ListObject({ id, title, imageURL, price, message }) {
         <ListItem>
             <ListItemAvatar>
                 <Avatar
-                    src={`${BACKEND_URL}${imageURL}`}
+                    src={`/images/${imageURL}`}
                     alt={title}
                     sx={{ width: 40, height: 40 }}
                 />

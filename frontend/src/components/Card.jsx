@@ -16,7 +16,6 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 import { useAuth } from './AuthContext';
 import { useCartContext } from './CartContext';
-import { BACKEND_URL } from "./variables.js";
 import { useNavigate } from 'react-router-dom';
 
 import coin from '../assets/icons/coin.png';
@@ -51,7 +50,7 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
         <CardMedia
           component="img"
           height="140"
-          image={`${BACKEND_URL}${imageUrl}`}
+          image={`/images/${imageUrl}`}
           alt={title}
         />
         <CardContent>

@@ -10,7 +10,7 @@ const gobtheme = createTheme({
   },
   palette: {
     primary: {
-      main: 'rgba(55, 71, 55, 1)',
+      main: 'rgb(216, 96, 174)',
       contrastText: '#fff',
     },
     secondary: {
@@ -29,10 +29,10 @@ const gobtheme = createTheme({
             color: '#ffffff',
           },
           '& .MuiInputLabel-root': {
-            color: '#888888',
+            color: '#ffffff',
           },
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#444444',
+            borderColor: '#e0c0c8',
           },
         },
       },

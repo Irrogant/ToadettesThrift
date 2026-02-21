@@ -1,0 +1,14 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "title": "Vintage Lamp",
+            "owner": 1,
+            "description": "A vintage lamp to brighten your room.",
+            "price": 20.00,
+            "date_created": "2023-01-15",
+            "last_modified": "2023-02-15",
+            "image": "knife.jpg"
+        }
+    ]
+}

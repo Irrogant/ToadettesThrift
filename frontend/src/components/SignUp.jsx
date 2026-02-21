@@ -1,54 +1,85 @@
+import { Box, Button, Container, TextField, Slider, Typography, IconButton } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { Box, Button, Container, TextField } from '@mui/material';
-
-import useSubmit from './useSubmit';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useSignUp } from './useSignUp';
 
 function Signup() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate()
+  const {
+    username,
+    password,
+    error,
+    handleChange,
+    handleSubmit,
+    setPassword, // Destructure setPassword from useSignUp
+  } = useSignUp();
 
-  const submit = useSubmit({
-    END_URL: "signup/",
-    onSuccess: () => {
-      navigate("/login");
-    },
-    onError: (data) => setError(data.error || "Signup failed"),
-    method: "POST"
-  });
+  const [sliderValue, setSliderValue] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  const handleSliderChange = (event, newValue) => {
+    setSliderValue(newValue);
+    const newPassword = newValue > 0 ? `password-${newValue}` : ''; // Generate the password based on the slider
+    setPassword(newPassword); // Update the password state directly
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleFocus = () => {
+    setFocused(true);
+  };
+
+  const handleSubmitWrapper = (e) => {
+    e.preventDefault();
+    handleSubmit(e); // Now handleSubmit will use the password state correctly
+  };
 
   return (
     <Container>
-      <Box component="form" onSubmit={(e) => submit({ username, email, password }, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <h2 style={{ textAlign: "center" }}>thy shall giveth us thy soul</h2>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
+      <Box component="form" onSubmit={handleSubmitWrapper} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <h2 style={{ textAlign: 'center' }}>Sign Up</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <TextField
           type="text"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={handleChange}
           label="Username"
         />
-
-        <TextField
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          label="Email"
-        />
-
-        <TextField
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          label="Password"
-        />
-
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography gutterBottom>Password Strength</Typography>
+          {focused && (
+            <Slider
+              value={sliderValue}
+              min={1}
+              max={1000}
+              step={1}
+              onChange={handleSliderChange}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(value) => `password-${value}`}
+            />
+          )}
+          <TextField
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            label="Password"
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                  aria-label="toggle password visibility"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              ),
+            }}
+            sx={{ mt: 2 }}
+            onFocus={handleFocus}
+          />
+        </Box>
         <Button type="submit" variant="contained">
           Sign Up
         </Button>

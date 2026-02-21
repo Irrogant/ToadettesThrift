@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
-
-import { BACKEND_URL } from './variables.js';
 import Items from './Items.jsx';
 
 function Search() {
@@ -13,20 +11,27 @@ function Search() {
     const query = searchParams.get("q");
 
     const searchItems = async (query) => {
-        if (!query) return; /* no query, no search */
+        if (!query) {
+            setItems([]);
+            return;
+        }
 
-        const url = `${BACKEND_URL}/searchitems/?q=${encodeURIComponent(query)}`;
+        try {
+            const response = await fetch("/items.json");
+            if (!response.ok) throw new Error("Failed to fetch items");
 
-        const response = await fetch(url, {
-            method: "GET",
-            credentials: "include",
-        });
+            const data = await response.json();
 
-        const data = await response.json();
+            const filtered = data.items.filter((item) =>
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.description.toLowerCase().includes(query.toLowerCase())
+            );
 
-        /* return array of the titles */
-        setItems(data.items);
-    }
+            setItems(filtered);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         searchItems(query);

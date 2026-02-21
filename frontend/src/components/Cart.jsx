@@ -1,50 +1,28 @@
-import { useEffect, useState } from 'react';
-
-import { Box, Button, Container, Typography } from '@mui/material';
-
+// Updated Cart Component
+import { useState, useEffect } from 'react';
+import { Box, Button, Container, Typography, TextField } from '@mui/material';
 import { useAuth } from './AuthContext.jsx';
 import { useCartContext } from './CartContext.jsx';
-import useSubmit from './useSubmit';
 import FolderList from './CartList.jsx';
-
 import coin from '../assets/icons/coin.png';
 
 function Cart() {
     const { isLoggedIn } = useAuth();
-    const { cartItems, price, refetch } = useCartContext();
-    const [error, setError] = useState("");
-    const [messages, setMessages] = useState("");
-    const [updateMessage, setUpdateMessage] = useState("");
+    const {
+        cartItems,
+        price,
+        removeFromCart,
+        priceWithDiscount,
+        couponCode,
+        setCouponCode,
+        applyCoupon
+    } = useCartContext();  // Extract couponCode, setCouponCode, and applyCoupon from context
 
-    const submit = useSubmit({
-        END_URL: "checkout/",
-        onSuccess: (data) => {
-            refetch()
-            setMessages(data.messages)
-            setUpdateMessage(data.updateMessage)
-        },
-        onError: (data) => setError(data.error || "Error at checkout OOF money gonegone"),
-        method: "POST"
-    });
-
-    const syncSubmit = useSubmit({
-        END_URL: "cart/",
-        onSuccess: (data) => {
-            refetch()
-            setMessages(data.messages)
-        },
-        onError: (data) => setError(data.error || "Error at cart sync"),
-        method: "POST"
-    });
+    const [messages, setMessages] = useState(""); // Handle message for coupon status
 
     useEffect(() => {
-        syncSubmit({ action: "sync" })
-    }, []
-    )
-
-    useEffect(() => {
-    }, [messages]
-    )
+        setMessages(""); // Reset messages on every render
+    }, [cartItems]);
 
     if (!isLoggedIn) {
         return (
@@ -54,6 +32,16 @@ function Cart() {
         );
     }
 
+    const handleRemoveItem = (itemId) => {
+        removeFromCart(itemId);
+    };
+
+    const handleCouponApply = () => {
+        const message = applyCoupon(couponCode); // Apply coupon logic
+        setMessages(message);
+    };
+
+    console.log(priceWithDiscount)
     return (
         <Container maxWidth="false" sx={{
             display: "flex",
@@ -62,25 +50,18 @@ function Cart() {
             minHeight: "100vh",
         }}>
             <h2 style={{ textAlign: "center" }}>YER CART</h2>
-            {error && <p style={{ color: "red" }}>{error}</p>}
 
             {cartItems.length === 0 ? (
-
-                (updateMessage) ?
-                    (<Typography>{updateMessage}</Typography>) :
-                    (<Typography>maybe add something to ur cart lmao</Typography>)
-
+                <Typography>maybe add something to ur cart lmao</Typography>
             ) : (
-                <Box component="form" onSubmit={(e) => submit(null, e)} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <FolderList items={cartItems} messages={messages} />
-                    <Typography
-                        sx={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "0.25em",
-                        }}
-                    >
-                        {price}
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <FolderList items={cartItems} removeItem={handleRemoveItem} messages={messages} />
+                    <Typography sx={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.25em",
+                    }}>
+                        {priceWithDiscount} {/* Show price after discount */}
                         <img
                             src={coin}
                             alt="Coin"
@@ -90,7 +71,21 @@ function Cart() {
                             }}
                         />
                     </Typography>
-                    <Button type="submit" color="inherit">
+
+                    {/* Coupon Code Field */}
+                    <TextField
+                        label="Coupon Code"
+                        variant="outlined"
+                        value={couponCode}  // Access couponCode from context
+                        onChange={(e) => setCouponCode(e.target.value)}  // Update couponCode via context
+                        sx={{ width: '200px', marginBottom: '16px' }}
+                    />
+                    <Button onClick={handleCouponApply} variant="contained" color="primary">
+                        Apply Coupon
+                    </Button>
+                    {messages && <Typography sx={{ color: priceWithDiscount > price ? 'green' : 'red' }}>{messages}</Typography>}
+
+                    <Button onClick={() => alert('oops looks like the item is sold out <3 better luck next time xoxo')} color="inherit">
                         <Typography>PAY</Typography>
                     </Button>
                 </Box>

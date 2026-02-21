@@ -1,16 +1,5 @@
-import { BACKEND_URL } from "./variables.js";
-import getCookie from "./cookie.js";
-
-function useSubmitFormData({
-    END_URL,
-    getFormData,
-    onSuccess,
-    onError,
-    method,
-}) {
-    const url = `${BACKEND_URL}/${END_URL}`;
-
-    const handleSubmit = async (e) => {
+function useFormSubmitLocal({ getFormData, onSuccess, onError }) {
+    const handleSubmit = (e) => {
         if (e?.preventDefault) e.preventDefault();
 
         let formData;
@@ -22,22 +11,18 @@ function useSubmitFormData({
         }
 
         try {
-            const response = await fetch(url, {
-                method,
-                credentials: "include",
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken"),
-                },
-                body: formData,
-            });
+            // Load existing items from localStorage
+            const storedItems = JSON.parse(localStorage.getItem("items") || "[]");
 
-            const data = await response.json();
+            // Assign a new id
+            const newId = storedItems.length > 0 ? storedItems[storedItems.length - 1].id + 1 : 1;
 
-            if (response.ok) {
-                onSuccess?.(data);
-            } else {
-                onError?.(data);
-            }
+            const newItem = { id: newId, ...formData };
+
+            // Save back
+            localStorage.setItem("items", JSON.stringify([...storedItems, newItem]));
+
+            onSuccess?.(newItem);
         } catch (err) {
             onError?.({ error: err.message });
         }
@@ -46,4 +31,4 @@ function useSubmitFormData({
     return handleSubmit;
 }
 
-export default useSubmitFormData;
+export default useFormSubmitLocal;

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { Autocomplete, Button, Container, TextField } from '@mui/material';
 
-import { BACKEND_URL } from './variables.js';
 import SearchIcon from '@mui/icons-material/Search';
 
 function SearchBar() {
@@ -18,21 +17,29 @@ function SearchBar() {
   };
 
   const searchItems = async (query) => {
-    const url = `${BACKEND_URL}/searchitems/?q=${encodeURIComponent(query)}`;
+    if (!query) {
+      setSearchResults([]);
+      return;
+    }
 
-    const response = await fetch(url, {
-      method: "GET",
-      credentials: "include",
-    });
+    try {
+      const response = await fetch("/items.json");
+      if (!response.ok) throw new Error("Failed to fetch items");
 
-    const data = await response.json();
+      const data = await response.json();
 
-    /* return array of the titles */
-    const titles = data.items.map(item => item.title);
-    setSearchResults(titles);
+      const filteredTitles = data.items
+        .filter((item) =>
+          item.title.toLowerCase().includes(query.toLowerCase())
+        )
+        .map((item) => item.title);
 
+      setSearchResults(filteredTitles);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  }
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate(`/search/?q=${encodeURIComponent(searchTerm)}`);

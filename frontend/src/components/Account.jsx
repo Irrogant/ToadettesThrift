@@ -7,34 +7,37 @@ import {
   Container,
 } from "@mui/material";
 import { useAuth } from "./AuthContext";
-import useSubmit from "./useSubmit";
-
 
 function Account() {
-  const { username, email } = useAuth();
-  const [view, setView] = useState("info")
-  const [oldPassword, setOldPassword] = useState("")
-  const [newPassword, setNewPassword] = useState("")
+  const { username } = useAuth();
+  const [view, setView] = useState("info");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-
 
   function clear() {
     setOldPassword("");
     setNewPassword("");
   }
 
-  const submit = useSubmit({
-    END_URL: "account/",
-    JSON_DATA: { oldPassword, newPassword },
-    onSuccess: () => {
-      setView("info")
-      setMessage("Password updated successfully")
-      clear()
-    },
-    onError: (data) => setError(data.error || "Password modification failed"),
-    method: "POST"
-  });
+  const handleSave = () => {
+    // Frontend-only validation example
+    if (!newPassword) {
+      setError("New password cannot be empty");
+      return;
+    }
+    if (newPassword === oldPassword) {
+      setError("New password cannot be the same as old password");
+      return;
+    }
+
+    // Fake "success" — no backend
+    setError("");
+    setMessage("Password updated successfully (demo only)");
+    setView("info");
+    clear();
+  };
 
   return (
     <Container>
@@ -46,11 +49,9 @@ function Account() {
             <Box sx={{ mt: 2 }}>
               <Typography variant="h6">Account Details</Typography>
               <Typography>Username: {username}</Typography>
-              <Typography>Email: {email}</Typography>
             </Box>
             {message && <Typography variant="h5">{message}</Typography>}
             <Button onClick={() => setView("edit")}> Edit Password </Button>
-
           </Box>
         </Container>
       }
@@ -72,12 +73,11 @@ function Account() {
               onChange={(e) => setNewPassword(e.target.value)}
               label="New Password"
             />
-            <Button onClick={() => submit({ oldPassword, newPassword })}> Save </Button>
+            <Button onClick={handleSave}> Save </Button>
             <Button onClick={() => { setView("info"); clear(); }}> Cancel </Button>
           </Box>
         </Container>
       }
-
     </Container>
   );
 }

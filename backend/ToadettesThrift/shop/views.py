@@ -13,46 +13,6 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
-
-class LandingView(View):
-
-    def get(self, request, *args, **kwargs):
-        itemAmount = Item.objects.all().count()
-        return render(request, "landing.html", {'itemAmount': itemAmount})
-
-    def post(self, request, *args, **kwargs):
-        button = request.POST.get("button")
-
-        if button == "proceed":
-            response = redirect(settings.FRONTEND_URL)
-            response.set_cookie('already_landed', 'True')
-            return response
-
-        if button == "populate":
-            # Emptying database
-            call_command('flush', '--no-input')
-
-            # Creating admin user
-            admin = User.objects.create_superuser("admin", "admin", "admin")
-            admin.save()
-            # Creating six users with numbers 1-6
-            for i in range(1, 7):
-                user = User.objects.create_user(
-                    f"testuser{i}", f"testuser{i}@ToadettesThrift.com", f"pass{i}")
-                user.save()
-
-            call_command('loaddata', 'item_fixture.json')
-            message = "ya populated the DB, congratz"
-
-        if button == "empty":
-            call_command('flush', '--no-input')
-            message = "and WHY wod ya do dat?"
-            # Fetching the total amount of objects by adding together amount fields
-
-        itemAmount = Item.objects.all().count()
-        return render(request, "landing.html", {'itemAmount': itemAmount, 'message': message})
-
-
 # curl -X GET "http://localhost:7000/myitems/" -H "Content-Type: application/json" -H "Cookie: sessionid={sess}; csrftoken={cook}" -H "X-CSRFToken: {cook}"
 class ItemsView(APIView):
 
