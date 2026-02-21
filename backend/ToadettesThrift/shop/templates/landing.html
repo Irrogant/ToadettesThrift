@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>GobShop</title>
+    <title>Toadette's Thrift</title>
     {% load static %}
     <link rel="icon" href="{% static 'images/favicon.png' type='image/png' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/accessStyle.css' %}">
@@ -13,7 +13,7 @@
 
     <div class="middleField">
 
-        <h1>GOBSHOP</h1>
+        <h1>Toadette's Thrift</h1>
         <h2> Number of items: {{itemAmount}} </h2>
     </div>
 
@@ -31,7 +31,7 @@
         {% csrf_token %}
         <button type="submit" name="button" value="populate">Populate DB</button>
         <button type="submit" name="button" value="empty">Empty DB</button>
-        <button type="submit" name="button" value="proceed">Proceed to GobShop</button>
+        <button type="submit" name="button" value="proceed">Proceed to ToadettesThrift</button>
     </form>
 
     </div>

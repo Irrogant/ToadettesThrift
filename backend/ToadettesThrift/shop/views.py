@@ -38,7 +38,7 @@ class LandingView(View):
             # Creating six users with numbers 1-6
             for i in range(1, 7):
                 user = User.objects.create_user(
-                    f"testuser{i}", f"testuser{i}@gobshop.com", f"pass{i}")
+                    f"testuser{i}", f"testuser{i}@ToadettesThrift.com", f"pass{i}")
                 user.save()
 
             call_command('loaddata', 'item_fixture.json')

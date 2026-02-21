@@ -20,7 +20,7 @@ function Home() {
 
   return (
     <Container maxWidth="false">
-      <h2 style={{ textAlign: "center" }}>GOBSHOP</h2>
+      <h2 style={{ textAlign: "center" }}>Toadette's Thrift</h2>
       <Items items={items} />
     </Container>
   );

@@ -1,5 +1,5 @@
-# GobShop
-Final project for the Web Technologies 2025 course created by Iréne Åbrandt (irene.abrandt@abo.fi).
+# Toadettes Thrift
+Submission for DaTes yearly hackathon. This year we were tasked with creating an technically working UI but with unituitive design.
 
 The project utilizes Django for the backend and serves React.js for the frontend through Node.js.
 
@@ -52,11 +52,11 @@ To install the dependencies, cd backend and run:
 
     pip install -r requirements.txt
 
-To apply migrations, cd backend/GobShop and run:
+To apply migrations, cd backend/ToadettesThrift and run:
 
 	python manage.py migrate
 
-To run the backend, cd backend/GobShop and run:
+To run the backend, cd backend/ToadettesThrift and run:
 
 	python manage.py runserver 7000
 
