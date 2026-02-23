@@ -18,7 +18,9 @@ import { useAuth } from './AuthContext';
 import { useCartContext } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 
+import ChaosButton from './ChaosButton';
 import coin from '../assets/icons/coin.png';
+
 
 export default function MultiActionAreaCard({ id, title, description, imageUrl, price, soldAt, dateCreated, owner, seller, buyer }) {
   const cardMaxWidth = 300
@@ -110,19 +112,21 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
               <RemoveShoppingCartIcon />
             </Button>
           ) : (
-            <Button
-              onClick={() => {
-                if (!isLoggedIn) {
-                  navigate("/login");
-                } else {
-                  addToCart(id);
-                }
-              }}
-              size="small"
-              color="primary"
-            >
-              <AddShoppingCartIcon />
-            </Button>
+            <ChaosButton>
+              <Button
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    navigate("/login");
+                  } else {
+                    addToCart(id);
+                  }
+                }}
+                size="small"
+                color="primary"
+              >
+                <AddShoppingCartIcon />
+              </Button>
+            </ChaosButton>
           )
         )}
         <Typography sx={{ pr: 1.5 }} variant="body2">

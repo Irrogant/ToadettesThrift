@@ -7,6 +7,8 @@ import { useAuth } from './AuthContext';
 import SearchBar from './SearchBar';
 import Logo from '../assets/logo.png';
 
+import ChaosButton from './ChaosButton';
+
 function NavBar() {
   const { isLoggedIn } = useAuth();
   return (
@@ -49,9 +51,19 @@ function NavBar() {
             <>
               <Button color="inherit" component={Link} to="/myitems">My Items</Button>
               <Button color="inherit" component={Link} to="/account">Account</Button>
-              <Button component={Link} to="/cart" color="inherit">
-                <ShoppingCartIcon />
-              </Button>
+              {/* Align ChaosButton the same way */}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ChaosButton>
+                  <Button
+                    color="inherit"
+                    component={Link}
+                    to="/cart"
+                    sx={{ display: 'flex', alignItems: 'center' }} // Aligning contents inside the Button
+                  >
+                    <ShoppingCartIcon />
+                  </Button>
+                </ChaosButton>
+              </Box>
               <Button color="inherit" component={Link} to="/logout">Log Out</Button>
             </>
           )}

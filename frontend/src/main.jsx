@@ -9,15 +9,18 @@ import gobtheme from './theme';
 
 import { AuthProvider } from './components/AuthContext';
 import { CartProvider } from './components/CartContext';
+import { MusicProvider } from './components/MusicContext';  // Import MusicProvider
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={gobtheme}>
-      <AuthProvider>
-        <CartProvider>
-          <App />
-        </CartProvider>
-      </AuthProvider>
+      <MusicProvider>  {/* Wrap the app in MusicProvider */}
+        <AuthProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </AuthProvider>
+      </MusicProvider>
     </ThemeProvider>
   </StrictMode>,
 );

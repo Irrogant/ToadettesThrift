@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import { useAuth } from "./AuthContext";
 import { useCart } from "./useCart.jsx";
+import ChaosButton from "./ChaosButton";
 
 import coin from "../assets/icons/coin.png";
 
@@ -42,9 +43,23 @@ function ItemDetail() {
         navigate("/"); // redirect to home or items list
     };
 
+    const handleAddToCart = (itemId) => {
+        addToCart(itemId);  // Some function that adds the item to the cart
+        navigate("/cart");  // Navigate to the cart page
+    };
+
     return (
-        <Container>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+        <Container
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-start',  // Aligns content to the top
+                minHeight: '100vh',
+                textAlign: 'center',
+                pt: 4,  // Adds padding-top to move content a bit down (adjust this value)
+            }}
+        >   {error && <p style={{ color: "red" }}>{error}</p>}
 
             {item && (
                 <>
@@ -81,7 +96,13 @@ function ItemDetail() {
                         </Grid>
                     </Grid>
 
-                    {!isOwner && <Button onClick={() => { addToCart(item.id); navigate("/cart"); }}>BUY</Button>}
+                    {!isOwner && (
+                        <ChaosButton>
+                            <Button onClick={() => { addToCart(item.id); navigate("/cart"); }}>
+                                BUY
+                            </Button>
+                        </ChaosButton>
+                    )}
                     {isOwner && <Button color="error" onClick={handleDelete}>DELETE</Button>}
                 </>
             )}
