@@ -1,11 +1,12 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, use } from "react";
 import { Button, Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
 import { useMusic } from './MusicContext';
 
 function ChaosButton({ children }) {
-    const { playTrack, stopTrack, isPlaying, currentTrack } = useMusic();
+    const { playTrack } = useMusic();
 
     const [stars, setStars] = useState([]);
+    const [chaosActive, setChaosActive] = useState(false);
     const [showCoupon, setShowCoupon] = useState(false);
     const [couponCode, setCouponCode] = useState("");
     const [couponGenerated, setCouponGenerated] = useState(false);
@@ -62,27 +63,33 @@ function ChaosButton({ children }) {
 
     const startChaos = () => {
         document.body.classList.add("chaos-mode");
-        playTrack("/music/star.mp3");
+        setChaosActive(true);
+        setCouponGenerated(false); // Reset coupon generation flag when chaos starts
         generateCouponWithDelay();
     };
 
     const stopChaos = () => {
         document.body.classList.remove("chaos-mode");
-        stopTrack();
+        setChaosActive(false);
         setStars([]); // Clear stars when chaos stops
+        setCouponGenerated(false); // Reset coupon flag to allow a new coupon next time chaos starts
     };
 
     const handleCloseCoupon = () => {
         setShowCoupon(false);
-        stopTrack();
     };
 
     useEffect(() => {
+        if (chaosActive) {
+            playTrack("/music/star.mp3");
+        }
         if (showCoupon) {
-            stopTrack();
             playTrack("/music/coupon.mp3");
         }
-    }, [showCoupon]);
+        else {
+            playTrack("/music/balloon_battle.mp3");
+        }
+    }, [chaosActive, showCoupon]);
 
     const handleButtonClick = (e) => {
         stopChaos(); // Stop chaos on button click

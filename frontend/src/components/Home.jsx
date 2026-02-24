@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import { Container, Box } from "@mui/material";
 import Items from "./Items.jsx";
 import { useTheme } from "@mui/material/styles";
-import { useMusic } from './MusicContext'; // Import the custom hook
 
 function Home() {
   const [items, setItems] = useState([]);
   const theme = useTheme();
-
-  const { playTrack, stopTrack, isPlaying, currentTrack } = useMusic();
 
   const adGifs = [
     "/ads/food.gif",
@@ -25,16 +22,11 @@ function Home() {
   const [ads, setAds] = useState(() => Array(8).fill("").map(() => adGifs[Math.floor(Math.random() * adGifs.length)]));
 
   useEffect(() => {
-    // When Home component is mounted, play balloon music if no other track is playing
-    if (!currentTrack) {
-      playTrack("/music/balloon_battle.mp3");
-    }
-
     fetch("/items.json")
       .then((response) => response.json())
       .then((data) => setItems(data.items))
       .catch((error) => console.error("Error fetching items:", error));
-  }, [currentTrack, playTrack]); // Trigger this effect only if currentTrack changes
+  }, []);
 
   return (
     <Container maxWidth="false" sx={{ padding: 0, margin: 0 }}>

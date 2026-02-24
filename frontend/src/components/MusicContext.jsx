@@ -19,7 +19,6 @@ export const MusicProvider = ({ children }) => {
                 setIsPlaying(false);
             };
 
-            // Automatically start playing the track if it is the selected one
             newAudio.play().catch((err) => console.error("Error playing track: ", err));
 
             // Clean up function when the track changes or the component unmounts
@@ -34,19 +33,16 @@ export const MusicProvider = ({ children }) => {
     const playTrack = (track) => {
         console.log(`Attempting to play track: ${track}`);
 
-        // If a track is currently playing and it's different from the new track, stop the current one
-        if (audio && currentTrack !== track) {
-            audio.pause();  // Pause the current track
-            setIsPlaying(false);  // Update play state
-        }
-
-        // Only change the track if it's different from the current one
-        if (track !== currentTrack) {
-            setCurrentTrack(track); // Set the new track
+        // If the track is different, set it as the new current track
+        if (currentTrack !== track) {
+            if (audio) {
+                audio.pause();  // Pause the current track before switching
+            }
+            setCurrentTrack(track);  // Update to the new track
+            setIsPlaying(true);      // Start playing the new track
         } else {
             // If the track is the same, toggle the play/pause state
             if (isPlaying) {
-                audio.pause();
                 setIsPlaying(false);
             } else {
                 audio.play().catch((err) => console.error("Error playing track: ", err));
@@ -55,18 +51,8 @@ export const MusicProvider = ({ children }) => {
         }
     };
 
-    // Stop the current track
-    const stopTrack = () => {
-        console.log('Stopping CURRENT track:', audio);
-        if (audio) {
-            audio.pause();
-            setIsPlaying(false);
-            setCurrentTrack(null);  // Clear the current track
-        }
-    };
-
     return (
-        <MusicContext.Provider value={{ playTrack, stopTrack, isPlaying, currentTrack }}>
+        <MusicContext.Provider value={{ playTrack, isPlaying, currentTrack }}>
             {children}
         </MusicContext.Provider>
     );
