@@ -5,12 +5,18 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: lab(87.91% 7.78 -5.5);
+  background-image: url('../public/sparkle.gif');
+  background-color: lab(83.19% 25.1 -17.23);
+  background-repeat: repeat;
+  background-size: cover;
+  /* Or 'contain' depending on how you want it to fit */
+  background-position: center;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 @font-face {
@@ -28,13 +34,6 @@ a:hover {
   color: #c81858;
 }
 
-body {
-  margin: 0;
-  display: block;
-  min-width: 100vw;
-  min-height: 100vh;
-}
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -47,8 +46,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
+  cursor: url('../public/star.png');
   transition: border-color 0.25s;
 }
 
@@ -105,33 +103,33 @@ button:focus-visible {
 /* Smooth Rainbow Flash Animation */
 @keyframes flash-bg {
   0% {
-    background-color: #e09eec;
-    /* Red */
+    background-color: rgba(224, 158, 236, 0.6);
+    /* Light Red/Pink, semi-transparent */
   }
 
   20% {
-    background-color: #e3c5b6;
-    /* Orange */
+    background-color: rgba(227, 197, 182, 0.6);
+    /* Light Orange */
   }
 
   40% {
-    background-color: #ecdf9c;
-    /* Yellow */
+    background-color: rgba(236, 223, 156, 0.6);
+    /* Light Yellow */
   }
 
   60% {
-    background-color: #cffaa0;
-    /* Green */
+    background-color: rgba(207, 250, 160, 0.6);
+    /* Light Green */
   }
 
   80% {
-    background-color: #b0dff2;
-    /* Blue */
+    background-color: rgba(176, 223, 242, 0.6);
+    /* Light Blue */
   }
 
   100% {
-    background-color: #e09eec;
-    /* Violet */
+    background-color: rgba(224, 158, 236, 0.6);
+    /* Light Violet */
   }
 }
 
@@ -182,17 +180,29 @@ button:focus-visible {
   }
 }
 
+.chaos-container {
+  position: relative;
+  overflow: visible;
+  /* Allow the stars to overflow */
+}
+
 /* Chaos Mode Background & Stars */
 .chaos-mode {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  /* Ensure background stretches */
+  background-position: center;
   animation: flash-bg 2s ease-in-out infinite, shake-zoom 0.5s ease infinite;
-  cursor: url('/star.gif') 16 16, pointer;
+  cursor: url('../public/star.gif') 16 16, pointer;
   overflow: hidden;
 }
 
 /* Basic Star Styles */
 .star {
-  position: absolute;
   background-color: white;
   opacity: 0.8;
   animation: fly-stars linear infinite;

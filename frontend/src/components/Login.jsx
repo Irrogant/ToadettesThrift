@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { Box, Button, Container, TextField } from '@mui/material';
-
+import { Box, Button, Container, TextField, Typography, useTheme } from '@mui/material';
 import { useAuth } from './AuthContext'; // Access the auth context
 
 function Login() {
@@ -12,6 +10,8 @@ function Login() {
   const navigate = useNavigate();
 
   const { setIsLoggedIn, setUsername: setAuthUsername } = useAuth(); // Access the auth context's setter functions
+
+  const theme = useTheme(); // Access the theme to get the primary color
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -39,13 +39,28 @@ function Login() {
   };
 
   return (
-    <Container>
+    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
       <Box
         component="form"
         onSubmit={handleLogin}
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          maxWidth: '200px', // Set a maximum width for the form to be smaller
+          width: '100%', // Ensure it doesn't expand beyond maxWidth
+        }}
       >
-        <h2 style={{ textAlign: 'center' }}>come forth, come forth</h2>
+        <Typography
+          style={{
+            fontSize: '40px',
+            fontWeight: 'bold',
+            color: theme.palette.primary.main,
+            textAlign: 'center',
+          }}
+        >
+          LOG IN
+        </Typography>
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
@@ -54,6 +69,26 @@ function Login() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           label="Username"
+          sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            '& .MuiInputLabel-root': {
+              color: theme.palette.primary.main,
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputBase-input': {
+              color: theme.palette.primary.main,
+            },
+          }}
         />
 
         <TextField
@@ -61,9 +96,35 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           label="Password"
+          sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            '& .MuiInputLabel-root': {
+              color: theme.palette.primary.main,
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputBase-input': {
+              color: theme.palette.primary.main,
+            },
+          }}
         />
 
-        <Button type="submit" variant="contained">
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+          }}
+        >
           Log In
         </Button>
       </Box>

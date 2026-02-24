@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, use } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
 import { useMusic } from './MusicContext';
 
@@ -10,20 +10,27 @@ function ChaosButton({ children }) {
     const [showCoupon, setShowCoupon] = useState(false);
     const [couponCode, setCouponCode] = useState("");
     const [couponGenerated, setCouponGenerated] = useState(false);
+    const [chaosStartTime, setChaosStartTime] = useState(null);
 
     const maxStars = 300;
     const timerRef = useRef(null);
+    const chaosTimeoutRef = useRef(null);
 
-    const getRandomStar = () => ({
-        id: Date.now() + Math.random(),
-        top: Math.random() * 100,
-        left: Math.random() * 100,
-        size: Math.random() * 15 + 10,
-        shape: Math.random() < 0.5 ? "circle" : "star",
-        animationDuration: Math.random() * 10 + 5 + "s",
-        animationDelay: Math.random() * 5 + "s",
-        rotation: Math.random() * 360,
-    });
+    const getRandomStar = () => {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        return {
+            id: Date.now() + Math.random(),
+            top: Math.random() * viewportHeight, // Expand to the full height of the viewport
+            left: Math.random() * viewportWidth, // Expand to the full width of the viewport
+            size: Math.random() * 15 + 10, // Size between 10px and 25px
+            shape: Math.random() < 0.5 ? "circle" : "star",
+            animationDuration: Math.random() * 10 + 5 + "s", // Animation duration between 5s and 15s
+            animationDelay: Math.random() * 5 + "s", // Delay between 0s and 5s
+            rotation: Math.random() * 360, // Random rotation for visual effect
+        };
+    };
 
     const generateCoupon = () => {
         const discountValues = [10, 20, 30, 40];
@@ -33,12 +40,14 @@ function ChaosButton({ children }) {
 
     const generateCouponWithDelay = () => {
         if (couponGenerated) return; // Don't generate a coupon if one has already been generated
-        const delay = Math.random() * (7000 - 3000) + 3000; // Random delay between 3-7 seconds
-        setTimeout(() => {
+
+        // Check if chaos mode has been active for at least 4 seconds
+        const timeInChaos = Date.now() - chaosStartTime;
+        if (timeInChaos >= 4000) {
             setCouponCode(generateCoupon());
             setShowCoupon(true);
-            setCouponGenerated(true); // Mark coupon as generated
-        }, delay);
+            setCouponGenerated(true);
+        }
     };
 
     useEffect(() => {
@@ -65,7 +74,10 @@ function ChaosButton({ children }) {
         document.body.classList.add("chaos-mode");
         setChaosActive(true);
         setCouponGenerated(false); // Reset coupon generation flag when chaos starts
-        generateCouponWithDelay();
+        setChaosStartTime(Date.now()); // Start the chaos timer
+
+        // Set a timeout to check after 4 seconds if the chaos is still active
+        chaosTimeoutRef.current = setTimeout(generateCouponWithDelay, 4000);
     };
 
     const stopChaos = () => {
@@ -73,6 +85,10 @@ function ChaosButton({ children }) {
         setChaosActive(false);
         setStars([]); // Clear stars when chaos stops
         setCouponGenerated(false); // Reset coupon flag to allow a new coupon next time chaos starts
+
+        if (chaosTimeoutRef.current) {
+            clearTimeout(chaosTimeoutRef.current); // Clear the timeout if chaos stops before 4 seconds
+        }
     };
 
     const handleCloseCoupon = () => {
@@ -85,8 +101,7 @@ function ChaosButton({ children }) {
         }
         if (showCoupon) {
             playTrack("/music/coupon.mp3");
-        }
-        else {
+        } else {
             playTrack("/music/balloon_battle.mp3");
         }
     }, [chaosActive, showCoupon]);
@@ -108,13 +123,16 @@ function ChaosButton({ children }) {
                     key={star.id}
                     className={star.shape}
                     style={{
-                        top: `${star.top}vh`,
-                        left: `${star.left}vw`,
+                        position: "fixed", // Change to fixed to make stars relative to the viewport
+                        top: `${star.top}px`,
+                        left: `${star.left}px`,
                         width: `${star.size}px`,
                         height: `${star.size}px`,
                         animationDuration: star.animationDuration,
                         animationDelay: star.animationDelay,
                         transform: `rotate(${star.rotation}deg)`,
+                        zIndex: 9999, // Ensure stars are on top of everything
+                        pointerEvents: "none", // Prevent interaction with other elements
                     }}
                 ></div>
             ))}

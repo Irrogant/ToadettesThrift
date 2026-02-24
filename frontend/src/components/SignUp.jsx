@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField, Slider, Typography, IconButton } from '@mui/material';
+import { Box, Button, Container, TextField, Slider, Typography, IconButton, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useSignUp } from './useSignUp';
@@ -16,6 +16,8 @@ function Signup() {
   const [sliderValue, setSliderValue] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState(false);
+
+  const theme = useTheme(); // Access the theme to get the primary color
 
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
@@ -37,18 +39,55 @@ function Signup() {
   };
 
   return (
-    <Container>
-      <Box component="form" onSubmit={handleSubmitWrapper} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <h2 style={{ textAlign: 'center' }}>Sign Up</h2>
+    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
+      <Box component="form" onSubmit={handleSubmitWrapper} sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        maxWidth: '200px', // Set a maximum width for the form to be smaller
+        width: '100%', // Ensure it doesn't expand beyond maxWidth
+      }}>
+        <Typography
+          style={{
+            fontSize: '40px',
+            fontWeight: 'bold',
+            color: theme.palette.primary.main, // Use the primary color for the title
+            textAlign: 'center',
+          }}
+        >
+          SIGN UP
+        </Typography>
+
         {error && <p style={{ color: 'red' }}>{error}</p>}
+
         <TextField
           type="text"
           value={username}
           onChange={handleChange}
           label="Username"
+          sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)', // Transparent white background
+            '& .MuiInputLabel-root': {
+              color: theme.palette.primary.main, // Use primary color for label
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.primary.main, // Use primary color for border
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.primary.main, // Hover effect with primary color
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main, // Focus effect with primary color
+              },
+            },
+            '& .MuiInputBase-input': {
+              color: theme.palette.primary.main, // Use primary color for input text
+            },
+          }}
         />
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography gutterBottom>Password Strength</Typography>
+
+        <Box>
           {focused && (
             <Slider
               value={sliderValue}
@@ -76,12 +115,37 @@ function Signup() {
                 </IconButton>
               ),
             }}
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              backgroundColor: 'rgba(255, 255, 255, 0.8)', // Transparent white background
+              '& .MuiInputLabel-root': {
+                color: theme.palette.primary.main, // Use primary color for label
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.primary.main, // Use primary color for border
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main, // Hover effect with primary color
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main, // Focus effect with primary color
+                },
+              },
+              '& .MuiInputBase-input': {
+                color: theme.palette.primary.main, // Use primary color for input text
+              },
+            }}
             onFocus={handleFocus}
           />
         </Box>
-        <Button type="submit" variant="contained">
-          Sign Up
+
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ backgroundColor: theme.palette.primary.main }}
+        >
+          SIGN UP
         </Button>
       </Box>
     </Container>

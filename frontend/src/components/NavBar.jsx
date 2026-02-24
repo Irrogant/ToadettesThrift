@@ -6,13 +6,23 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAuth } from './AuthContext';
 import SearchBar from './SearchBar';
 import Logo from '../assets/logo.png';
+import glow from '../assets/glow.gif';
 
 import ChaosButton from './ChaosButton';
 
 function NavBar() {
   const { isLoggedIn } = useAuth();
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" sx={{
+      backgroundImage: `url(${glow})`,
+      backgroundSize: 'cover', // This will make sure the image covers the entire navbar
+      backgroundPosition: 'center', // Center the background image
+      backgroundRepeat: 'no-repeat', // Prevent repeating the image
+      // Optionally, add a semi-transparent overlay on top of the image if needed
+      '& .MuiToolbar-root': {
+        backgroundColor: 'rgba(201, 15, 161, 0.5)', // Dark overlay, adjust opacity as needed
+      },
+    }}>
       <Toolbar>
 
         <Link to="/">
@@ -41,6 +51,18 @@ function NavBar() {
             overflow: "hidden",
           },
         }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <ChaosButton>
+              <Button
+                color="inherit"
+                component={Link}
+                to="/cart"
+                sx={{ display: 'flex', alignItems: 'center' }} // Aligning contents inside the Button
+              >
+                <ShoppingCartIcon />
+              </Button>
+            </ChaosButton>
+          </Box>
           <Button color="inherit" component={Link} to="/">Shop</Button>
           {!isLoggedIn ? (
             <>
@@ -51,19 +73,6 @@ function NavBar() {
             <>
               <Button color="inherit" component={Link} to="/myitems">My Items</Button>
               <Button color="inherit" component={Link} to="/account">Account</Button>
-              {/* Align ChaosButton the same way */}
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ChaosButton>
-                  <Button
-                    color="inherit"
-                    component={Link}
-                    to="/cart"
-                    sx={{ display: 'flex', alignItems: 'center' }} // Aligning contents inside the Button
-                  >
-                    <ShoppingCartIcon />
-                  </Button>
-                </ChaosButton>
-              </Box>
               <Button color="inherit" component={Link} to="/logout">Log Out</Button>
             </>
           )}

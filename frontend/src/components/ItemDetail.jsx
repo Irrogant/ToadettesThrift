@@ -51,11 +51,12 @@ function ItemDetail() {
     return (
         <Container
             sx={{
+                backgroundColor: "rgba(186, 81, 160, 0.8)",
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'flex-start',  // Aligns content to the top
-                minHeight: '100vh',
+                minHeight: '85vh',
                 textAlign: 'center',
                 pt: 4,  // Adds padding-top to move content a bit down (adjust this value)
             }}
@@ -105,8 +106,9 @@ function ItemDetail() {
                     )}
                     {isOwner && <Button color="error" onClick={handleDelete}>DELETE</Button>}
                 </>
-            )}
-        </Container>
+            )
+            }
+        </Container >
     );
 }
 

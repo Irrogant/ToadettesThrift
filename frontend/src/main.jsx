@@ -14,7 +14,7 @@ import { MusicProvider } from './components/MusicContext';  // Import MusicProvi
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={gobtheme}>
-      <MusicProvider>  {/* Wrap the app in MusicProvider */}
+      <MusicProvider>
         <AuthProvider>
           <CartProvider>
             <App />

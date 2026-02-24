@@ -9,7 +9,7 @@ function Items({ items }) {
                 {items.map((item) => {
                     console.log("Image URL for item:", item.image); // Log the imageUrl to the console
                     return (
-                        <Grid key={item.id} size={4}>
+                        <Grid key={item.id} size={6}>
                             <MultiActionAreaCard
                                 id={item.id}
                                 title={item.title}

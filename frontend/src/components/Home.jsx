@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Box } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import Items from "./Items.jsx";
 import { useTheme } from "@mui/material/styles";
 
@@ -30,12 +30,12 @@ function Home() {
 
   return (
     <Container maxWidth="false" sx={{ padding: 0, margin: 0 }}>
-      <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
+      <Box sx={{ display: "flex", width: "100%", height: "90vh" }}>
         {/* Left Column with Ads */}
-        <Box sx={{ width: 200, display: "flex", flexDirection: "column", gap: 2, height: "100vh", padding: 2, background: "linear-gradient(135deg, #ff66b2, #ff3385)", position: "relative" }}>
+        <Box sx={{ width: 200, display: "flex", flexDirection: "column", gap: 2, height: "800px", padding: 2, backgroundColor: "rgba(186, 81, 160, 0.8)", position: "relative" }}>
           {[...Array(4)].map((_, index) => (
             <Box key={index} sx={{ position: "relative", backgroundColor: "#fff", padding: 1, boxShadow: "0 4px 15px rgba(255, 0, 127, 0.5)", border: "4px solid #ff007f", borderRadius: 3, overflow: "hidden", backgroundSize: "cover", backgroundPosition: "center" }}>
-              <Box sx={{ position: "absolute", top: 5, right: 5, color: "#fff", fontWeight: "bold", fontSize: "22px", backgroundColor: "#ff007f", padding: "5px 10px", borderRadius: "50px", textTransform: "uppercase", letterSpacing: "2px", textShadow: "2px 2px 8px #fff" }}>
+              <Box sx={{ position: "absolute", top: 5, right: 5, color: "#fff", fontWeight: "bold", fontSize: "22px", backgroundColor: "rgba(186, 81, 160, 0.8)", padding: "5px 10px", borderRadius: "50px", textTransform: "uppercase", letterSpacing: "2px", textShadow: "2px 2px 8px #fff" }}>
                 AD
               </Box>
               <img
@@ -48,18 +48,18 @@ function Home() {
         </Box>
 
         {/* Middle Column with Items */}
-        <Box sx={{ flex: 2, padding: 2 }}>
-          <h2 style={{ textAlign: "center", color: theme.palette.primary.main, fontSize: "40px", textShadow: "3px 3px 10px rgba(255, 0, 127, 0.5)" }}>
+        <Box sx={{ flex: 2, height: "800px", }}>
+          <Typography style={{ textAlign: "center", color: theme.palette.primary.main, fontSize: "80px", textShadow: "2px 2px 3px rgb(255, 255, 255)" }}>
             Toadette's Thrift
-          </h2>
+          </Typography>
           <Items items={items} />
         </Box>
 
         {/* Right Column with Ads */}
-        <Box sx={{ width: 200, display: "flex", flexDirection: "column", gap: 2, height: "100vh", padding: 2, background: "linear-gradient(135deg, #ff66b2, #ff3385)", position: "relative" }}>
+        <Box sx={{ width: 200, display: "flex", flexDirection: "column", gap: 2, height: "800px", padding: 2, backgroundColor: "rgba(186, 81, 160, 0.8)", position: "relative" }}>
           {[...Array(4)].map((_, index) => (
             <Box key={index + 4} sx={{ position: "relative", backgroundColor: "#fff", padding: 1, boxShadow: "0 4px 15px rgba(255, 0, 127, 0.5)", border: "4px solid #ff007f", borderRadius: 3, overflow: "hidden", backgroundSize: "cover", backgroundPosition: "center" }}>
-              <Box sx={{ position: "absolute", top: 5, right: 5, color: "#fff", fontWeight: "bold", fontSize: "22px", backgroundColor: "#ff007f", padding: "5px 10px", borderRadius: "50px", textTransform: "uppercase", letterSpacing: "2px", textShadow: "2px 2px 8px #fff" }}>
+              <Box sx={{ position: "absolute", top: 5, right: 5, color: "#fff", fontWeight: "bold", fontSize: "22px", backgroundColor: "rgba(186, 81, 160, 0.8)", padding: "5px 10px", borderRadius: "50px", textTransform: "uppercase", letterSpacing: "2px", textShadow: "2px 2px 8px #fff" }}>
                 AD
               </Box>
               <img
