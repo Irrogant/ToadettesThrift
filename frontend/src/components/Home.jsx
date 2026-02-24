@@ -1,5 +1,4 @@
-// Home.js
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Container, Box } from "@mui/material";
 import Items from "./Items.jsx";
 import { useTheme } from "@mui/material/styles";
@@ -9,8 +8,7 @@ function Home() {
   const [items, setItems] = useState([]);
   const theme = useTheme();
 
-  // Access the global music state
-  const { isMusicPlaying, stopMusic, playMusic } = useMusic();
+  const { playTrack, stopTrack, isPlaying, currentTrack } = useMusic();
 
   const adGifs = [
     "/ads/food.gif",
@@ -24,36 +22,24 @@ function Home() {
     "/ads/gam.gif"
   ];
 
-  const audioRef = useRef(new Audio("/music/balloon_battle.mp3"));
-
-  useEffect(() => {
-    // Pause balloon music if other music is playing
-    if (isMusicPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch((error) => {
-        console.log("Error playing audio:", error);
-      });
-    }
-
-    return () => {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    };
-  }, [isMusicPlaying]);
-
   const [ads, setAds] = useState(() => Array(8).fill("").map(() => adGifs[Math.floor(Math.random() * adGifs.length)]));
 
   useEffect(() => {
+    // When Home component is mounted, play balloon music if no other track is playing
+    if (!currentTrack) {
+      playTrack("/music/balloon_battle.mp3");
+    }
+
     fetch("/items.json")
       .then((response) => response.json())
       .then((data) => setItems(data.items))
       .catch((error) => console.error("Error fetching items:", error));
-  }, []);
+  }, [currentTrack, playTrack]); // Trigger this effect only if currentTrack changes
 
   return (
     <Container maxWidth="false" sx={{ padding: 0, margin: 0 }}>
       <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
+        {/* Left Column with Ads */}
         <Box sx={{ width: 200, display: "flex", flexDirection: "column", gap: 2, height: "100vh", padding: 2, background: "linear-gradient(135deg, #ff66b2, #ff3385)", position: "relative" }}>
           {[...Array(4)].map((_, index) => (
             <Box key={index} sx={{ position: "relative", backgroundColor: "#fff", padding: 1, boxShadow: "0 4px 15px rgba(255, 0, 127, 0.5)", border: "4px solid #ff007f", borderRadius: 3, overflow: "hidden", backgroundSize: "cover", backgroundPosition: "center" }}>
@@ -69,6 +55,7 @@ function Home() {
           ))}
         </Box>
 
+        {/* Middle Column with Items */}
         <Box sx={{ flex: 2, padding: 2 }}>
           <h2 style={{ textAlign: "center", color: theme.palette.primary.main, fontSize: "40px", textShadow: "3px 3px 10px rgba(255, 0, 127, 0.5)" }}>
             Toadette's Thrift
@@ -76,6 +63,7 @@ function Home() {
           <Items items={items} />
         </Box>
 
+        {/* Right Column with Ads */}
         <Box sx={{ width: 200, display: "flex", flexDirection: "column", gap: 2, height: "100vh", padding: 2, background: "linear-gradient(135deg, #ff66b2, #ff3385)", position: "relative" }}>
           {[...Array(4)].map((_, index) => (
             <Box key={index + 4} sx={{ position: "relative", backgroundColor: "#fff", padding: 1, boxShadow: "0 4px 15px rgba(255, 0, 127, 0.5)", border: "4px solid #ff007f", borderRadius: 3, overflow: "hidden", backgroundSize: "cover", backgroundPosition: "center" }}>

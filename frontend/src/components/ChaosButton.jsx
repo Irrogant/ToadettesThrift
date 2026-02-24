@@ -1,11 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
-import { useMusic } from './MusicContext'; // Import the useMusic hook
+import { useMusic } from './MusicContext';
 
 function ChaosButton({ children }) {
-    const { playMusic, stopMusic } = useMusic();
-    const audioRef = useRef(new Audio("/music/star.mp3"));
-    const couponAudioRef = useRef(new Audio("/music/coupon.mp3"));
+    const { playTrack, stopTrack, isPlaying, currentTrack } = useMusic();
 
     const [stars, setStars] = useState([]);
     const [showCoupon, setShowCoupon] = useState(false);
@@ -64,33 +62,25 @@ function ChaosButton({ children }) {
 
     const startChaos = () => {
         document.body.classList.add("chaos-mode");
-        audioRef.current.loop = true;
-        playMusic(audioRef.current); // Play chaos music and stop the previous one
+        playTrack("/music/star.mp3");
         generateCouponWithDelay();
     };
 
     const stopChaos = () => {
         document.body.classList.remove("chaos-mode");
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        stopTrack();
         setStars([]); // Clear stars when chaos stops
-        stopMusic(); // Stop music when chaos stops
     };
 
     const handleCloseCoupon = () => {
         setShowCoupon(false);
-        couponAudioRef.current.pause();
-        couponAudioRef.current.currentTime = 0;
-        stopMusic(); // Stop music when coupon dialog is closed
+        stopTrack();
     };
 
     useEffect(() => {
         if (showCoupon) {
-            couponAudioRef.current.play().catch(() => console.log("Autoplay blocked for coupon sound"));
-            couponAudioRef.current.loop = true;
-            playMusic(couponAudioRef.current); // Play coupon sound, stop other music
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
+            stopTrack();
+            playTrack("/music/coupon.mp3");
         }
     }, [showCoupon]);
 
