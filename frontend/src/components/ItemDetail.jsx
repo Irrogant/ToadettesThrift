@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { useAuth } from "./AuthContext";
 import { useCart } from "./useCart.jsx";
 import ChaosButton from "./ChaosButton";
-
 import coin from "../assets/icons/coin.png";
 
 function ItemDetail() {
@@ -15,6 +14,8 @@ function ItemDetail() {
     const { username } = useAuth();
     const { addToCart } = useCart();
     const navigate = useNavigate();
+
+    const theme = useTheme();
 
     // Load items from items.json
     useEffect(() => {
@@ -48,67 +49,132 @@ function ItemDetail() {
         navigate("/cart");  // Navigate to the cart page
     };
 
-    return (
-        <Container
-            sx={{
-                backgroundColor: "rgba(186, 81, 160, 0.8)",
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',  // Aligns content to the top
-                minHeight: '85vh',
-                textAlign: 'center',
-                pt: 4,  // Adds padding-top to move content a bit down (adjust this value)
-            }}
-        >   {error && <p style={{ color: "red" }}>{error}</p>}
+    // Array of ad images
+    const adGifs = [
+        "/ads/food.gif",
+        "/ads/car.gif",
+        "/ads/wae.gif",
+        "/ads/singles.gif",
+        "/ads/aaa.gif",
+        "/ads/ram.gif",
+        "/ads/skins.gif",
+        "/ads/vbuck.gif",
+        "/ads/gam.gif"
+    ];
 
-            {item && (
-                <>
-                    <h2>{item.title}</h2>
-                    <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                            <Stack spacing={2}>
-                                <Typography>{item.description}</Typography>
-                                <Typography sx={{ display: "inline-flex", alignItems: "center", gap: "0.25em" }}>
-                                    {item.price}
-                                    <img src={coin} alt="Coin" style={{ width: "1em", height: "1em" }} />
-                                </Typography>
-                            </Stack>
+    // Randomize ads
+    const [ads, setAds] = useState(() => Array(4).fill("").map(() => adGifs[Math.floor(Math.random() * adGifs.length)]));
+    const playError = () => {
+        const audio = new Audio("/sounds/error.mp3");
+        audio.play();
+    }
+
+    return (
+        <>
+            <Container
+                sx={{
+                    backgroundColor: "rgba(186, 81, 160, 0.8)",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',  // Aligns content to the top
+                    minHeight: '500px',
+                    textAlign: 'center',
+                    pt: 7,  // Adds padding-top to move content a bit down (adjust this value)
+                }}
+            >
+                {error && <p style={{ color: "red" }}>{error}</p>}
+
+                {item && (
+                    <>
+                        <h2>{item.title}</h2>
+                        <Grid container spacing={2}>
+                            <Grid item xs={4}>
+                                <Stack spacing={2}>
+                                    <Typography>{item.description}</Typography>
+                                    <Typography sx={{ display: "inline-flex", alignItems: "center", gap: "0.25em" }}>
+                                        {item.price}
+                                        <img src={coin} alt="Coin" style={{ width: "1em", height: "1em" }} />
+                                    </Typography>
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Box
+                                    sx={{
+                                        width: 250,
+                                        height: 250,
+                                        borderRadius: 2,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        overflow: "hidden",
+                                        position: "relative",
+                                        border: "5px solid pink",  // Solid pink border
+                                    }}
+                                >
+                                    {item.image ? (
+                                        <img src={`/images/${item.image}`} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                    ) : (
+                                        <Typography>No image</Typography>
+                                    )}
+                                </Box>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={8}>
-                            <Box
+
+                        <Box sx={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
+                            {/* Back Button */}
+                            <Button onClick={playError}
                                 sx={{
-                                    width: 250,
-                                    height: 250,
-                                    borderRadius: 2,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    overflow: "hidden",
-                                    position: "relative",
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: 'white',
+                                    boxShadow: 3,
+                                    '&:hover': {
+                                        boxShadow: 6,
+                                    },
                                 }}
                             >
-                                {item.image ? (
-                                    <img src={`/images/${item.image}`} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                ) : (
-                                    <Typography>No image</Typography>
-                                )}
-                            </Box>
-                        </Grid>
-                    </Grid>
-
-                    {!isOwner && (
-                        <ChaosButton>
-                            <Button onClick={() => { addToCart(item.id); navigate("/cart"); }}>
-                                BUY
+                                BACK
                             </Button>
-                        </ChaosButton>
-                    )}
-                    {isOwner && <Button color="error" onClick={handleDelete}>DELETE</Button>}
-                </>
-            )
-            }
-        </Container >
+
+                            {/* Buy Button */}
+                            {!isOwner && (
+                                <ChaosButton>
+                                    <Button
+                                        onClick={() => { addToCart(item.id); navigate("/cart"); }}
+                                        sx={{
+                                            backgroundColor: theme.palette.secondary.main,
+                                            color: 'white',
+                                            boxShadow: 3,
+                                            '&:hover': {
+                                                boxShadow: 6,
+                                            },
+                                        }}
+                                    >
+                                        BUY
+                                    </Button>
+                                </ChaosButton>
+                            )}
+
+                            {/* Delete Button (for item owners) */}
+                            {isOwner && <Button color="error" onClick={handleDelete}>DELETE</Button>}
+                        </Box>
+                    </>
+                )}
+            </Container>
+
+            {/* Ad Row at the Bottom */}
+            <Box sx={{ display: "flex", justifyContent: "space-evenly", width: "100%", marginTop: "20px", padding: "10px 0" }}>
+                {ads.map((ad, index) => (
+                    <Box key={index} sx={{ width: "220px", height: "220px", overflow: "hidden", borderRadius: "8px", boxShadow: "0 4px 15px rgba(255, 0, 127, 0.5)", border: "2px solid #ff007f" }}>
+                        <img
+                            src={ad}
+                            alt={`Ad ${index + 1}`}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
+                        />
+                    </Box>
+                ))}
+            </Box>
+        </>
     );
 }
 

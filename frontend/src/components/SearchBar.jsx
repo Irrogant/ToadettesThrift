@@ -54,13 +54,16 @@ function SearchBar() {
           options={searchResults}
           value={searchTerm}
           onInputChange={handleSearch}
+          renderOption={(props, option) => (
+            <li
+              {...props}
+              style={{ color: 'rgb(240, 88, 176)', background: '#fafafa' }}
+            >
+              {option}
+            </li>
+          )}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search"
-              variant="outlined"
-              fullWidth
-            />
+            <TextField {...params} label="Search" variant="outlined" fullWidth />
           )}
         />
         <Button type="submit" color="inherit">

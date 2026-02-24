@@ -1,7 +1,8 @@
-import { Box, Button, Container, TextField, Slider, Typography, IconButton, useTheme } from '@mui/material';
+import { Box, Button, Container, TextField, Slider, Typography, IconButton, useTheme, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useSignUp } from './useSignUp';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate for redirection
 
 function Signup() {
   const {
@@ -16,8 +17,10 @@ function Signup() {
   const [sliderValue, setSliderValue] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState(false);
-
+  const [showDialog, setShowDialog] = useState(false);  // State for controlling the dialog visibility
+  const [randomPeople, setRandomPeople] = useState(0); // State for storing the random number of people
   const theme = useTheme(); // Access the theme to get the primary color
+  const navigate = useNavigate();  // Use the useNavigate hook for redirection
 
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
@@ -33,9 +36,28 @@ function Signup() {
     setFocused(true);
   };
 
+  // Handle submit and show dialog after successful sign-up
   const handleSubmitWrapper = (e) => {
     e.preventDefault();
     handleSubmit(e); // Now handleSubmit will use the password state correctly
+
+    // Generate a random number of people using the password (between 1 and 100)
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    setRandomPeople(randomNumber); // Set the random number of people
+
+    // After sign-up is successful, show the dialog
+    setShowDialog(true);
+
+    // Redirect after a short delay (e.g., 3 seconds)
+    setTimeout(() => {
+      navigate('/login'); // Redirect to the login page
+    }, 8000);
+  };
+
+  // Handle dialog close
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+    navigate('/login')
   };
 
   return (
@@ -148,6 +170,28 @@ function Signup() {
           SIGN UP
         </Button>
       </Box>
+
+      {/* Dialog for successful sign-up */}
+      <Dialog open={showDialog} onClose={handleCloseDialog} maxWidth="xs">
+        <DialogContent style={{ padding: "0 10px" }}>
+          <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+            <img
+              src="/gifs/toadette_yay.gif"
+              alt="Success"
+              className="coupon-image"
+              style={{ width: "120px", height: "120px", marginBottom: "10px" }}
+            />
+            <Typography variant="h6" align="center" gutterBottom>
+              your password is already in use by {randomPeople} other users, so be careful xoxo
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions style={{ padding: "8px 16px" }}>
+          <Button onClick={handleCloseDialog} color="primary" size="small">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

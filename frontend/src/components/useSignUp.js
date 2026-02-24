@@ -91,9 +91,6 @@ export const useSignUp = () => {
         const newUser = { username, password };
         const updatedUsers = [...storedUsers, newUser];
         localStorage.setItem('users', JSON.stringify(updatedUsers));
-
-        // Redirect to login
-        navigate('/login');
     };
 
     return {
