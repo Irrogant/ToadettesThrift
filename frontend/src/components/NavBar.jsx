@@ -1,69 +1,84 @@
 import { Link } from 'react-router-dom';
-
 import { AppBar, Toolbar, Button, Box } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 import { useAuth } from './AuthContext';
 import SearchBar from './SearchBar';
 import Logo from '../assets/logo.png';
 import glow from '../assets/glow.gif';
-
 import ChaosButton from './ChaosButton';
 
-function NavBar() {
+function NavBar({ darkMode, setDarkMode }) {
   const { isLoggedIn } = useAuth();
+
   return (
-    <AppBar position="fixed" sx={{
-      backgroundImage: `url(${glow})`,
-      backgroundSize: 'cover', // This will make sure the image covers the entire navbar
-      backgroundPosition: 'center', // Center the background image
-      backgroundRepeat: 'no-repeat', // Prevent repeating the image
-      // Optionally, add a semi-transparent overlay on top of the image if needed
-      '& .MuiToolbar-root': {
-        backgroundColor: 'rgba(201, 15, 161, 0.5)', // Dark overlay, adjust opacity as needed
-      },
-    }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        zIndex: 1300,
+
+        backgroundImage: `url(${glow})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+
+        '& .MuiToolbar-root': {
+          backgroundColor: darkMode
+            ? 'rgba(0,0,0,0.75)'   // darker overlay in dark mode
+            : 'rgba(201, 15, 161, 0.5)',
+        },
+      }}
+    >
       <Toolbar>
 
         <Link to="/">
-          <Box component="img" src={Logo} alt="Logo" sx={{ verticalAlign: "middle", height: 40 }} />
+          <Box component="img" src={Logo} alt="Logo" sx={{ height: 40 }} />
         </Link>
+
+        <Button
+          color="inherit"
+          onClick={() => setDarkMode(prev => !prev)}
+        >
+          {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+        </Button>
 
         <Box sx={{
           flexGrow: 1,
-          flexShrink: 1,
           mx: 2,
           minWidth: 100,
           maxWidth: '70vw',
         }}>
           <SearchBar />
         </Box>
-        {/* If logged in, login and signup is removed, and logout is added*/}
+
         <Box sx={{
           display: "flex",
           gap: 1,
-          flexWrap: "nowrap",
-          overflow: "hidden",
           marginLeft: "auto",
-          "& .MuiButton-root": {
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-          },
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",  // ensures vertical alignment
+              justifyContent: "center",
+            }}
+          >
             <ChaosButton>
               <Button
                 color="inherit"
                 component={Link}
                 to="/cart"
-                sx={{ display: 'flex', alignItems: 'center' }} // Aligning contents inside the Button
+                sx={{ minWidth: 0, padding: 1 }} // optional: make it same size as other icons
               >
                 <ShoppingCartIcon />
               </Button>
             </ChaosButton>
           </Box>
+
           <Button color="inherit" component={Link} to="/">Shop</Button>
+
           {!isLoggedIn ? (
             <>
               <Button color="inherit" component={Link} to="/login">Log In</Button>
@@ -77,6 +92,7 @@ function NavBar() {
             </>
           )}
         </Box>
+
       </Toolbar>
     </AppBar>
   );

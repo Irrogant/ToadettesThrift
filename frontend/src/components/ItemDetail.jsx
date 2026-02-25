@@ -5,6 +5,7 @@ import { useAuth } from "./AuthContext";
 import { useCart } from "./useCart.jsx";
 import ChaosButton from "./ChaosButton";
 import coin from "../assets/icons/coin.png";
+import AdRow from "./AdRow.jsx"; // <-- import reusable component
 
 function ItemDetail() {
     const [searchParams] = useSearchParams();
@@ -14,10 +15,8 @@ function ItemDetail() {
     const { username } = useAuth();
     const { addToCart } = useCart();
     const navigate = useNavigate();
-
     const theme = useTheme();
 
-    // Load items from items.json
     useEffect(() => {
         const fetchItem = async () => {
             try {
@@ -37,37 +36,16 @@ function ItemDetail() {
     const isOwner = item && username === item.owner;
 
     const handleDelete = () => {
-        // Remove item from localStorage items.json simulation
         let items = JSON.parse(localStorage.getItem("items") || "[]");
         items = items.filter(i => String(i.id) !== String(query));
         localStorage.setItem("items", JSON.stringify(items));
-        navigate("/"); // redirect to home or items list
+        navigate("/");
     };
 
-    const handleAddToCart = (itemId) => {
-        addToCart(itemId);  // Some function that adds the item to the cart
-        navigate("/cart");  // Navigate to the cart page
-    };
-
-    // Array of ad images
-    const adGifs = [
-        "/ads/food.gif",
-        "/ads/car.gif",
-        "/ads/wae.gif",
-        "/ads/singles.gif",
-        "/ads/aaa.gif",
-        "/ads/ram.gif",
-        "/ads/skins.gif",
-        "/ads/vbuck.gif",
-        "/ads/gam.gif"
-    ];
-
-    // Randomize ads
-    const [ads, setAds] = useState(() => Array(4).fill("").map(() => adGifs[Math.floor(Math.random() * adGifs.length)]));
     const playError = () => {
         const audio = new Audio("/sounds/error.mp3");
         audio.play();
-    }
+    };
 
     return (
         <>
@@ -77,10 +55,10 @@ function ItemDetail() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'flex-start',  // Aligns content to the top
+                    justifyContent: 'flex-start',
                     minHeight: '500px',
                     textAlign: 'center',
-                    pt: 7,  // Adds padding-top to move content a bit down (adjust this value)
+                    pt: 7,
                 }}
             >
                 {error && <p style={{ color: "red" }}>{error}</p>}
@@ -109,7 +87,7 @@ function ItemDetail() {
                                         justifyContent: "center",
                                         overflow: "hidden",
                                         position: "relative",
-                                        border: "5px solid pink",  // Solid pink border
+                                        border: "5px solid pink",
                                     }}
                                 >
                                     {item.image ? (
@@ -122,58 +100,29 @@ function ItemDetail() {
                         </Grid>
 
                         <Box sx={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
-                            {/* Back Button */}
-                            <Button onClick={playError}
-                                sx={{
-                                    backgroundColor: theme.palette.primary.main,
-                                    color: 'white',
-                                    boxShadow: 3,
-                                    '&:hover': {
-                                        boxShadow: 6,
-                                    },
-                                }}
-                            >
+                            <Button onClick={playError} sx={{ backgroundColor: theme.palette.primary.main, color: 'white', boxShadow: 3, '&:hover': { boxShadow: 6 } }}>
                                 BACK
                             </Button>
 
-                            {/* Buy Button */}
                             {!isOwner && (
                                 <ChaosButton>
                                     <Button
                                         onClick={() => { addToCart(item.id); navigate("/cart"); }}
-                                        sx={{
-                                            backgroundColor: theme.palette.secondary.main,
-                                            color: 'white',
-                                            boxShadow: 3,
-                                            '&:hover': {
-                                                boxShadow: 6,
-                                            },
-                                        }}
+                                        sx={{ backgroundColor: theme.palette.secondary.main, color: 'white', boxShadow: 3, '&:hover': { boxShadow: 6 } }}
                                     >
                                         BUY
                                     </Button>
                                 </ChaosButton>
                             )}
 
-                            {/* Delete Button (for item owners) */}
                             {isOwner && <Button color="error" onClick={handleDelete}>DELETE</Button>}
                         </Box>
                     </>
                 )}
             </Container>
 
-            {/* Ad Row at the Bottom */}
-            <Box sx={{ display: "flex", justifyContent: "space-evenly", width: "100%", marginTop: "20px", padding: "10px 0" }}>
-                {ads.map((ad, index) => (
-                    <Box key={index} sx={{ width: "220px", height: "220px", overflow: "hidden", borderRadius: "8px", boxShadow: "0 4px 15px rgba(255, 0, 127, 0.5)", border: "2px solid #ff007f" }}>
-                        <img
-                            src={ad}
-                            alt={`Ad ${index + 1}`}
-                            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
-                        />
-                    </Box>
-                ))}
-            </Box>
+            {/* Reusable Ad Row */}
+            <AdRow count={4} />
         </>
     );
 }

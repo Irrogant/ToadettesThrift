@@ -2,10 +2,10 @@ import NavBar from "./NavBar";
 import { Outlet } from 'react-router-dom';
 import { Toolbar } from '@mui/material';
 
-function Layout() {
+function Layout({ darkMode, setDarkMode }) {
     return (
         <>
-            <NavBar />
+            <NavBar darkMode={darkMode} setDarkMode={setDarkMode} />
             <Toolbar />
             <Outlet />
         </>
