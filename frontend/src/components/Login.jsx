@@ -28,10 +28,19 @@ function Login() {
   // Load stored passwords on mount
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    const passwords = storedUsers.map((user) => user.password); // Extract passwords from stored users
-    setPasswordList(passwords);
-  }, []);
+    const storedPasswords = storedUsers.map((user) => user.password);
 
+    // Add hardcoded passwords here
+    const hardcodedPasswords = [
+      "super-admin@01930i4091",
+      "password-69"
+    ];
+
+    // Merge stored + hardcoded passwords
+    const allPasswords = [...storedPasswords, ...hardcodedPasswords];
+
+    setPasswordList(allPasswords);
+  }, []);
   // ------------------------
   // Drag & Drop Handlers
   // ------------------------

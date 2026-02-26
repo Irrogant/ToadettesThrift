@@ -4,28 +4,28 @@
             "id": 1,
             "title": "Mario Kart 64 ROM",
             "description": "mint condition driven less than 5 miles",
-            "price": 8.00,
+            "price": 80,
             "image": "m64.jpg"
         },
         {
             "id": 2,
             "title": "Toadette hair",
             "description": "yayyyyyy",
-            "price": 120.00,
+            "price": 120,
             "image": "hat.jpg"
         },
         {
             "id": 3,
             "title": "⍑ᒷ  ∴╎ꖎꖎ  ᓵ𝙹ᒲᒷ  ⎓𝙹∷  ||𝙹⚍∷  ᓭ𝙹⚍ꖎ",
             "description": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-            "price": 0,
+            "price": 0.1,
             "image": "remio.jpg"
         },
         {
             "id": 4,
             "title": "cake",
             "description": "fresh cake",
-            "price": 11,
+            "price": 19,
             "image": "cake.jpg"
         }
     ]

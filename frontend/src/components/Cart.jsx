@@ -93,18 +93,36 @@ function Cart() {
 
     if (orderCompleted) {
         return (
-            <Container maxWidth="sm" sx={{
-                backgroundColor: "rgba(186, 81, 160, 0.8)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                paddingTop: "30px",
-                paddingBottom: "30px",
-                borderRadius: "8px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"
-            }}>
-                <Typography variant="h4">Thank You for Your Order!</Typography>
-                <Typography>your package will be sent to Date City Hall in Iburi Subprefecture, Hokkaido, Japan</Typography>
+            <Container
+                maxWidth="sm"
+                sx={{
+                    backgroundColor: "rgba(186, 81, 160, 0.8)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    paddingTop: "30px",
+                    paddingBottom: "30px",
+                    borderRadius: "8px",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center"
+                }}
+            >
+                <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+                    <Typography variant="h4" align="center">
+                        YIPPIE YAY! Thank You for Your Order!
+                    </Typography>
+
+                    <img
+                        src="/gifs/toadette_yay.gif"
+                        alt="yay"
+                        className="coupon-image"
+                        style={{ width: "120px", height: "120px", marginBottom: "10px" }}
+                    />
+
+                    <Typography align="center">
+                        your package will be sent to Date City Hall in Iburi Subprefecture, Hokkaido, Japan ⋆✴︎˚｡⋆
+                    </Typography>
+                </Box>
             </Container>
         );
     }
@@ -188,8 +206,8 @@ function Cart() {
                     }
                 }}
             >
-                <DialogTitle sx={{ color: 'pink' }}>Enter Payment Details</DialogTitle>
-                <DialogContent sx={{ backgroundColor: 'rgba(255, 105, 180, 0.5)' }}>
+                <DialogTitle sx={{ color: theme.palette.primary.main }}>Enter Payment Details</DialogTitle>
+                <DialogContent sx={{ backgroundColor: 'rgba(255, 105, 180, 0.9)' }}>
                     {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
                     <TextField
                         label="Credit Card Number"
@@ -214,8 +232,8 @@ function Cart() {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setViewPaymentForm(false)} color="secondary" sx={{ color: 'pink' }}>Cancel</Button>
-                    <Button onClick={handlePaymentSubmit} color="primary" sx={{ color: 'pink' }}>Submit Payment</Button>
+                    <Button onClick={() => setViewPaymentForm(false)} color="secondary" sx={{ color: theme.palette.primary.main }}>Cancel</Button>
+                    <Button onClick={handlePaymentSubmit} color="primary" sx={{ color: theme.palette.primary.main }}>Submit Payment</Button>
                 </DialogActions>
             </Dialog>
 
@@ -230,8 +248,8 @@ function Cart() {
                     }
                 }}
             >
-                <DialogTitle sx={{ color: 'pink' }}>Enter Shipping Address</DialogTitle>
-                <DialogContent sx={{ backgroundColor: 'rgba(255, 105, 180, 0.5)' }}>
+                <DialogTitle sx={{ color: theme.palette.primary.main }}>Enter Shipping Address</DialogTitle>
+                <DialogContent sx={{ backgroundColor: 'rgba(255, 105, 180, 0.9)' }}>
                     {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
                     <TextField
                         label="Shipping Address"
@@ -241,8 +259,8 @@ function Cart() {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setViewAddressForm(false)} color="secondary" sx={{ color: 'pink' }}>Cancel</Button>
-                    <Button onClick={handleAddressSubmit} color="primary" sx={{ color: 'pink' }}>Submit Address</Button>
+                    <Button onClick={() => setViewAddressForm(false)} color="secondary" sx={{ color: theme.palette.primary.main }}>Cancel</Button>
+                    <Button onClick={handleAddressSubmit} color="primary" sx={{ color: theme.palette.primary.main }}>Submit Address</Button>
                 </DialogActions>
             </Dialog>
         </Container>

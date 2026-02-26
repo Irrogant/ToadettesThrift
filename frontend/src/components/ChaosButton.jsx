@@ -33,7 +33,7 @@ function ChaosButton({ children }) {
     };
 
     const generateCoupon = () => {
-        const discountValues = [10, 20, 30, 40];
+        const discountValues = [30, 40, 50];
         const randomDiscount = discountValues[Math.floor(Math.random() * discountValues.length)];
         return `DISCOUNT${randomDiscount}`;
     };

@@ -114,7 +114,7 @@ function Signup() {
             <Slider
               value={sliderValue}
               min={1}
-              max={10}
+              max={100}
               step={1}
               onChange={handleSliderChange}
               valueLabelDisplay="auto"

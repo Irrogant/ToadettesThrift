@@ -33,13 +33,6 @@ function ItemDetail() {
         fetchItem();
     }, [query]);
 
-    const handleDelete = () => {
-        let items = JSON.parse(localStorage.getItem("items") || "[]");
-        items = items.filter(i => String(i.id) !== String(query));
-        localStorage.setItem("items", JSON.stringify(items));
-        navigate("/");
-    };
-
     const playError = () => {
         const audio = new Audio("/sounds/error.mp3");
         audio.play();
