@@ -2,13 +2,31 @@
     "items": [
         {
             "id": 1,
-            "title": "Vintage Lamp",
-            "owner": 1,
-            "description": "A vintage lamp to brighten your room.",
-            "price": 20.00,
-            "date_created": "2023-01-15",
-            "last_modified": "2023-02-15",
-            "image": "knife.jpg"
+            "title": "Mario Kart 64 ROM",
+            "description": "mint condition driven less than 5 miles",
+            "price": 8.00,
+            "image": "m64.jpg"
+        },
+        {
+            "id": 2,
+            "title": "Toadette hair",
+            "description": "yayyyyyy",
+            "price": 120.00,
+            "image": "hat.jpg"
+        },
+        {
+            "id": 3,
+            "title": "⍑ᒷ  ∴╎ꖎꖎ  ᓵ𝙹ᒲᒷ  ⎓𝙹∷  ||𝙹⚍∷  ᓭ𝙹⚍ꖎ",
+            "description": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "price": 0,
+            "image": "remio.jpg"
+        },
+        {
+            "id": 4,
+            "title": "cake",
+            "description": "fresh cake",
+            "price": 11,
+            "image": "cake.jpg"
         }
     ]
 }

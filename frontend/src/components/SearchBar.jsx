@@ -1,15 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import { Autocomplete, Button, Container, TextField } from '@mui/material';
-
 import SearchIcon from '@mui/icons-material/Search';
 
 function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const navigate = useNavigate();
-
 
   const handleSearch = (event, value) => {
     setSearchTerm(value);
@@ -22,27 +17,20 @@ function SearchBar() {
       return;
     }
 
-    try {
-      const response = await fetch("/items.json");
-      if (!response.ok) throw new Error("Failed to fetch items");
-
-      const data = await response.json();
-
-      const filteredTitles = data.items
-        .filter((item) =>
-          item.title.toLowerCase().includes(query.toLowerCase())
-        )
-        .map((item) => item.title);
-
-      setSearchResults(filteredTitles);
-    } catch (error) {
-      console.error(error);
-    }
+    // Set the search results to just the fixed string
+    setSearchResults(["I don't get paid enough for this"]);
   };
 
+
+  const playError = () => {
+    const audio = new Audio("/sounds/error.mp3");
+    audio.play();
+  };
+
+
   const handleSubmit = (event) => {
-    event.preventDefault();
-    navigate(`/search/?q=${encodeURIComponent(searchTerm)}`);
+    event.preventDefault();  // This prevents the form submission and any default behavior
+    // Do nothing here, the button click won't trigger anything
   };
 
   return (
@@ -66,7 +54,7 @@ function SearchBar() {
             <TextField {...params} label="Search" variant="outlined" fullWidth />
           )}
         />
-        <Button type="submit" color="inherit">
+        <Button onClick={playError} type="submit" color="inherit">
           <SearchIcon style={{ width: "40px", height: "40px" }} />
         </Button>
       </Container>

@@ -9,11 +9,11 @@ import { useNavigate } from 'react-router-dom';
 import ChaosButton from './ChaosButton';
 import coin from '../assets/icons/coin.png';
 
-export default function MultiActionAreaCard({ id, title, description, imageUrl, price, owner, seller, buyer }) {
+export default function MultiActionAreaCard({ id, title, description, imageUrl, price, seller, buyer }) {
   const cardMaxWidth = 300;
   const cardMaxHeight = 300;
   const itemDescription = description ? ((description.length > 50) ? (description.substring(0, 50).trim()) : description) : "";
-  const itemTitle = (title.length > 20) ? (title.substring(0, 20).trim()) : title;
+  const itemTitle = (title.length > 30) ? (title.substring(0, 30).trim()) : title;
   const { addToCart, removeFromCart, inCart } = useCartContext();
   const { username, isLoggedIn } = useAuth();
   const [isUserInvolved, setIsUserInvolved] = useState(false);
@@ -26,7 +26,7 @@ export default function MultiActionAreaCard({ id, title, description, imageUrl, 
   }, []);
 
   useEffect(() => {
-    setIsUserInvolved([owner, seller, buyer].includes(username));
+    setIsUserInvolved([seller, buyer].includes(username));
   }, []);
 
   return (

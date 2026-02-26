@@ -10,6 +10,11 @@ export function useCart() {
     const [priceWithDiscount, setPriceWithDiscount] = useState(0); // Price with coupon applied
     const { isLoggedIn, username } = useAuth();
 
+    function clearCart() {
+        setCartIDs([]);
+        localStorage.removeItem(`cart_${username}`); // Remove cart from localStorage
+    }
+
     useEffect(() => {
         if (!isLoggedIn) {
             setCartIDs([]);
@@ -125,5 +130,6 @@ export function useCart() {
         couponCode,
         setCouponCode,
         applyCoupon,
+        clearCart, // Add this line
     };
 }

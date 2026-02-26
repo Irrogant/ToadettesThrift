@@ -33,8 +33,6 @@ function ItemDetail() {
         fetchItem();
     }, [query]);
 
-    const isOwner = item && username === item.owner;
-
     const handleDelete = () => {
         let items = JSON.parse(localStorage.getItem("items") || "[]");
         items = items.filter(i => String(i.id) !== String(query));
@@ -104,18 +102,14 @@ function ItemDetail() {
                                 BACK
                             </Button>
 
-                            {!isOwner && (
-                                <ChaosButton>
-                                    <Button
-                                        onClick={() => { addToCart(item.id); navigate("/cart"); }}
-                                        sx={{ backgroundColor: theme.palette.secondary.main, color: 'white', boxShadow: 3, '&:hover': { boxShadow: 6 } }}
-                                    >
-                                        BUY
-                                    </Button>
-                                </ChaosButton>
-                            )}
-
-                            {isOwner && <Button color="error" onClick={handleDelete}>DELETE</Button>}
+                            <ChaosButton>
+                                <Button
+                                    onClick={() => { addToCart(item.id); navigate("/cart"); }}
+                                    sx={{ backgroundColor: theme.palette.secondary.main, color: 'white', boxShadow: 3, '&:hover': { boxShadow: 6 } }}
+                                >
+                                    BUY
+                                </Button>
+                            </ChaosButton>
                         </Box>
                     </>
                 )}

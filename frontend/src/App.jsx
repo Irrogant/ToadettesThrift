@@ -10,12 +10,13 @@ import Home from './components/Home';
 import Layout from './components/Layout';
 import Search from './components/Search';
 import ItemDetail from './components/ItemDetail';
-import MyItems from './components/MyItems';
 import Cart from './components/Cart';
 import ProtectedRoute from './components/ProtectedRoute';
 import LandingRoute from './components/LandingRoute';
 import LoggedInRoute from './components/LoggedInRoute';
 import GlobalAdSpawner from './components/AdSpawner';
+
+// privacy policy 
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -58,7 +59,6 @@ function App() {
                 <Route path="/logout" element={<LogOut />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/account" element={<Account />} />
-                <Route path="/myitems" element={<MyItems />} />
               </Route>
 
             </Route>

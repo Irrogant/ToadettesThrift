@@ -16,21 +16,8 @@ function Search() {
             return;
         }
 
-        try {
-            const response = await fetch("/items.json");
-            if (!response.ok) throw new Error("Failed to fetch items");
-
-            const data = await response.json();
-
-            const filtered = data.items.filter((item) =>
-                item.title.toLowerCase().includes(query.toLowerCase()) ||
-                item.description.toLowerCase().includes(query.toLowerCase())
-            );
-
-            setItems(filtered);
-        } catch (error) {
-            console.error(error);
-        }
+        // Set the search result to always be the fixed message
+        setItems([{ title: "I don't get paid enough for this" }]);
     };
 
     useEffect(() => {
@@ -39,11 +26,10 @@ function Search() {
 
     return (
         <Container maxWidth="false">
-            <h2 style={{ textAlign: "center" }}>reshults</h2>
-            < Items items={items} />
+            <h2 style={{ textAlign: "center" }}>Results</h2>
+            <Items items={items} />
         </Container>
     );
 }
-
 
 export default Search;

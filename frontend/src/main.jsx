@@ -22,5 +22,5 @@ createRoot(document.getElementById('root')).render(
         </AuthProvider>
       </MusicProvider>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode>
 );

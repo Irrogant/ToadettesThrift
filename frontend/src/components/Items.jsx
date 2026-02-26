@@ -18,7 +18,6 @@ function Items({ items }) {
                                 price={item.price}
                                 dateCreated={item.date_created}
                                 soldAt={item.sold_at}
-                                owner={item.owner}
                                 seller={item.seller}
                                 buyer={item.buyer}
                             />

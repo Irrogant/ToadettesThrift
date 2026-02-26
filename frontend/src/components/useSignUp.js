@@ -29,9 +29,6 @@ const randomWords = {
     X: ['XxX', 'Xeno', 'Xtra', 'Xplosive', 'Xray'],
     Y: ['Yeet', 'Yolo', 'Yikes', 'YasQueen', 'Yasss'],
     Z: ['Zoomer', 'Zelda', 'Zinger', 'ZzZ', 'Zany'],
-    Å: ['Ånglok', 'ÅÅÅÅÅhhhh'],
-    Ä: ['Ärevarv', 'Äckel'],
-    Ö: ['Öhm', 'Öbviously']
 };
 
 // Custom hook to handle the sign-up logic

@@ -43,7 +43,7 @@ function ChaosButton({ children }) {
 
         // Check if chaos mode has been active for at least 4 seconds
         const timeInChaos = Date.now() - chaosStartTime;
-        if (timeInChaos >= 4000) {
+        if (timeInChaos >= 3000) {
             setCouponCode(generateCoupon());
             setShowCoupon(true);
             setCouponGenerated(true);
@@ -77,7 +77,7 @@ function ChaosButton({ children }) {
         setChaosStartTime(Date.now()); // Start the chaos timer
 
         // Set a timeout to check after 4 seconds if the chaos is still active
-        chaosTimeoutRef.current = setTimeout(generateCouponWithDelay, 4000);
+        chaosTimeoutRef.current = setTimeout(generateCouponWithDelay, 3000);
     };
 
     const stopChaos = () => {
