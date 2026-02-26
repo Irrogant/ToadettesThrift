@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Box, Button, Container, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { useAuth } from "./AuthContext";
-import { useCart } from "./useCart.jsx";
+import { useCartContext } from './CartContext';
 import ChaosButton from "./ChaosButton";
 import coin from "../assets/icons/coin.png";
 import AdRow from "./AdRow.jsx"; // <-- import reusable component
@@ -13,7 +13,7 @@ function ItemDetail() {
     const [item, setItem] = useState(null);
     const [error, setError] = useState("");
     const { username } = useAuth();
-    const { addToCart } = useCart();
+    const { addToCart } = useCartContext();
     const navigate = useNavigate();
     const theme = useTheme();
 
